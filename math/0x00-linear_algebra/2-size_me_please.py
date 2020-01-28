@@ -2,7 +2,8 @@
 
 
 def matrix_shape(matrix):
-    """Matrix shape function
+    """
+    Matrix shape function
     """
 
     size = []
@@ -16,7 +17,8 @@ def matrix_shape(matrix):
 
 
 def matrix_shape_rec(matrix, size):
-    """Matrix shape recursive function
+    """
+    Matrix shape recursive function
     """
     if type(matrix) is list:
         size.append(len(matrix))
