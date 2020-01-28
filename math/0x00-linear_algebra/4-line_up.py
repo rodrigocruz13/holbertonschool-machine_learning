@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Module used to add two arrays
+"""
 
 
 def add_arrays(arr1, arr2):
