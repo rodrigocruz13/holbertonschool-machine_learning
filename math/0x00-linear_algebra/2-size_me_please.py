@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+"""
+Module used to find the size of a matrix
+"""
 
 def matrix_shape(matrix):
     """
