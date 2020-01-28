@@ -11,6 +11,6 @@ def matrix_transpose(matrix):
     for j in range(column):
         transpose.append([])
         for i in range(row):
-            t_num = matrix[i][j]
-            transpose[j].append(t_num)
+            num = matrix[i][j]
+            transpose[j].append(num)
     return transpose
