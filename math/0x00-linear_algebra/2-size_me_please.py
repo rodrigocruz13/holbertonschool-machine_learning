@@ -3,6 +3,7 @@
 Module used to find the size of a matrix
 """
 
+
 def matrix_shape(matrix):
     """
     Matrix shape function
