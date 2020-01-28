@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+"""
+Module used to concatenate 2 arrays
+"""
 
 
 def cat_arrays(arr1, arr2):
-    """Matrix add function
+    """Matrix concatenate function
     """
 
     if (type(arr1) is not list) or (type(arr2) is not list):
