@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+"""
+Module used to multiply 2 2D arrays
+"""
 
 def mat_mul(mat1, mat2):
     """Matrix add function
