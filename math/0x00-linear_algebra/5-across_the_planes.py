@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Module used to add 2D matrices
+"""
 
 
 def add_matrices2D(mat1, mat2):
