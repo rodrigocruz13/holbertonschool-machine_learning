@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Module used to find the Transpose of a matrix
+"""
 
 
 def matrix_transpose(matrix):
