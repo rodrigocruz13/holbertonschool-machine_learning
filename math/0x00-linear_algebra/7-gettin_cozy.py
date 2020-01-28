@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+"""
+Module used to concatenate 2 2D arrays
+"""
 
 
 def cat_matrices2D(mat1, mat2, axis=0):
-    """Matrix add function
+    """Matrix concatenate function
     """
 
     new = []
