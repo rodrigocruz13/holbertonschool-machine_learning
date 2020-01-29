@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
+"""
+Module used to use elementwise operations
+"""
 
 
-def add(mat1, mat2):
-    """Matrix add function
+def np_elementwise(mat1, mat2):
+    """Matrix elementwise operations
     """
-    import numpy as np
-    return np.transpose(np.array(matrix))
+    m_sum = mat1 + mat2
+    m_sub = mat1 - mat2
+    m_mul = mat1 * mat2
+    m_div = mat1 / mat2
+
+    return (m_sum, m_sub, m_mul, m_div)
