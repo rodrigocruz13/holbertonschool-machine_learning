@@ -8,12 +8,13 @@ np.random.seed(5)
 x, y = np.random.multivariate_normal(mean, cov, 2000).T
 y += 180
 
-s = 5 # point size
-c = "m" # mangenta color
-marker = 'o' # marker circle
+s = 5  # point size
+c = "m"  # mangenta color
+marker = 'o'  # marker circle
 
-plt.scatter(x, y, s, c, marker)
 plt.xlabel("Height (in)")
 plt.ylabel("Weight (lbs)")
 plt.title("Men's Height vs Weight")
+
+plt.scatter(x, y, s, c, marker)
 plt.show()
