@@ -12,8 +12,8 @@ plt.title("Project A")
 align = "mid"  # aligment
 edgecolor = 'black'  # edgecolor
 n_bins = range(0, 110, 10)
-plt.xticks(np.arange(0, 100, step = 10))
-plt.hist(student_grades, bins = n_bins, edgecolor = edgecolor)
+plt.xticks(np.arange(0, 100, step=10))
+plt.hist(student_grades, bins=n_bins, edgecolor=edgecolor)
 
 plt.xlim(0, 100)
 plt.ylim(0, 30)
