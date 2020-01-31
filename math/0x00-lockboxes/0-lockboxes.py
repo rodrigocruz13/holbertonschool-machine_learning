@@ -11,7 +11,7 @@ def canUnlockAll(boxes):
         boxes (lst): List of all the boxes.
 
     Returns:
-        True (bool): for success, 
+        True (bool): for success,
         False (bool): In case of failure.
     """
 
@@ -37,7 +37,8 @@ def canUnlockAll(boxes):
 
 def go_open(open_me, boxes, unlocked_lst):
     """
-    Opens a single box (open_me), then check it in the open_ list as unlocked.
+    Opens a single box (open_me), and check it as unlocked in unlocked_list.
+    If open_me is a list, then opens recursively each box (open_me_i)
     Args:
         open_me (lst): List with the info of the current boxes to be opened.
         boxes (lst): List with all the boxes.
@@ -45,7 +46,7 @@ def go_open(open_me, boxes, unlocked_lst):
 
     Returns:
         next_boxes (lst): In case of success, a list of next boxes to open.
-        None: In case of failure.
+        None: If open_me is None or empty
     """
 
     if (open_me is None):  # There are no current boxes to be opened
@@ -77,8 +78,8 @@ def go_open(open_me, boxes, unlocked_lst):
             next_boxes[i] = go_open(open_me_i, boxes, unlocked_lst)
             i += 1
 
-        if len(next_boxes) == 0:
+        if len(next_boxes) == 0:  # No more routes to take
             return None
-        if next_boxes.count(None) == i:
+        if next_boxes.count(None) == i:  # All routes are taken
             return None
         return next_boxes
