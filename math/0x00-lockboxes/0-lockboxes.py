@@ -53,7 +53,7 @@ def go_open(open_me, boxes, open_lst):
     elif (len(open_me) == 0):  # Empty. There are no current boxes to open
         return None
 
-    elif (len(open_me) == 1):  # List of 1.
+    elif (len(open_me) == 1):  # 1 box to be open.
         i = open_me[0]
         if (len(boxes) <= i):  # crazy position
             return None
@@ -65,7 +65,7 @@ def go_open(open_me, boxes, open_lst):
                 return None
         return boxes[i]
 
-    else:
+    else:  # More than 1 box to be opened
         next_boxes = [None] * len(open_me)
         i = 0
         for box_i in open_me:
