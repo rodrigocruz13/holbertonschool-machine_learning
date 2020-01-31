@@ -10,13 +10,13 @@ You have n number of locked boxes in front of you. Each box is numbered sequenti
 * The first box (boxes[0]) is unlocked
 * Return True if all boxes can be opened, else return False
 
-### Analysis
+## Analysis
 
-#### 1st sample
+### 1st sample. Result: True
 ![Sample 1](https://imgur.com/3S4IhGi.jpg)
 
-#### 2nd sample
+### 2nd sample. Result: True
 ![Sample 2](https://i.imgur.com/D5i6zv3.jpg)
 
-#### 3th sample
+### 3th sample. Result: False
 ![Sample 3](https://i.imgur.com/jYXhUD4.jpg)
