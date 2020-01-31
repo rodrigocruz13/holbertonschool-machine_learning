@@ -21,26 +21,26 @@ def canUnlockAll(boxes):
         return False
 
     n_boxes = len(boxes)
-    open_ = ["Locked"] * n_boxes  # List to check all unlocked boxes
-    open_[0] = "Unlocked"  # The first box boxes[0] is unlocked
+    open_lst = ["Locked"] * n_boxes  # List to check all unlocked boxes
+    open_lst[0] = "Unlocked"  # The first box boxes[0] is unlocked
 
     next = boxes[0]
-    while (open_.count("Unlocked") < n_boxes and next is not None):
+    while (open_lst.count("Unlocked") < n_boxes and next is not None):
         open_me = next
-        next = go_open(open_me, boxes, open_)
+        next = go_open(open_me, boxes, open_lst)
 
-    if (open_.count("Unlocked") == n_boxes):
+    if (open_lst.count("Unlocked") == n_boxes):
         return True
     return False
 
 
-def go_open(open_me, boxes, open_):
+def go_open(open_me, boxes, open_lst):
     """
-    Method that determines if all the boxes can be opened.
+    Opens a single box (open_me), then check it in the open_ list as unlocked.
     Args:
         open_me (lst): List with the info of the current boxes to be opened.
         boxes (lst): List with all the boxes.
-        open_ (lst): List with the info of the all opened boxes.
+        open_lst (lst): List of Locked - Unlocked boxes.
 
     Returns:
         next_boxes (lst): In case of success, a list of next boxes to open.
@@ -50,17 +50,17 @@ def go_open(open_me, boxes, open_):
     if (open_me is None):  # There are no current boxes to be opened
         return None
 
-    elif (len(open_me) == 0):  # Empty. There are no current boxes to be opened
+    elif (len(open_me) == 0):  # Empty. There are no current boxes to open
         return None
 
     elif (len(open_me) == 1):  # List of 1.
         i = open_me[0]
         if (len(boxes) <= i):  # crazy position
             return None
-        if (open_[i] == "Unlocked"):  # Already been there
+        if (open_lst[i] == "Unlocked"):  # Already been there
             return None
         else:
-            open_[i] = "Unlocked"
+            open_lst[i] = "Unlocked"
             if(boxes[i] == open_me):  # Same position
                 return None
         return boxes[i]
@@ -73,7 +73,7 @@ def go_open(open_me, boxes, open_):
                 n = [box_i]
             else:
                 n = box_i
-            next_boxes[i] = go_open(n, boxes, open_)
+            next_boxes[i] = go_open(n, boxes, open_lst)
             i += 1
 
         if len(next_boxes) == 0:
