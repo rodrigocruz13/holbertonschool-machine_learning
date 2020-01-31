@@ -1,5 +1,9 @@
 # 0x00. Lockboxes
-## Specializations - Machine Learning
+## Specializations - Interview Preparation ― Algorithms
+
+![100 boxes](https://imgur.com/ijNNiE7.jpg)
+
+## Tasks
 
 You have n number of locked boxes in front of you. Each box is numbered sequentially from 0 to n - 1 and each box may contain keys to the other boxes. Write a method that determines if all the boxes can be opened.
 
@@ -13,10 +17,10 @@ You have n number of locked boxes in front of you. Each box is numbered sequenti
 ## Analysis
 
 ### 1st sample. Result: True
-![Sample 1](https://imgur.com/3S4IhGi.jpg)
+![Sample 1](https://imgur.com/saNsoaF.jpg)
 
 ### 2nd sample. Result: True
-![Sample 2](https://i.imgur.com/D5i6zv3.jpg)
+![Sample 2](https://i.imgur.com/MtOiS9e.jpg)
 
 ### 3th sample. Result: False
-![Sample 3](https://i.imgur.com/jYXhUD4.jpg)
+![Sample 3](https://i.imgur.com/sVigScl.jpg)
