@@ -28,6 +28,7 @@ student_grades = np.random.normal(68, 15, 50)
 #  General layout
 figure = plt.figure()
 figure.suptitle("All in One")
+fontsize="x-small"
 
 #  Graph 1
 figure.add_subplot(321)  # rows, columns, position
@@ -41,16 +42,16 @@ figure.add_subplot(322)
 s = 4  # point size
 c = "m"  # mangenta color
 marker = 'o'  # marker circle
-plt.xlabel("Height (in)")
-plt.ylabel("Weight (lbs)")
-plt.title("Men's Height vs Weight")
+plt.xlabel("Height (in)", fontsize=fontsize)
+plt.ylabel("Weight (lbs)", fontsize=fontsize)
+plt.title("Men's Height vs Weight", fontsize=fontsize)
 plt.scatter(x1, y1, s, c, marker)
 
 #  Graph 3
 figure.add_subplot(323)
-plt.xlabel("Time (years)")
-plt.ylabel("Fraction Remaining")
-plt.title("Exponential Decay of C-14")
+plt.xlabel("Time (years)", fontsize=fontsize)
+plt.ylabel("Fraction Remaining", fontsize=fontsize)
+plt.title("Exponential Decay of Radioactive Elements", fontsize=fontsize)
 plt.xlim(0, 28650)
 plt.yscale('log')
 plt.plot(x2, y2)
@@ -61,18 +62,18 @@ color1 = "r--"  # red dash
 color2 = "g"  # green
 graph1, graph2 = plt.plot(x3, y31, color1, x3, y32, color2)
 
-plt.xlabel("Time (years)")
-plt.ylabel("Fraction Remaining")
-plt.title("Exponential Decay of C-14")
+plt.xlabel("Time (years)", fontsize=fontsize)
+plt.ylabel("Fraction Remaining", fontsize=fontsize)
+plt.title("Exponential Decay of C-14", fontsize=fontsize)
 plt.legend([graph1, graph2], ["C-14", "Ra-226"])
 plt.xlim(0, 20000)
 plt.ylim(0, 1)
 
 #  Graph 5 (313)
 figure.add_subplot(313)
-plt.xlabel("Grades")
-plt.ylabel("Number of Students")
-plt.title("Project A")
+plt.xlabel("Grades", fontsize=fontsize)
+plt.ylabel("Number of Students", fontsize=fontsize)
+plt.title("Project A", fontsize=fontsize)
 
 align = "mid"  # aligment
 edgecolor = 'black'  # edgecolor
