@@ -16,7 +16,7 @@ graph1, graph2 = plt.plot(x, y1, color1, x, y2, color2)
 
 plt.xlabel("Time (years)")
 plt.ylabel("Fraction Remaining")
-plt.title("Exponential Decay of C-14")
+plt.title("Exponential Decay of Radioactive Elements")
 plt.legend([graph1, graph2], ["C-14", "Ra-226"])
 
 plt.xlim(0, 20000)
