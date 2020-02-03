@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 
 
-def summation_i_squared(n):
+def poly_derivative(poly):
     """
-    function that calculates sum_{i=1}^{n} i^2:
+    function that calculates a derivate of a poly
     Args:
-        n (int): is the stopping condition
+        poly (lst): poly is a list of coefficients representing a polynomial
+            The index is the power of x that the coefficient belongs to
+            Example: if f(x) = x^3 + 3x +5, poly is equal to [5, 3, 0, 1]
 
     Returns:
-        sum (int): for success,
-        None (): In case n is not valid.
+        deriv (lst): list with the coefficient of de derivate
     """
 
-    if type(n) is not int or n < 1:
+    if type(poly) is not list:
         return None
+    elif len(poly) == 0:
+        return None
+    elif len(poly) == 1:
+        return [0]
     else:
-        sum = 0
-        for i in range(n + 1):
-            sum += (i * i)
-    return sum
+        deriv = [0] * (len(poly) - 1)
+        for i in range(len(poly) - 1):
+            deriv[i] = poly[i + 1] * (i + 1)
+    return deriv
