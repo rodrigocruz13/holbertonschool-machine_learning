@@ -3,6 +3,7 @@
 Module used to calculate sums
 """
 
+
 def summation_i_squared(n):
     """
     function that calculates sum from i=1 to n of i^2:
@@ -14,10 +15,25 @@ def summation_i_squared(n):
         None (): In case n is not valid.
     """
 
+    sum = 0
+
     if type(n) is not int or n < 1:
         return None
     else:
-        sum = 0
-        for i in range(n + 1):
-            sum += (i * i)
-    return sum
+        return sum_recursive(n)
+
+
+def sum_recursive(n):
+    """
+    function that calculates sum recursevily
+    Args:
+        n (int): is the stopping condition
+
+    Returns:
+        sum (int): for success,
+    """
+
+    if n < 1:
+        return 0
+    else:
+        return (n * n) + sum_recursive(n - 1)
