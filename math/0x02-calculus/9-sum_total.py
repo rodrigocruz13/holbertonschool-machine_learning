@@ -17,7 +17,7 @@ def summation_i_squared(n):
 
     sum = 0
 
-    if type(n) is not int or n < 1:
+    if n is None or type(n) is not int or n < 1:
         return None
     else:
         return sum_recursive(n)
@@ -30,7 +30,7 @@ def sum_recursive(n):
         n (int): is the stopping condition
 
     Returns:
-        sum (int): for success,
+        sum (int): sum
     """
 
     if n < 1:
