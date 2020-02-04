@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+"""
+Module used to integrals
+"""
 
 def poly_integral(poly, C=0):
     """

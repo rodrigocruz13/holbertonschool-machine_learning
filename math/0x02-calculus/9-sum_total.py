@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-
+"""
+Module used to calculate sums
+"""
 
 def summation_i_squared(n):
     """
-    function that calculates sum_{i=1}^{n} i^2:
+    function that calculates sum from i=1 to n of i^2:
     Args:
         n (int): is the stopping condition
 
