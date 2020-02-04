@@ -20,7 +20,7 @@ def summation_i_squared(n):
     if n is None or type(n) is not int or n < 1:
         return None
     else:
-        return sum_recursive(n)
+        return int(sum_recursive(n))
 
 
 def sum_recursive(n):
