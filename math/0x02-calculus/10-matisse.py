@@ -3,6 +3,7 @@
 Module used to calculate derivates
 """
 
+
 def poly_derivative(poly):
     """
     function that calculates a derivate of a poly

@@ -3,6 +3,7 @@
 Module used to integrals
 """
 
+
 def poly_integral(poly, C=0):
     """
     function that calculates the integral of a poly
