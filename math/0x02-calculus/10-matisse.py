@@ -25,5 +25,7 @@ def poly_derivative(poly):
     else:
         deriv = [0] * (len(poly) - 1)
         for i in range(len(poly) - 1):
+            if (type(poly[i]) is not int):
+                return None
             deriv[i] = poly[i + 1] * (i + 1)
     return deriv
