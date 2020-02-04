@@ -26,6 +26,8 @@ def poly_integral(poly, C=0):
         else:
             inte = [0] * (len(poly) + 1)
             for i in range(len(poly)):
+                if type(poly[i]) is not int:
+                    return None 
                 temp = poly[i] / (i + 1)
                 if temp % 1 != 0:
                     inte[i + 1] = float(poly[i])/(i + 1)
