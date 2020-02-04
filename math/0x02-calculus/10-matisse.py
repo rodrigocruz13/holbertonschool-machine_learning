@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+"""
+Module used to calculate derivates
+"""
 
 def poly_derivative(poly):
     """
