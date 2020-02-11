@@ -11,9 +11,10 @@ class Poisson:
         """
         Initialize Poisson
         Args:
-            data (lst): List of the data to be used to estimate the dist
-            lambtha (int): Expected number of events in a given time frame
+            - data (lst): List of the data to be used to estimate the dist
+            - lambtha (int): Expected number of events in a given time frame
         Returns:
+            λ
         """
         self.lambtha = lambtha
         π = 3.1415926536
@@ -21,17 +22,16 @@ class Poisson:
 
         λ = float(lambtha)
 
-        if (data is None or (type(data) is list and len(data) == 0)):
-            if λ < 0:
+        if data is None:
+            if λ <= 0:
                 raise ValueError("lambtha must be a positive value")
-
         else:
-            if λ < 0:
-                raise ValueError("lambtha must be a positive value")
             if type(data) is not list:
                 raise ValueError("data must be a list")
+
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
+
             λ = float(sum(data) / len(data))
             self.lambtha = λ
 
