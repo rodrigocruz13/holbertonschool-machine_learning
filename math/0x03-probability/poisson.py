@@ -88,3 +88,24 @@ class Poisson:
         e = self.e
 
         return (λ ** k) * (e ** -λ) / k_f
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of “successes”
+        Args:
+            k (float): Number of “successes”
+
+        Returns:
+               CMF (float): The PMF value for k.
+        """
+
+        if k <= 0:
+            return 0
+
+        k = int(k)
+
+        cdf = 0
+        while (k > 0):
+            cdf += self.pmf(k)
+            k = k - 1
+        return cdf
