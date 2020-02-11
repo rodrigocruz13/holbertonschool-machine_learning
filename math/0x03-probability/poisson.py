@@ -107,5 +107,5 @@ class Poisson:
         cdf = 0
         while (k > 0):
             cdf += self.pmf(k)
-            k = k - 1
+            k = k - 0.9999999999
         return cdf
