@@ -71,7 +71,7 @@ class Exponential:
             fact = fact * n
         return fact
 
-    def pdf(self, k):
+    def pdf(self, x):
         """
         Calculates the value of the PMF for a given number of “successes”
         Args:
@@ -81,17 +81,16 @@ class Exponential:
                PMF (float): The PMF value for k.
         """
 
-        if k <= 0:
+        if x < 0:
             return 0
 
-        k = int(k)
+        k = int(x)
         λ = self.lambtha
-        k_f = self.factorial(k)
         e = self.e
 
         return λ * (e ** -λ * k)
 
-    def cdf(self, k):
+    def cdf(self, x):
         """
         Calculates the value of the CDF for a given number of “successes”
         Args:
@@ -101,10 +100,10 @@ class Exponential:
                CMF (float): The PMF value for k.
         """
 
-        if k <= 0:
+        if x <= 0:
             return 0
 
-        k = int(k)
+        k = int(x)
 
         cdf = 0
         while (k > 0):
