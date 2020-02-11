@@ -81,7 +81,7 @@ class Exponential:
                PMF (float): The PMF value for k.
         """
 
-        if k < 0:
+        if k <= 0:
             return 0
 
         k = int(k)
