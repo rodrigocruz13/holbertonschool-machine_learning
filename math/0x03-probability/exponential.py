@@ -21,6 +21,7 @@ class Exponential:
         self.e = 2.7182818285
 
         λ = float(lambtha)
+        β = 1 / λ
 
         if data is None:
             if λ <= 0:
@@ -33,6 +34,7 @@ class Exponential:
                 raise ValueError("data must contain multiple values")
             λ = 1 / float(sum(data) / len(data))
             self.lambtha = λ
+            β = 1 / λ
 
     def erf(self, x):
         """
@@ -69,7 +71,7 @@ class Exponential:
             fact = fact * n
         return fact
 
-    def pmf(self, k):
+    def pdf(self, k):
         """
         Calculates the value of the PMF for a given number of “successes”
         Args:
@@ -79,7 +81,7 @@ class Exponential:
                PMF (float): The PMF value for k.
         """
 
-        if k <= 0:
+        if k < 0:
             return 0
 
         k = int(k)
@@ -87,7 +89,7 @@ class Exponential:
         k_f = self.factorial(k)
         e = self.e
 
-        return (λ ** k) * (e ** -λ) / k_f
+        return λ * (e ** -λ * k)
 
     def cdf(self, k):
         """
