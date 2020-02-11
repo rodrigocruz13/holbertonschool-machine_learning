@@ -31,7 +31,7 @@ class Poisson:
 
             elif len(data) < 2:
                 raise ValueError("data must contain multiple values")
-
+            λ = float(sum(data) / len(data))
             self.lambtha = λ
 
     def erf(x):
