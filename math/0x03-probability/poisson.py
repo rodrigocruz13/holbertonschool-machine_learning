@@ -29,7 +29,7 @@ class Poisson:
             if type(data) is not list:
                 raise ValueError("data must be a list")
 
-            if len(data) < 2:
+            elif len(data) < 2:
                 raise ValueError("data must contain multiple values")
 
             λ = float(sum(data) / len(data))
