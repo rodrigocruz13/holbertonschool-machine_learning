@@ -27,12 +27,11 @@ class Poisson:
                 raise ValueError("lambtha must be a positive value")
         else:
             if type(data) is not list:
-                raise ValueError("data must be a list")
+                raise TypeError("data must be a list")
 
             elif len(data) < 2:
                 raise ValueError("data must contain multiple values")
 
-            λ = float(sum(data) / len(data))
             self.lambtha = λ
 
     def erf(x):
