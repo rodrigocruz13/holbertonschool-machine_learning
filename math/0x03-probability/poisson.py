@@ -15,7 +15,7 @@ class Poisson:
             lambtha (int): Expected number of events in a given time frame
         Returns:
         """
-
+        self.lambtha = lambtha
         π = 3.1415926536
         e = 2.7182818285
 
@@ -30,7 +30,7 @@ class Poisson:
                 raise ValueError("lambtha must be a positive value")
             if type(data) is not list:
                 raise ValueError("data must be a list")
-            if len.data < 2:
+            if len(data) < 2:
                 raise ValueError("data must contain multiple values")
             λ = float(sum(data) / len(data))
             self.lambtha = λ
