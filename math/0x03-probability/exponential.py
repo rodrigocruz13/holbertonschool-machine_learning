@@ -79,12 +79,12 @@ class Exponential:
                pdf (float): The PDF value for k.
         """
 
-        if x < 0:
-            return 0
-
-        k = int(x)
+        k = x
         λ = self.lambtha
         e = self.e
+
+        if x < 0:
+            return 0
 
         return λ * (e ** -λ * k)
 
@@ -98,10 +98,9 @@ class Exponential:
                cdf (float): The PMF value for k.
         """
 
+        k = x
         if x <= 0:
             return 0
-
-        k = int(x)
 
         cdf = 0
         while (k > 0):
