@@ -73,12 +73,12 @@ class Exponential:
 
     def pdf(self, x):
         """
-        Calculates the value of the PMF for a given number of “successes”
+        Calculates the value of the PDF for a given number of “successes”
         Args:
             k (float): Number of “successes”
 
         Returns:
-               PMF (float): The PMF value for k.
+               PDF (float): The PDF value for k.
         """
 
         if x < 0:
@@ -107,6 +107,6 @@ class Exponential:
 
         cdf = 0
         while (k > 0):
-            cdf += self.pmf(k)
+            cdf += self.pdf(k)
             k = k - 0.9999999999
         return cdf
