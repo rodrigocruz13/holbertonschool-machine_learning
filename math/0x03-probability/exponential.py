@@ -20,7 +20,7 @@ class Exponential:
         self.π = 3.1415926536
         self.e = 2.7182818285
 
-        λ = float(lambtha)
+        λ = self.lambtha
 
         if data is None:
             if λ <= 0:
@@ -31,7 +31,7 @@ class Exponential:
 
             elif len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            λ = float (1 / (sum(data) / len(data)))
+            λ = float(1 / (sum(data) / len(data)))
             self.lambtha = λ
 
     def erf(self, x):
