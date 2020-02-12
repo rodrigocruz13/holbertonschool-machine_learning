@@ -21,7 +21,6 @@ class Exponential:
         self.e = 2.7182818285
 
         λ = float(lambtha)
-        β = 1 / λ
 
         if data is None:
             if λ <= 0:
@@ -34,7 +33,6 @@ class Exponential:
                 raise ValueError("data must contain multiple values")
             λ = 1 / float(sum(data) / len(data))
             self.lambtha = λ
-            β = 1 / λ
 
     def erf(self, x):
         """
@@ -75,10 +73,10 @@ class Exponential:
         """
         Calculates the value of the PDF for a given number of “successes”
         Args:
-            k (float): Number of “successes”
+            x (float): Number of “successes”
 
         Returns:
-               PDF (float): The PDF value for k.
+               pdf (float): The PDF value for k.
         """
 
         if x < 0:
@@ -94,10 +92,10 @@ class Exponential:
         """
         Calculates the value of the CDF for a given number of “successes”
         Args:
-            k (float): Number of “successes”
+            x (float): Number of “successes”
 
         Returns:
-               CMF (float): The PMF value for k.
+               cdf (float): The PMF value for k.
         """
 
         if x <= 0:
