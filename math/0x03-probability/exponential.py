@@ -16,7 +16,7 @@ class Exponential:
         Returns:
             Nothing. Just initialize the variables
         """
-        self.lambtha = lambtha
+        self.lambtha = float(lambtha)
         self.π = 3.1415926536
         self.e = 2.7182818285
 
@@ -31,7 +31,7 @@ class Exponential:
 
             elif len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            λ = 1 / float(sum(data) / len(data))
+            λ = float (1 / (sum(data) / len(data)))
             self.lambtha = λ
 
     def erf(self, x):
