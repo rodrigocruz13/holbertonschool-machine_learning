@@ -106,4 +106,4 @@ class Exponential:
         if k < 0:
             return 0
 
-        return 1 - e ** (-1 * λ * k) 
+        return 1 - e ** (-1 * λ * k)
