@@ -73,20 +73,21 @@ class Exponential:
         """
         Calculates the value of the PDF for a given number of “successes”
         Args:
-            x (float): Number of “successes”
+            x (float):  is the time period
 
         Returns:
-               pdf (float): The PDF value for k.
+               pdf (float): The PDF value for x.
+               0 if x is out of range
         """
 
         k = x
         λ = self.lambtha
         e = self.e
 
-        if x < 0:
+        if k < 0:
             return 0
 
-        return λ * (e ** -λ * k)
+        return λ * e ** (-1 * λ * k)
 
     def cdf(self, x):
         """
@@ -99,11 +100,10 @@ class Exponential:
         """
 
         k = x
-        if x <= 0:
+        λ = self.lambtha
+        e = self.e
+
+        if k < 0:
             return 0
 
-        cdf = 0
-        while (k > 0):
-            cdf += self.pdf(k)
-            k = k - 0.9999999999
-        return cdf
+        return 1 - e ** (-1 * λ * k) 
