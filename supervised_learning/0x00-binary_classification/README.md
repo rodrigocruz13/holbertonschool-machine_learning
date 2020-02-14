@@ -2,7 +2,7 @@
 
 ## Specializations - Machine Learning ― Supervised Learning
 
-![Classification](https://imgur.com/42vqH03)
+![Classification](https://imgur.com/42vqH03.jpg)
 
 ## Tasks
 
