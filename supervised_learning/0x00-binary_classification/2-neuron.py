@@ -78,7 +78,8 @@ class Neuron:
         Return:
         - __A: The value of the attribute __A.
         """
-        # z = X.W
+        # z = w.X + b
         z = np.matmul(self.W, X) + self.b
         forward_prop = 1 / (1 + np.exp(-1 * z))
         self.__A = forward_prop
+        return self.__A
