@@ -98,7 +98,9 @@ class Neuron:
         """
         m = Y.shape[1]
         j = - (1 / m)
-        u = 1.0000001 - A
+
+        Ä = 1.0000001 - A
+        Ÿ = 1 - Y
         cost = j * np.sum(np.multiply(Y, np.log(A)) +
-                          np.multiply(1 - Y, np.log(u)))
+                          np.multiply(Ÿ, np.log(Ä)))
         return cost
