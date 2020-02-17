@@ -165,14 +165,15 @@ class Neuron:
                       example. The label values should be 1 if the output
                       of the network is >= 0.5 and 0 otherwise
         - cost: the cost
-        Answer from: https://bit.ly/37vaP3S
+        Answer from: - https://bit.ly/37vaP3S
+
         """
 
         α = alpha
-        m = 1 / len(Y[0])
+        m = 1 / len(X[0])
 
         # z = w1X1 + w2X2 + b
-        # Derivative z
+        # Derivative z: https://www.youtube.com/watch?v=z_xiwjEdAC4  
         dz = A - Y
 
         # Derivative respect to weight
