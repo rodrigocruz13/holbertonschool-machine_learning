@@ -166,14 +166,13 @@ class Neuron:
                       of the network is >= 0.5 and 0 otherwise
         - cost: the cost
         Answer from: - https://bit.ly/37vaP3S
-
         """
 
         α = alpha
         m = 1 / len(X[0])
 
         # z = w1X1 + w2X2 + b
-        # Derivative z: https://www.youtube.com/watch?v=z_xiwjEdAC4  
+        # Derivative z: https://www.youtube.com/watch?v=z_xiwjEdAC4
         dz = A - Y
 
         # Derivative respect to weight
@@ -183,7 +182,7 @@ class Neuron:
         db = np.sum(dz) * m
 
         # w: = α * dw, where ": = means actualization"
-        self.__W = self.__W - (α * dw)
+        self.__W = self.__W - (α * dw).T
 
         # b: = α * db, where ": = means actualization"
-        self.__b = self.__b - (α * db)
+        self.__b = self.__b - (α * db).T
