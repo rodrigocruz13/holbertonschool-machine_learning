@@ -134,7 +134,7 @@ class Neuron:
 
         # You are not allowed to use any loops (for, while, etc.)
 
-        #labels = self.__A.copy()
+        # labels = self.__A.copy()
         # for i in range(len(self.__A)):
         #    for j in range(len(self.__A[0])):
         #        if (self.__A[i][j] >= 0.5):
