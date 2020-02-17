@@ -124,7 +124,7 @@ class Neuron:
 
         # Generate forward propagation.
         # This creates the value of each activation
-        self.forward_prop(X)
+        predictions = self.forward_prop(X)
 
         # Calculate cost
         cost = self.cost(Y, self.__A)
@@ -132,12 +132,16 @@ class Neuron:
         # Generate a matrix of size (1, m) and generate labels
         # 1 if the output of the network is >= 0.5 and 0 otherwise
 
-        labels = self.__A.copy()
+        # You are not allowed to use any loops (for, while, etc.)
 
-        for i in range(len(self.__A)):
-            for j in range(len(self.__A[0])):
-                if (self.__A[i][j] >= 0.5):
-                    labels[i][j] = 1
-                else:
-                    labels[i][j] = 0
+        #labels = self.__A.copy()
+        # for i in range(len(self.__A)):
+        #    for j in range(len(self.__A[0])):
+        #        if (self.__A[i][j] >= 0.5):
+        #            labels[i][j] = 1
+        #        else:
+        #            labels[i][j] = 0
+        # return (labels, cost)
+
+        labels = np.where(predictions < 0.5, 0, 1)
         return (labels, cost)
