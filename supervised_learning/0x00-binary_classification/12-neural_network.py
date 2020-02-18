@@ -165,7 +165,6 @@ class NeuralNetwork:
                           np.multiply(Ŷ, np.log(Ä)))
         return cost
 
-
     def evaluate(self, X, Y):
         """
         Calculates the cost of the model using logistic regression
