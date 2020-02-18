@@ -6,7 +6,7 @@ Class NeuralNetwork
 import numpy as np
 
 
-class Neuron:
+class NeuralNetwork:
     """ Class """
 
     def __init__(self, nx, nodes):
@@ -41,12 +41,12 @@ class Neuron:
         if nodes < 1:
             raise ValueError("nodes must be a positive integer")
 
-        self.W1 = np.random.randn(1, nx)
+        self.W1 = np.random.randn(nodes, nx)
         #  Draw random samples from a normal dist.
-        self.b1 = 0
+        self.b1 = np.zeros((nodes, 1))
         self.A1 = 0
 
-        self.W2 = np.random.randn(1, nx)
+        self.W2 = np.random.randn(1, nodes)
         #  Draw random samples from a normal dist.
         self.b2 = 0
         self.A2 = 0
