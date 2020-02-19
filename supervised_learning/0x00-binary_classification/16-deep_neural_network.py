@@ -43,12 +43,7 @@ class DeepNeuralNetwork:
 
         self.L = len(layers)
         self.cache = {}
-        self.weights = {"W1": np.random.randn(layers[0], nx) *
-                        np.sqrt(2 / nx), "b1": np.zeros((layers[0], 1))}
-
-        for a_layer, size in enumerate(layers[1:], 2):
-            c = "W" + str(a_layer)
-            self.weights[c] = (np.random.randn(size, layers[a_layer - 2]) *
-                                 np.sqrt(2 / layers[a_layer - 2]))
-            c = "b" + str(a_layer)
-            self.weights[c] = np.zeros((layers[a_layer - 1], 1))
+        self.weights = {"W1": np.random.randn(layers[0], nx), "b1": np.zeros((layers[0], 1))}
+        for i in range(1, self.L):
+            self.weights[("W{}".format(i+1))] = np.random.randn(layers[i], layers[i-1]) * np.sqrt(2/layers[i-1])
+            self.weights[("b{}".format(i+1))] = np.zeros((layers[i], 1))
