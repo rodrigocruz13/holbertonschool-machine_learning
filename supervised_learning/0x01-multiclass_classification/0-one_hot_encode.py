@@ -20,11 +20,12 @@ def one_hot_encode(Y, classes):
     """
     if isinstance(Y, np.ndarray):
         if (isinstance(classes, int) and classes > 0 and Y.shape[0] > 0):
-            # create empty matrix
-            encoded_Y = np.zeros((classes, Y.shape[0]))
+            if (classes <= Y.shape[0]):
+                # create empty matrix
+                encoded_Y = np.zeros((classes, Y.shape[0]))
 
-            # Hot encoding
-            for i in range(Y.shape[0]):
-                encoded_Y[Y[i]][i] = 1
-            return encoded_Y
+                # Hot encoding
+                for i in range(Y.shape[0]):
+                    encoded_Y[Y[i]][i] = 1
+                return encoded_Y
     return None
