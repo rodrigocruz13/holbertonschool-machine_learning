@@ -17,16 +17,16 @@ def one_hot_decode(one_hot):
             a one-hot encoding of Y with shape (classes, m),
             None on failure
     """
+    if type(one_hot) == np.ndarray:
+        if (one_hot.shape[0] > 0 and type(one_hot.shape[0]) == int):
+            lenght_ = one_hot.shape[0]
+            a_list = []
 
-    if (one_hot.shape[0] > 0):
-        lenght_ = one_hot.shape[0]
-        a_list = []
+            for i in range(lenght_):
+                column = one_hot[:, i]
+                key = np.unique(column, return_index=True, axis=None)
+                a_list.append(key[1][1])
 
-        for i in range(lenght_):
-            column = one_hot[:, i]
-            key = np.unique(column, return_index=True, axis=None)
-            a_list.append(key[1][1])
-
-        one_hot_decode = np.asarray(a_list)
-        return (one_hot_decode)
+            one_hot_decode = np.asarray(a_list)
+            return (one_hot_decode)
     return None
