@@ -19,7 +19,7 @@ def one_hot_decode(one_hot):
     if isinstance(one_hot, np.ndarray):
         if (one_hot.shape[0] > 0 and isinstance(one_hot.shape[0], int)):
             if (np.max(one_hot) > 0):
-                lenght_ = one_hot.shape[0]
+                lenght_ = one_hot.shape[1]
                 a_list = []
 
                 for i in range(lenght_):
