@@ -20,7 +20,8 @@ def one_hot_encode(Y, classes):
     """
     if isinstance(Y, np.ndarray):
         if (isinstance(classes, int) and classes > 0 and Y.shape[0] > 0):
-            if (classes <= Y.shape[0]):
+            maximum = np.max(Y)
+            if (classes <= Y.shape[0] and classes > maximum):
                 # create empty matrix
                 encoded_Y = np.zeros((classes, Y.shape[0]))
 
