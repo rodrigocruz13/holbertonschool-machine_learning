@@ -101,8 +101,8 @@ class DeepNeuralNetwork:
         Calculates the forward propagation of the neural network
         Updates the private attributes __cache
         The activated outputs of each layer should be saved in the __cache
-        dictionary using the key A{l} where {l} is the hidden layer the activated
-        output belongs to
+        dictionary using the key A{l} where {l} is the hidden layer the
+        activated output belongs to
         The neurons should use a sigmoid activation function
 
 
@@ -114,69 +114,21 @@ class DeepNeuralNetwork:
         - The output of the neural network and the cache, respectively
         """
 
-        # z1 = w . X1 + b1
-        z = np.matmul(self.W1, X) + self.b1
-        forward_prop = 1 / (1 + np.exp(-1 * z))
-        self.__A1 = forward_prop
+        self.__cache["A0"] = X
 
-        # z2 = w . __A1 + b12
-        # For this case, the inputs will be the layer A1 instead of X
-        z = np.matmul(self.W2, self.__A1) + self.b2
-        forward_prop = 1 / (1 + np.exp(-1 * z))
-        self.__A2 = forward_prop
+        for layer in range(self.__L):
 
-        return self.__A1, self.__A2
-
-        self.__cache['A0'] = X
-        for cont in range(1, self.__L + 1):
-            weights = self.__weights['W' + str(cont)]
-            old_a = self.__cache['A' + str(cont - 1)]
-            b = self.__weights['b' + str(cont)]
+            weights = self.__weights["W" + str(layer + 1)]
+            a_ = self.__cache["A" + str(layer)]
+            b = self.__weights["b" + str(layer + 1)]
 
             # z1 = w . X1 + b1
-            z = np.dot(weights, old_a) + b
+            z = np.matmul(weights, a_) + b
 
             # sigmoid function
             forward_prop = 1 / (1 + np.exp(-1 * z))
 
             # updating cache
-            self.__cache['A' + str(cont)] = forward_prop
+            self.__cache["A" + str(layer + 1)] = forward_prop
 
-        return (forward_prop, self.__cache)
-
-    def forward_prop(self, X):
-        """
-        Calculates the forward propagation of the neural network
-        Updates the private attributes __cache
-        The activated outputs of each layer should be saved in the __cache
-        dictionary using the key A{l} where {l} is the hidden layer the activated
-        output belongs to
-        The neurons should use a sigmoid activation function
-
-
-        Arguments:
-        - X is a numpy.ndarray with shape (nx, m) that contains the input data
-          - nx (int) is the number of input features to the neuron
-          - m (int) is the number of examples
-        Return:
-        - The output of the neural network and the cache, respectively
-        """
-
-        self.__cache['A0'] = X
-
-        for cont in range(1, self.__L + 1):
-
-            weights = self.__weights['W' + str(cont)]
-            old_a = self.__cache['A' + str(cont - 1)]
-            b = self.__weights['b' + str(cont)]
-
-            # z1 = w . X1 + b1
-            z = np.dot(weights, old_a) + b
-
-            # sigmoid function
-            forward_prop = 1 / (1 + np.exp(-1 * z))
-
-            #updating cache
-            self.__cache['A' + str(cont)] = forward_prop
-
-        return (forward_prop, self.__cache)
+        return self.__cache["A" + str(self.__L)], self.__cache
