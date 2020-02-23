@@ -13,49 +13,56 @@ class DeepNeuralNetwork:
         """
         Initialize NeuralNetwork
         Args:
-            - nx: is the number of input features to the neuron
-            - layers: is a list representing the number of nodes
-                      in each layer of the network
+            - nx: nx is the number of input features
+            - Layers: is the number of nodes found in the hidden layer
         Public attributes:
-        - W1: The weights vector for the hidden layer. Upon instantiation,
-              it should be initialized using a random normal distribution.
-        - b1: b1: The bias for the hidden layer. Upon instantiation,
-              it should be initialized with 0’s.
-        - A1: The activated output for the hidden layer. Upon instantiation,
-              it should be initialized to 0.
-        - W2: The weights vector for the neuron.
-              It is initialized with a random normal distribution.
-        - b2: The bias for the neuron. Upon instantiation.
-             It is initialized to 0.
-        - A2: The activated output of the neuron (prediction).
-            It is initialized to 0.
+            - L: The number of layers in the neural network.
+            - cache: A dictionary to hold all intermediary values of the
+            network. Upon instantiation, it should be set to an empty dict.
+            - weights: A dict to hold all weights and biased of the network.
+            Upon instantiation:
+            - The weights of the network should be initialized with He et al.
+            method and saved in the weights dictionary using the key W{l}
+            where {l}is the hidden layer the weight belongs to
+            - The biases of the network should be initialized to 0’s and
+            saved in the weights dictionary using the key b{l} where {l}
+            is the hidden layer the bias belongs to
         """
-
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
+
         if nx < 1:
             raise ValueError("nx must be a positive integer")
+
         if not isinstance(layers, list):
             raise TypeError("layers must be a list of positive integers")
-        if layers.len == 0:
-            raise TypeError("layers must be a list of positive integers")
-        if min(layers) < 1:
+
+        if layers[0] < 1:
+            raise ValueError("layers must be a list of positive integers")
+
+        if (np.where(layers[0] < 0, True, False)):
             raise TypeError("layers must be a list of positive integers")
 
-        self.L = len(layers)
+        self.L = layers[0]
         self.cache = {}
         self.weights = {}
 
-        for i in range(self.L):
-            if not isinstance(layers[i], int) or layers[i] <= 0:
+        "layer_size = ls"
+        "w=np.random.randn(ls[l],ls[l-1])*np.sqrt(2/ls[l-1])"
+
+        for l in range(len(layers)):
+            if not isinstance(layers[l], int):
                 raise TypeError('layers must be a list of positive integers')
 
-            if i == 0:
-                w = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
+            if layers[l] <= 0:
+                raise TypeError('layers must be a list of positive integers')
+
+            if l == 0:
+                he_et_tal = np.random.randn(layers[l], nx) * np.sqrt(2 / nx)
 
             else:
-                w = np.random.randn(layers[i], layers[i - 1])
-                w = w * np.sqrt(2 / layers[i - 1])
+                he_et_tal = np.random.randn(layers[l], layers[l - 1])
+                he_et_tal = he_et_tal * np.sqrt(2 / layers[l - 1])
 
-            self.weights["b" + str(i + 1)] = np.zeros((layers[i], 1))
-            self.weights["W" + str(i + 1)] = w
+            self.weights["b" + str(l + 1)] = np.zeros((layers[l], 1))
+            self.weights["W" + str(l + 1)] = he_et_tal
