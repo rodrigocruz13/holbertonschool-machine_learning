@@ -6,25 +6,6 @@ Module used to
 import tensorflow as tf
 
 
-def create_placeholders(nx, classes):
-    """
-    function that returns two placeholders, x and y, for the neural network:
-    Args:
-        nx (int): the number of feature columns in our data
-        classes (int): the number of classes in our classifier
-
-    Returns:
-        placeholders named x and y, respectively
-        x is the placeholder for the input data to the neural network
-        y is the placeholder for the one-hot labels for the input data
-    """
-
-    x = tf.placeholder(float, shape=[None, nx], name="x")
-    y = tf.placeholder(float, shape=[None, classes], name="y")
-
-    return (x, y)
-
-
 def create_layer(prev, n, activation):
     """
     function that returns  tensor output of the layer.
@@ -43,16 +24,15 @@ def create_layer(prev, n, activation):
     raw_layer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
 
     # (1)
-    init = tf.global_variables_initializer()
+    # init = tf.global_variables_initializer()
 
     # (2)
-    output_tensor = tf.layers.dense(inputs=prev, 
-                                    units=n,
+    output_tensor = tf.layers.Dense(units=n,
                                     activation=activation,
                                     kernel_initializer=raw_layer,
                                     name="layer")
 
-    return(output_tensor)
+    return(output_tensor(prev))
 
     # (1)
     # The layer contains variables that must be initialized before they can be
@@ -70,7 +50,7 @@ def create_layer(prev, n, activation):
 
     # (2)
     # https://bit.ly/390xI0B   tf.layers.Dense
-    # 
+    #
     # tf.layers.dense. In TensorFlow, this type of fully-connected neuron
     # layer is implemented using tf.layers.dense, which takes in a neuron
     # layer and output size as required arguments, and adds a
