@@ -39,6 +39,7 @@ def create_layer(prev, n, activation):
     # used. While it is possible to initialize variables individually, you can
     # easily initialize all the variables in a TensorFlow graph as follows:
     # init = tf.global_variables_initializer()
+    # ??
 
     # Important: Calling tf.global_variables_initializer only creates and
     # returns a handle to a TensorFlow operation. That op will initialize all
