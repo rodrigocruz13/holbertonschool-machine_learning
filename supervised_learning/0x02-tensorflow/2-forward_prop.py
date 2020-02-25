@@ -22,6 +22,7 @@ def forward_prop(x, layer_sizes=[], activations=[]):
         the prediction of the network in tensor form
     """
 
+    # 
     # print(x) = Tensor("x:0", shape=(?, 784), dtype=float32)
     # print(layer_sizes) = [256, 256, 10]
     # print(activations) = [<function tanh at 0x7efe482730d0>,
@@ -36,7 +37,7 @@ def forward_prop(x, layer_sizes=[], activations=[]):
         layer_activation_ = activations[i]
 
         if (i != 0):
-            input_ = new_layer[1:]
+            input_ = new_layer
 
         new_layer = create_layer(input_, layer_lenght_, layer_activation_)
         i = i + 1
