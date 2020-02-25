@@ -70,3 +70,9 @@ def create_layer(prev, n, activation):
 
     # (2)
     # https://bit.ly/390xI0B   tf.layers.Dense
+    # 
+    # tf.layers.dense. In TensorFlow, this type of fully-connected neuron
+    # layer is implemented using tf.layers.dense, which takes in a neuron
+    # layer and output size as required arguments, and adds a
+    # fully-connected output layer with the given size to the computation
+    # graph.
