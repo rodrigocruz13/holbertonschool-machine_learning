@@ -40,19 +40,19 @@ def create_layer(prev, n, activation):
         the tensor output of the layer
     """
 
-    m = "FAN_AVG"
-    raw_layer = tf.contrib.layers.variance_scaling_initializer(mode=m)
+    raw_layer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
 
     # (1)
     init = tf.global_variables_initializer()
 
     # (2)
-    output_tensor = tf.layers.Dense(units=n,
+    output_tensor = tf.layers.dense(inputs=prev, 
+                                    units=n,
                                     activation=activation,
                                     kernel_initializer=raw_layer,
                                     name="layer")
 
-    return(output_tensor(prev))
+    return(output_tensor)
 
     # (1)
     # The layer contains variables that must be initialized before they can be
