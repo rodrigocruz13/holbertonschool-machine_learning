@@ -11,7 +11,7 @@ def shuffle_data(X, Y):
     Shuffles the data points in two matrices the same way:
 
     Args:
-        X numpy.ndarray of shape (m, nx) to normalize
+        X numpy.ndarray of shape (m, nx) to shuffle
             - m is the number of data points
             - nx is the number of features
         Y is the second numpy.ndarray of shape (m, ny)
