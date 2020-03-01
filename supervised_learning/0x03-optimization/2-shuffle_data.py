@@ -24,7 +24,7 @@ def shuffle_data(X, Y):
 
     # Answer # 2. stackoverflow. https://bit.ly/2TshCq6
     # Using numPy's array indexing:
-    
+
     assert len(X) == len(Y)
     p = np.random.permutation(len(X))
     return (X[p], Y[p])
