@@ -22,9 +22,9 @@ def shuffle_data(X, Y):
         The shuffled X and Y matrices
     """
 
-    # Hint: you should use numpy.random.permutation
-
-    xs = np.random.permutation(X)
-    ys = np.random.permutation(Y)
-
-    return (xs, ys)
+    # Answer # 2. stackoverflow. https://bit.ly/2TshCq6
+    # Using numPy's array indexing:
+    
+    assert len(X) == len(Y)
+    p = np.random.permutation(len(X))
+    return (X[p], Y[p])
