@@ -22,7 +22,7 @@ def normalize(X, m, s):
         The normalized X matrix
     """
 
-    # Normalized 
+    # Normalized
     z = (X - m) / s
 
     return (z)
