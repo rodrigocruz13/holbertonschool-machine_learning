@@ -22,10 +22,7 @@ def normalize(X, m, s):
         The normalized X matrix
     """
 
-    # mean
-    Ẋ = np.mean(X, axis=0)
+    # Normalized 
+    z = (X - m) / s
 
-    # Standard deviation
-    σ = np.std(X, axis=0)
-
-    return (Ẋ, σ)
+    return (z)
