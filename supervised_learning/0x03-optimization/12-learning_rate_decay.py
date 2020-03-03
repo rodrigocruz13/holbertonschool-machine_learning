@@ -3,6 +3,8 @@
 Module used to
 """
 
+import tensorflow as tf
+
 
 def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
     """
@@ -19,17 +21,22 @@ def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
         The updated value for alpha
     """
 
-    # inverse time decay
-    # https://towardsdatascience.com/learning-rate-schedules-and-adaptive-learning-rate-methods-for-deep-learning-2c8f433990d1
-    # lr *= (1. / (1. decay rate * epoch)) * lr
-
-    # But using the formula in tf.train.inverse_time_decay:
-    # decayed_learning_rate =
-    # learning_rate / (1 + decay_rate * floor(global_step / decay_step))
-    # floor int()
-
     α = alpha
-    dr = decay_rate
 
-    decayed_learning_rate = α / (1 + dr * int(global_step / decay_step))
-    return (decayed_learning_rate)
+    # tf.train.RMSPropOptimizer
+    # https://github.com/tensorflow/docs/blob/r1.12/site/en/api_docs/python/tf/train/RMSPropOptimizer.md
+    # Optimizer that implements the RMSProp algorithm.
+    α1 = tf.train.inverse_time_decay(learning_rate=α,
+                                     global_step=global_step,
+                                     decay_steps=decay_step,
+                                     decay_rate=decay_rate,
+                                     staircase=True)
+
+    # Args minimize(
+    # - loss, A Tensor containing the value to minimize
+    # ...
+    # Returns:
+    # An Operation that updates the variables in var_list. If global_step
+    # was not None, that operation also increments global_step.
+
+    return α1
