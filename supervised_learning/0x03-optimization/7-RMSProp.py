@@ -3,8 +3,6 @@
 Module used to
 """
 
-import tensorflow as tf
-
 
 def update_variables_RMSProp(alpha, beta2, epsilon, var, grad, s):
     """
