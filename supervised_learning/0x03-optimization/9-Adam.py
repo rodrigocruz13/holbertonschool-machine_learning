@@ -38,6 +38,6 @@ def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
 
     Vd_ok = Vd / (1 - β1 ** t)
     Sd_ok = Sd / (1 - β2 ** t)
-    
+
     w = var - α * (Vd_ok / ((Sd_ok ** (0.5)) + ε))
     return (w, Vd, Sd)
