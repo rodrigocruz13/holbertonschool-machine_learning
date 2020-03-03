@@ -16,6 +16,8 @@ def update_variables_momentum(alpha, beta1, var, grad, v):
         var:   is a numpy.ndarray containing the variable to be updated
         grad:  is a numpy.ndarray containing the gradient of var
         v:     is the previous first moment of var
+    Returns:
+        The updated variable and the new moment, respectively
     """
 
     # Gradient descent with momentum
