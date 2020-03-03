@@ -29,7 +29,10 @@ def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
     # tf.train.RMSPropOptimizer
     # https://github.com/tensorflow/docs/blob/r1.12/site/en/api_docs/python/tf/train/RMSPropOptimizer.md
     # Optimizer that implements the RMSProp algorithm.
-    train = tf.train.AdamOptimizer(learning_rate=α, beta1=β1, beta2=β2, epsilon=ε)
+    train = tf.train.AdamOptimizer(learning_rate=α,
+                                   beta1=β1,
+                                   beta2=β2,
+                                   epsilon=ε)
 
     # Args minimize(
     # - loss, A Tensor containing the value to minimize
