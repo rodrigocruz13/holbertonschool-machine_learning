@@ -23,7 +23,7 @@ def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
 
     α = alpha
 
-    # tf.train.RMSPropOptimizer
+    # tf.train.inverse_time_decay
     # https://github.com/tensorflow/docs/blob/r1.12/site/en/api_docs/python/tf/train/RMSPropOptimizer.md
     # Optimizer that implements the RMSProp algorithm.
     α1 = tf.train.inverse_time_decay(learning_rate=α,
@@ -32,11 +32,18 @@ def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
                                      decay_rate=decay_rate,
                                      staircase=True)
 
-    # Args minimize(
-    # - loss, A Tensor containing the value to minimize
-    # ...
+    # Args
+    # - learning_rate: A scalar float32 or float64 Tensor or a Python number.
+    #                  The initial learning rate.
+    # - global_step:   A Python number. Global step to use for the decay
+    #                  computation. Must not be negative.
+    # - decay_steps:   How often to apply decay.
+    # - decay_rate:    A Python number. The decay rate.
+    # - staircase:     Whether to apply decay in a discrete staircase,
+    #                  as opposed to continuous, fashion.
+    # - name:          String. Optional name of the operation.
+    #                  Defaults to 'InverseTimeDecay'.
     # Returns:
-    # An Operation that updates the variables in var_list. If global_step
-    # was not None, that operation also increments global_step.
+    # the learning rate decay operation
 
     return α1
