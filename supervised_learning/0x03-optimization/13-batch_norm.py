@@ -29,14 +29,14 @@ def batch_norm(Z, gamma, beta, epsilon):
 
     # https://www.youtube.com/watch?v=tNIpEZLv_eg
 
-    # len of layer
-    m = len(Z)
-
     # mean
-    μ = np.sum(Z) / m
+    μ = Z.mean(0)
+
+    # std deviation
+    σ = Z.std(0)
 
     # variance
-    σ2 = np.sum((Z - μ) ** 2) / m
+    σ2 = Z.std(0) ** 2
 
     # z normalized
     z_normalized = (Z - μ) / ((σ2 + ε) ** (0.5))
