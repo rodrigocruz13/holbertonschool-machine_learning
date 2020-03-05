@@ -22,7 +22,7 @@ def create_confusion_matrix(labels, logits):
 
     # labels.shape = 50.000 x 10
     # logits.shape = 50.0000 x 10
-    # Answer = 10 x 10  --->  labels.transpose
+    # Answer = 10 x 10  --->then --->  labels.transpose
 
     confusion = np.dot(labels.T, logits)
 
