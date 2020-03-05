@@ -18,7 +18,7 @@ def specificity(confusion):
         numpy.ndarray of shape (classes,) with the specificity of each class
     """
 
-    # FP = confusion_matrix.sum(axis=0) - np.diag(confusion_matrix)  
+    # FP = confusion_matrix.sum(axis=0) - np.diag(confusion_matrix)
     # FN = confusion_matrix.sum(axis=1) - np.diag(confusion_matrix)
     # TP = np.diag(confusion_matrix)
     # TN = confusion_matrix.values.sum() - (FP + FN + TP)
@@ -26,27 +26,27 @@ def specificity(confusion):
     # 1
     # Sensitivity, hit rate, recall, or true positive rate
     # TPR = TP/(TP+FN)
-    
+
     # 2
     # Specificity or true negative rate
-    # TNR = TN/(TN+FP) 
-    
+    # TNR = TN/(TN+FP)
+
     # 3
     # Precision or positive predictive value
     # PPV = TP/(TP+FP)
-    
+
     # 4
     # Negative predictive value
     # NPV = TN/(TN+FN)
-    
+
     # 5
     # Fall out or false positive rate
     # FPR = FP/(FP+TN)
-    
+
     # 6
     # False negative rate
     # FNR = FN/(TP+FN)
-    
+
     # 7
     # False discovery rate
     # FDR = FP/(TP+FP)
@@ -55,10 +55,10 @@ def specificity(confusion):
     # Overall accuracy
     # ACC = (TP+TN)/(TP+FP+FN+TN)
 
-    FP = confusion.sum(axis=0) - np.diag(confusion)  
+    FP = confusion.sum(axis=0) - np.diag(confusion)
     FN = confusion.sum(axis=1) - np.diag(confusion)
     TP = np.diag(confusion)
     TN = confusion.sum() - (FP + FN + TP)
 
     # 2. Specifity
-    return (TN/ (TN + FP))
+    return (TN / (TN + FP))
