@@ -23,7 +23,8 @@ def sensitivity(confusion):
     for row in confusion:
         positive = row[i]
         false_positive = np.sum(row)
-        sensitivity.append(positive / false_positive)
+        sensitivity_i = round(positive / false_positive, 8)
+        sensitivity.append(sensitivity_i)
         i = i + 1
 
     return (sensitivity)
