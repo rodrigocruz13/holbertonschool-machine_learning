@@ -29,10 +29,10 @@ def l2_reg_cost(cost, lambtha, weights, L, m):
     λ = lambtha
     sum_weights = 0
 
-    i = 0
     for keys in weights:
-        values = weights[keys]
-        sum_weights += np.linalg.norm(values)
+        if (keys[0] == "W"):    # selecting only weights from the dict
+            values = weights[keys]
+            sum_weights += np.linalg.norm(values)
 
     cost_l2 = cost + (λ / (2 * m)) * sum_weights
     return(cost_l2)
