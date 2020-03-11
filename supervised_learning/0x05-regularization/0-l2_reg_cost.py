@@ -24,9 +24,6 @@ def l2_reg_cost(cost, lambtha, weights, L, m):
 
     # Cost function = Loss + (λ / 2 * m) *  Σ | w | ^ 2
 
-    if (L == 0):
-        return 0
-
     λ = lambtha
     sum_weights = 0
 
