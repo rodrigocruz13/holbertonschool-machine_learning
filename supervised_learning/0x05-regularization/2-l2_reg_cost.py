@@ -18,8 +18,11 @@ def l2_reg_cost(cost):
     """
 
     # Cost = Entrophy cost (or cost) + L2_cost
+    # https://datascience-enthusiast.com/DL/Improving_DeepNeural_Networks_Regularization.html
 
     entrophy_cost = cost
-    cost_l2 = tf.contrib.layers.l2_regularizer()
+    cost_l2 = tf.losses.get_regularization_losses()
+    # Gets the list of regularization losses.
+    # Returns: A list of regularization losses as Tensors.
 
     return(entrophy_cost + cost_l2)
