@@ -31,9 +31,8 @@ def l2_reg_cost(cost, lambtha, weights, L, m):
 
     i = 0
     for keys in weights:
-        if (i < L - 1):
-            values = weights[keys]
-            sum_weights += np.linalg.norm(values)
+        values = weights[keys]
+        sum_weights += np.linalg.norm(values)
 
     cost_l2 = cost + (λ / (2 * m)) * sum_weights
     return(cost_l2)
