@@ -22,11 +22,12 @@ def dropout_create_layer(prev, n, activation, keep_prob):
     # Returns a funct that can be used to apply L2 regularization to weights.
 
     raw_layer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    dropout_layer = tf.layers.Dropout(keep_prob)
 
     output_tensor = tf.layers.Dense(units=n,
                                     activation=activation,
+                                    kernel_regularizer=dropout_layer,
                                     kernel_initializer=raw_layer)
 
-    droput_layer = tf.layers.Dropout(keep_prob)
     applied_layer = output_tensor(prev)
     return(applied_layer)
