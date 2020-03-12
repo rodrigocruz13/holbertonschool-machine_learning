@@ -3,7 +3,8 @@
 Module used to
 """
 
-def early_stopping(cost, opt_cost, threshold, patience, count): 
+
+def early_stopping(cost, opt_cost, threshold, patience, count):
     """
     that determines if you should stop gradient descent early.
     Early stopping should occur when the validation cost of the network has
@@ -25,6 +26,6 @@ def early_stopping(cost, opt_cost, threshold, patience, count):
 
     NN_should_be_stopped_early = False
     if (count == patience):
-        NN_should_be_stopped_early  = True
+        NN_should_be_stopped_early = True
 
     return (NN_should_be_stopped_early, count)
