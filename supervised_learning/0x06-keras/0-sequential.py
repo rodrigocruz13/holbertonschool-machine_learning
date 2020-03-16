@@ -6,7 +6,6 @@ Module used to
 import tensorflow.keras as K
 
 
-
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """
     Builds a NN with the Keras library **WITHOUT** the input class
