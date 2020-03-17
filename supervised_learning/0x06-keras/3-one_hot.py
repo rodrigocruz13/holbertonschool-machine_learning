@@ -10,7 +10,8 @@ def one_hot(labels, classes=None):
     """
     Builds a NN with the Keras library **WITHOUT** the sequential class
         Args:
-        - The last dimension of the one-hot matrix must be the number of classes
+        - The last dimension of the one-hot matrix must be the number of
+          classes
     Returns:
         the one-hot matrix
     """
