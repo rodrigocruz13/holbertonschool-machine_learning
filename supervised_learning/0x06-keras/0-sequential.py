@@ -40,5 +40,5 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
         # Layer (type)            Output Shape      Param #
         # dropout_2 (Dropout)     (None, 10)        0
         if i < n_layers - 1:
-            a_model.add(K.layers.Dropout(1- keep_prob))
+            a_model.add(K.layers.Dropout(1 - keep_prob))
     return a_model
