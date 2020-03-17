@@ -30,20 +30,17 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     regularizer = K.regularizers.l2(λ)
 
     # input layer creation
-    dense = K.layers.Dense(units=layers[0],
-                           kernel_regularizer=regularizer,
-                           activation=activations[0])(inputs)  # inputs
-    dense = K.layers.Dropout(1 - keep_prob)(dense)
+    outputs = K.layers.Dense(units=layers[0],
+                             kernel_regularizer=regularizer,
+                             activation=activations[0],
+                             name="dense")(inputs)  # inputs
 
     for i in range(1, n_layers):
-        dense = K.layers.Dense(units=layers[i],
-                               kernel_regularizer=regularizer,
-                               activation=activations[i],
-                               input_dim=nx)(dense)  # past layer
-        # To avoid creation of:
-        # Layer (type)            Output Shape      Param #
-        # dropout_2 (Dropout)     (None, 10)        0
-        if i < n_layers - 1:
-            dense = K.layers.Dropout(1 - keep_prob)(dense)
-    a_model = K.Model(inputs, dense)
+        dropout = K.layers.Dropout(1 - keep_prob)(outputs)
+        outputs = K.layers.Dense(units=layers[i],
+                                 kernel_regularizer=regularizer,
+                                 activation=activations[i],
+                                 input_dim=nx,
+                                 name="dense_" + str(i))(dropout)  # old layer
+    a_model = K.Model(inputs, outputs)
     return a_model
