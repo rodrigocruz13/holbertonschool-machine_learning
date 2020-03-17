@@ -21,7 +21,7 @@ def l2_reg_cost(cost):
     # https://datascience-enthusiast.com/DL/Improving_DeepNeural_Networks_Regularization.html
 
     entrophy_cost = cost
-    cost_l2 = tf.losses.get_regularization_losses()
+    cost_l2 = tf.losses.get_regularization_losses(scope=None)
     # Gets the list of regularization losses.
     # Returns: A list of regularization losses as Tensors.
 
