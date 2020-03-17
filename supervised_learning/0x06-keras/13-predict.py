@@ -6,9 +6,9 @@ Module used to
 import tensorflow.keras as K
 
 
-def predict(network, data, verbose=True):
+def predict(network, data, verbose=False):
     """
-    Function that saves a model’s configuration in JSON format:
+    Function that makes a prediction using a neural network:
     Args:
         - network is the network model to test
         - data is the input data to test the model with
@@ -18,7 +18,8 @@ def predict(network, data, verbose=True):
         The prediction for the data
     """
 
-    predictions = network.predict(data, verbose=verbose)
     # Generate predictions (probabilities -- the output of the last layer)
     # on new data using `predict`
-    return (predictions)
+
+    return network.predict(data, verbose=verbose)
+
