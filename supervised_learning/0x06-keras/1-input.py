@@ -33,7 +33,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     dense = K.layers.Dense(units=layers[0],
                            kernel_regularizer=regularizer,
                            activation=activations[0])(inputs)  # inputs
-    dense = K.layers.Dropout(1- keep_prob)(dense)
+    dense = K.layers.Dropout(1 - keep_prob)(dense)
 
     for i in range(1, n_layers):
         dense = K.layers.Dense(units=layers[i],
