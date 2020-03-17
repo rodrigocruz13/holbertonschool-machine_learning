@@ -22,4 +22,3 @@ def predict(network, data, verbose=False):
     # on new data using `predict`
 
     return network.predict(data, verbose=verbose)
-
