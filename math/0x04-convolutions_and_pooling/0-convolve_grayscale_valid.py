@@ -34,20 +34,20 @@ def convolve_grayscale_valid(images, kernel):
     k_h = kernel.shape[0]
     k_w = kernel.shape[1]
 
-    # output height
+    # output_height and output_width 
     o_h = i_h - k_h + 1
     o_w = i_w - k_w + 1
 
     # pad ⊛
     pad = 1
 
-    # convolution outputs of size n_images
+    # creating outputs of size: n_images, o_h x o_w
     outputs = np.zeros((n_images, o_h, o_w))
 
-    # vectorizing
+    # vectorizing the n_images
     images_array = np.arange(0, n_images)
 
-    # iterating over the output array
+    # iterating over the output array and generating the convolution
     for x in range(o_w):
         for y in range(o_h):
             x1 = x + k_w
