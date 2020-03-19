@@ -6,19 +6,21 @@ Module used to
 import numpy as np
 
 
-def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
+def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     """
-    Performs a valid convolution on grayscale images
+    Performs a valid convolution on images with channels (colors)
     Args:
-        - images is a numpy.ndarray with shape (m, h, w) containing
+        - images is a numpy.ndarray with shape (m, h, w, c) containing
           multiple grayscale images
             - m is the number of images
             - h is the height in pixels of the images
             - w is the width in pixels of the images
-        - kernel is a numpy.ndarray with shape (kh, kw) containing the kernel
-          for the convolution
+            - c is the number of channels in the image
+        - kernel is a numpy.ndarray with shape (kh, kw, c)
+          containing the kernel for the convolution
             - kh is the height of the kernel
             - kw is the width of the kernel
+            - c is the number of channels in the image
         - padding is either a tuple of (ph, pw), ‘same’, or ‘valid’
             - if ‘same’, performs a same convolution
             - if ‘valid’, performs a valid convolution
@@ -40,6 +42,9 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     i_h = images.shape[1]
     i_w = images.shape[2]
 
+    # images channel
+    i_c = images.shape[3]
+
     # kernel_width and kernel_height
     k_h = kernel.shape[0]
     k_w = kernel.shape[1]
@@ -53,7 +58,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         p_h = int((k_h - 1) / 2)
         p_w = int((k_w - 1) / 2)
 
-    elif (type(padding) is tuple):
+    elif (isinstance(padding, tuple)):
         p_h = padding[0]
         p_w = padding[1]
 
@@ -70,12 +75,19 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
 
     # creating pad of zeros around the output images
     padded_imgs = np.pad(images,
-                         ((0, 0), (p_h, p_h), (p_w, p_w)),
+                         ((0, 0),       # dim n_images
+                          (p_h, p_h),   # dim height
+                          (p_w, p_w),   # dim width
+                          (0, 0)        # dim channels
+                          ),
                          mode="constant",
                          constant_values=0)
 
-    # vectorizing the n_images into an array
+    # vectorizing the n_images into an array (creating a new dimension)
     imgs_arr = np.arange(0, n_images)
+
+    # vectorizing the n_images into an array (creating a new dimension)
+    chan_arr = np.arange(0, i_c)
 
     # iterating over the output array and generating the convolution
     for x in range(o_h):
@@ -85,6 +97,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
             x1 = x0 + k_h
             y1 = y0 + k_w
             outputs[imgs_arr, x, y] = np.sum(np.multiply(
-                padded_imgs[imgs_arr, x0: x1, y0: y1], kernel), axis=(1, 2))
+                padded_imgs[imgs_arr, x0: x1, y0: y1], kernel),
+                axis=(1, 2, 3))
 
     return outputs
