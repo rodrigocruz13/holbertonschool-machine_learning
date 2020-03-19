@@ -16,8 +16,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
             - h is the height in pixels of the images
             - w is the width in pixels of the images
             - c is the number of channels in the image
-        - kernel is a numpy.ndarray with shape (kh, kw, c) containing the kernel
-          for the convolution
+        - kernel is a numpy.ndarray with shape (kh, kw, c)
+          containing the kernel for the convolution
             - kh is the height of the kernel
             - kw is the width of the kernel
             - c is the number of channels in the image
@@ -58,7 +58,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         p_h = int((k_h - 1) / 2)
         p_w = int((k_w - 1) / 2)
 
-    elif (type(padding) is tuple):
+    elif (isinstance(padding, tuple)):
         p_h = padding[0]
         p_w = padding[1]
 
@@ -75,7 +75,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
 
     # creating pad of zeros around the output images
     padded_imgs = np.pad(images,
-                         ((0, 0),       # dim n_images 
+                         ((0, 0),       # dim n_images
                           (p_h, p_h),   # dim height
                           (p_w, p_w),   # dim width
                           (0, 0)        # dim channels
