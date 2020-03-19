@@ -6,9 +6,9 @@ Module used to
 import numpy as np
 
 
-def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
+def convolve(images, kernels, padding='same', stride=(1, 1)):
     """
-    Performs a valid convolution on images with channels (colors)
+    Performs a valid convolution on images with multiple channels (colors)
     Args:
         - images is a numpy.ndarray with shape (m, h, w, c) containing
           multiple grayscale images
@@ -16,11 +16,11 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
             - h is the height in pixels of the images
             - w is the width in pixels of the images
             - c is the number of channels in the image
-        - kernel is a numpy.ndarray with shape (kh, kw, c)
+        - kernels is a numpy.ndarray with shape (kh, kw, c)
           containing the kernel for the convolution
             - kh is the height of the kernel
             - kw is the width of the kernel
-            - c is the number of channels in the image
+            - nc is the number of kernels
         - padding is either a tuple of (ph, pw), ‘same’, or ‘valid’
             - if ‘same’, performs a same convolution
             - if ‘valid’, performs a valid convolution
@@ -46,8 +46,11 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     i_c = images.shape[3]
 
     # kernel_width and kernel_height
-    k_h = kernel.shape[0]
-    k_w = kernel.shape[1]
+    k_h = kernels.shape[0]
+    k_w = kernels.shape[1]
+
+    # numer of channels of the kernel
+    k_c = kernels.shape[2]
 
     # pad_h and pad_w ⊛
     if (padding == "valid"):
@@ -70,8 +73,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     o_h = int((i_h + 2 * p_h - k_h) / s_h) + 1
     o_w = int((i_w + 2 * p_w - k_w) / s_w) + 1
 
-    # creating outputs of size: n_images, o_h x o_w
-    outputs = np.zeros((n_images, o_h, o_w))
+    # creating outputs of size: [n_images,  o_h  ⊛  o_w  ⊛  k_c]
+    outputs = np.zeros((n_images, o_h, o_w, k_c))
 
     # creating pad of zeros around the output images
     padded_imgs = np.pad(images,
@@ -92,12 +95,13 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     # iterating over the output array and generating the convolution
     for x in range(o_h):
         for y in range(o_w):
-            x0 = x * s_h
-            y0 = y * s_w
-            x1 = x0 + k_h
-            y1 = y0 + k_w
-            outputs[imgs_arr, x, y] = np.sum(np.multiply(
-                padded_imgs[imgs_arr, x0: x1, y0: y1], kernel),
-                axis=(1, 2, 3))
+            for z in range(k_c):
+                x0 = x * s_h
+                y0 = y * s_w
+                x1 = x0 + k_h
+                y1 = y0 + k_w
+                outputs[imgs_arr, x, y, z] = np.sum(np.multiply(
+                    padded_imgs[imgs_arr, x0: x1, y0: y1], kernels[z]),
+                    axis=(1, 2, 3))
 
     return outputs
