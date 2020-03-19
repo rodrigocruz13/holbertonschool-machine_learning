@@ -50,8 +50,8 @@ def convolve_grayscale_valid(images, kernel):
     # iterating over the output array and generating the convolution
     for x in range(o_h):
         for y in range(o_w):
-            x1 = x + k_w
-            y1 = y + k_h
+            x1 = x + k_h
+            y1 = y + k_w
             outputs[images_array, x, y] = np.sum(np.multiply(
                 images[images_array, x: x1, y: y1], kernel), axis=(1, 2))
 
