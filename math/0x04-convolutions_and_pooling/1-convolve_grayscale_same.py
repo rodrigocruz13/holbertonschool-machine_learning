@@ -59,8 +59,8 @@ def convolve_grayscale_same(images, kernel):
     # iterating over the output array and generating the convolution
     for x in range(o_h):
         for y in range(o_w):
-            x1 = x + k_w
-            y1 = y + k_h
+            x1 = x + k_h
+            y1 = y + k_w
             outputs[imgs_arr, x, y] = np.sum(np.multiply(
                 padded_imgs[imgs_arr, x: x1, y: y1], kernel), axis=(1, 2))
 
