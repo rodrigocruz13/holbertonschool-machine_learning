@@ -44,24 +44,24 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     k_h = kernel.shape[0]
     k_w = kernel.shape[1]
 
+    # stride_height and stride_width
+    s_h = stride[0]
+    s_w = stride[1]
+
     # pad_h and pad_w ⊛
     if (padding == "valid"):
         p_h = 0
         p_w = 0
 
     elif (padding == "same"):
-        p_h = int((k_h - 1) / 2)
-        p_w = int((k_w - 1) / 2)
+        p_h = int((i_h - 1) * s_h + k_h - i_h / 2) + 1
+        p_w = int((i_w - 1) * s_h + k_w - i_w / 2) + 1
 
     elif (isinstance(padding, tuple)):
         p_h = padding[0]
         p_w = padding[1]
 
-    # stride_height and stride_width
-    s_h = stride[0]
-    s_w = stride[1]
-
-    # output_height and output_width
+# output_height and output_width
     o_h = int((i_h + 2 * p_h - k_h) / s_h) + 1
     o_w = int((i_w + 2 * p_w - k_w) / s_w) + 1
 
