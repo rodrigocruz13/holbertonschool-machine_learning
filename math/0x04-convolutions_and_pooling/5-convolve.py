@@ -52,22 +52,21 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     # numer of channels of the kernel
     k_c = kernels.shape[2]
 
-    # pad_h and pad_w ⊛
-    if (padding == "valid"):
-        p_h = 0
-        p_w = 0
+    # stride_height and stride_width
+    s_h = stride[0]
+    s_w = stride[1]
 
-    elif (padding == "same"):
-        p_h = int((k_h - 1) / 2)
-        p_w = int((k_w - 1) / 2)
+    # pad_h and pad_w ⊛
+    p_h = 0
+    p_w = 0
+
+    if (padding == "same"):
+        p_h = int(((i_h - 1) * s_h + k_h - i_h) / 2) + 1
+        p_w = int(((i_w - 1) * s_w + k_w - i_w) / 2) + 1
 
     elif (isinstance(padding, tuple)):
         p_h = padding[0]
         p_w = padding[1]
-
-    # stride_height and stride_width
-    s_h = stride[0]
-    s_w = stride[1]
 
     # output_height and output_width
     o_h = int((i_h + 2 * p_h - k_h) / s_h) + 1
@@ -101,7 +100,8 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
                 x1 = x0 + k_h
                 y1 = y0 + k_w
                 outputs[imgs_arr, x, y, z] = np.sum(np.multiply(
-                    padded_imgs[imgs_arr, x0: x1, y0: y1], kernels[z]),
+                    padded_imgs[imgs_arr,
+                                x0: x1, y0: y1], kernels[:, :, :, z]),
                     axis=(1, 2, 3))
 
     return outputs
