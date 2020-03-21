@@ -50,7 +50,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     k_w = kernels.shape[1]
 
     # numer of channels of the kernel
-    k_c = kernels.shape[2]
+    k_c = kernels.shape[3]
 
     # stride_height and stride_width
     s_h = stride[0]
