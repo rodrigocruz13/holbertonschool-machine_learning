@@ -72,7 +72,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     o_h = int((i_h + 2 * p_h - k_h) / s_h) + 1
     o_w = int((i_w + 2 * p_w - k_w) / s_w) + 1
 
-    # creating outputs of size: [n_images,  o_h  ⊛  o_w  ⊛  k_c]
+    # creating outputs of size: [n_images,  o_h  ⊛  o_w  ⊛  k_c ⊛  i_c]
     outputs = np.zeros((n_images, o_h, o_w, k_c))
 
     # creating pad of zeros around the output images
@@ -88,9 +88,6 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     # vectorizing the n_images into an array (creating a new dimension)
     imgs_arr = np.arange(0, n_images)
 
-    # vectorizing the n_images into an array (creating a new dimension)
-    chan_arr = np.arange(0, i_c)
-
     # iterating over the output array and generating the convolution
     for x in range(o_h):
         for y in range(o_w):
@@ -100,8 +97,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
                 x1 = x0 + k_h
                 y1 = y0 + k_w
                 outputs[imgs_arr, x, y, z] = np.sum(np.multiply(
-                    padded_imgs[imgs_arr,
-                                x0: x1, y0: y1], kernels[:, :, :, z]),
-                    axis=(1, 2, 3))
+                    padded_imgs[imgs_arr, x0: x1, y0: y1],
+                    kernels[:, :, :, z]), axis=(1, 2, 3))
 
     return outputs
