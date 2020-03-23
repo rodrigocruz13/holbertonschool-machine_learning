@@ -77,6 +77,7 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
                 x1 = x0 + k_h
                 y1 = y0 + k_w
                 outputs[imgs_arr, x, y, z] = np.sum(np.multiply(
-                    A_prev[imgs_arr, x0: x1, y0: y1], W[:, :, :, z]), axis=(1, 2, 3))
-
+                    A_prev[imgs_arr, x0: x1, y0: y1], W[:, :, :, z]),
+                    axis=(1, 2, 3))
+    outputs += b
     return outputs
