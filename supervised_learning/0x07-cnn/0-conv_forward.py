@@ -55,16 +55,34 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     s_h = stride[0]
     s_w = stride[1]
 
-    # output_height and output_width
-    o_h = ((h_prev - k_h + 1) // s_h)  # ceil function
-    o_w = ((w_prev - k_w + 1) // s_w)  # ceil function
+    # pad_h and pad_w ⊛
+    p_h = 0
+    p_w = 0
 
     if (padding == "same"):
-        o_h = (h_prev // s_h) + 1  # ceil function
-        o_w = (w_prev // s_w) + 1  # ceil funtion
+        p_h = int(((h_prev - 1) * s_h + k_h - h_prev) / 2) + 1
+        p_w = int(((w_prev - 1) * s_w + k_w - w_prev) / 2) + 1
+
+    elif (isinstance(padding, tuple)):
+        p_h = padding[0]
+        p_w = padding[1]
+
+    # output_height and output_width
+    o_h = int((h_prev + 2 * p_h - k_h) / s_h) + 1
+    o_w = int((w_prev + 2 * p_w - k_w) / s_w) + 1
 
     # creating outputs of size: [m,  o_h  ⊛  o_w  ⊛  c_output]
     outputs = np.zeros((m, o_h, o_w, c_output))
+
+    # creating pad of zeros around the output images
+    padded_imgs = np.pad(A_prev,
+                         ((0, 0),       # dim n_images
+                          (p_h, p_h),   # dim height
+                          (p_w, p_w),   # dim width
+                          (0, 0)        # dim channels
+                          ),
+                         mode="constant",
+                         constant_values=0)
 
     # vectorizing the n_images into an array (creating a new dimension)
     imgs_arr = np.arange(0, m)
@@ -78,7 +96,7 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
                 x1 = x0 + k_h
                 y1 = y0 + k_w
 
-                A_ = A_prev[imgs_arr, x0: x1, y0: y1]
+                A_ = padded_imgs[imgs_arr, x0: x1, y0: y1]
                 W_ = W[:, :, :, z]
                 b_ = b[:, :, :, z]
 
