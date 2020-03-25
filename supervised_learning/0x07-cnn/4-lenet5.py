@@ -3,11 +3,10 @@
 Module used to
 """
 
-import numpy as np
 import tensorflow as tf
 
 
-def lenet5(x, y): 
+def lenet5(x, y):
     """
     Function that builds a modified version of the LeNet-5 architecture using
     tensorflow:
@@ -43,29 +42,28 @@ def lenet5(x, y):
 
     # exampla taken from : https://bit.ly/2WI57tC
 
-
     init_ = tf.contrib.layers.variance_scaling_initializer()
     # 1. Conv layer, 6 kernels of shape 5x5 with same padding (hidden)
     cv_lyr1 = tf.layers.Conv2D(filters=6,
-                               kernel_size=(5,5),
+                               kernel_size=(5, 5),
                                padding='same',
                                kernel_initializer=init_,
                                activation=tf.nn.relu)(x)
 
     # 2. Max pooling layer, with kernels of shape 2x2 & 2x2 strides (hidden)
-    pool_lyr_2 = tf.layers.MaxPooling2D(pool_size=(2,2),
-                                        strides=(2,2))(cv_lyr1)
+    pool_lyr_2 = tf.layers.MaxPooling2D(pool_size=(2, 2),
+                                        strides=(2, 2))(cv_lyr1)
 
     # 3. Conv layer, 16 kernels of shape 5x5 with same padding (hidden)
     cv_lyr3 = tf.layers.Conv2D(filters=16,
-                               kernel_size=(5,5),
-                               padding='vaid',
+                               kernel_size=(5, 5),
+                               padding='valid',
                                kernel_initializer=init_,
                                activation=tf.nn.relu)(pool_lyr_2)
 
     # 4. Max pooling layer, with kernels of shape 2x2 & 2x2 strides (hidden)
-    pool_lyr_4 = tf.layers.MaxPooling2D(pool_size=(2,2),
-                                        strides=(2,2))(cv_lyr3)
+    pool_lyr_4 = tf.layers.MaxPooling2D(pool_size=(2, 2),
+                                        strides=(2, 2))(cv_lyr3)
 
     # 5. Fully connected layer with 120 nodes
     flatten5 = tf.layers.Flatten()(pool_lyr_4)
