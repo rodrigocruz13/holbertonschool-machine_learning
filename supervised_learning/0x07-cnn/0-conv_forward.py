@@ -60,12 +60,10 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     p_w = 0
 
     if (padding == "same"):
-        p_h = int(((h_prev - 1) * s_h + k_h - h_prev) / 2) + 1
-        p_w = int(((w_prev - 1) * s_w + k_w - w_prev) / 2) + 1
-
-    elif (isinstance(padding, tuple)):
-        p_h = padding[0]
-        p_w = padding[1]
+        p_h = np.ceil(((s_h * h_prev) - s_h + k_h - h_prev) / 2)
+        p_h = int(p_h)
+        p_w = np.ceil(((s_w * w_prev) - s_w + k_w - w_prev) / 2)
+        p_w = int(p_w)
 
     # output_height and output_width
     o_h = int((h_prev + 2 * p_h - k_h) / s_h) + 1
@@ -100,7 +98,7 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
                 W_ = W[:, :, :, z]
                 b_ = b[:, :, :, z]
 
-                outputs[imgs_arr, x, y, z] = activation(
-                    np.sum((A_ * W_), axis=(1, 2, 3)) + b_)
+                mx = np.sum((A_ * W_), axis=(1, 2, 3))
+                outputs[imgs_arr, x, y, z] = activation(mx + b_)
 
-    return outputs
+    return (outputs)
