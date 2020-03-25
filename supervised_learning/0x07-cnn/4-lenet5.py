@@ -81,13 +81,15 @@ def lenet5(x, y):
 
     # 7. Fully connected softmax output layer with 10 nodes
     # no need of flatten
-    sfmx_lyr = tf.contrib.layers.fully_connected(inputs=fc_lyr_6,
-                                                 num_outputs=10,
-                                                 activation_fn=tf.nn.softmax,
-                                                 weights_initializer=init_)
+    sfmx_ = tf.contrib.layers.fully_connected(inputs=fc_lyr_6,
+                                              num_outputs=10,
+                                              activation_fn=None,
+                                              weights_initializer=init_)
+
+    sfmx_lyr = tf.nn.softmax(sfmx_)
 
     # https://steadforce.com/first-steps-tensorflow-part-3/
-    losses = tf.losses.softmax_cross_entropy(onehot_labels=y, logits=sfmx_lyr)
+    losses = tf.losses.softmax_cross_entropy(onehot_labels=y, logits=sfmx_)
     predictions = tf.equal(tf.argmax(sfmx_lyr, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(predictions, tf.float32))
 
@@ -95,4 +97,4 @@ def lenet5(x, y):
     # site/en/api_docs/python/tf/train/AdamOptimizer.md
     train_operation = tf.train.AdamOptimizer().minimize(losses)
 
-    return sfmx_lyr, train_operation, losses, accuracy
+    return (sfmx_lyr, train_operation, losses, accuracy)
