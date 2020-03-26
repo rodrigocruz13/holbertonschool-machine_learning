@@ -63,21 +63,18 @@ def lenet5(X):
     flatten5 = K.layers.Flatten()(pool_lyr_4)
     fc_lyr_5 = K.layers.Dense(units=120,
                               activation='relu',
-                              use_bias=False,
                               kernel_initializer=init_)(flatten5)
 
     # 6. Fully connected layer with 84 nodes
     # no need of flatten
     fc_lyr_6 = K.layers.Dense(units=84,
                               activation='relu',
-                              use_bias=False,
                               kernel_initializer=init_)(fc_lyr_5)
 
     # 7. Fully connected softmax output layer with 10 nodes
     # no need of flatten
     sfmx_lyr = K.layers.Dense(units=10,
                               activation='softmax',
-                              use_bias=False,
                               kernel_initializer=init_)(fc_lyr_6)
 
     model = K.Model(inputs=X, outputs=sfmx_lyr)
