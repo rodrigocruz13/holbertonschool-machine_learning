@@ -21,7 +21,7 @@ def inception_network():
 
     # https://www.youtube.com/watch?v=KfV8CJh7hE0
 
-    i = K.layers.Input(shape=(224, 224, 3))  # 0
+    input_image = K.layers.Input(shape=(224, 224, 3))  # 0
 
     # Layer 1
     x = K.layers.Conv2D(64, 7, strides=2, padding='same', activation='relu')(i)
@@ -56,6 +56,6 @@ def inception_network():
 
     # x = K.layers.Flatten()(x)
     output = K.layers.Dense(1000, activation='softmax')(x)
-    model = K.models.Model(i, output)
+    model = K.models.Model(input_image, output)
 
     return model
