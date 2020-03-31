@@ -34,7 +34,7 @@ def identity_block(A_prev, filters):
     # Save the input valu
     X_shortcut = A_prev
 
-    init_ = K.initializers.he_normal(seed=0)
+    init_ = K.initializers.he_normal()
 
     # First component of main path
     X = K.layers.Conv2D(filters=F11,
