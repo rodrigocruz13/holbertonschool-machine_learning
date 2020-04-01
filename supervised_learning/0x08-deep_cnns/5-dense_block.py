@@ -10,18 +10,15 @@ def dense_block(X, nb_filters, growth_rate, layers):
     """
     Function that builds a dense block as described in Densely Connected
     Convolutional Networks:
-
     1. You should use the bottleneck layers used for DenseNet-B
     2. All weights should use he normal initialization
     3. All convolutions should be preceded by Batch Normalization and a
        rectified linear activation (ReLU), respectively
-
     Args:
     - X is the output from the previous layer
     - nb_filters is an integer representing the number of filters in X
     - growth_rate is the growth rate for the dense block
     - layers is the number of layers in the dense block
-
     Returns:
         The concatenated output of each layer within the Dense Block and the
         number of filters within the concatenated outputs, respectively
@@ -31,10 +28,10 @@ def dense_block(X, nb_filters, growth_rate, layers):
 
     for i in range(layers):
         each_layer = conv_layer(X, growth_rate)
-        block_x = K.layers.concatenate([X, each_layer])
+        X = K.layers.concatenate([X, each_layer])
         nb_filters += growth_rate
 
-    return block_x, nb_filters
+    return X, nb_filters
 
 
 def conv_layer(X, growth_rate):
@@ -44,9 +41,10 @@ def conv_layer(X, growth_rate):
     # before BN-ReLU-3×3 Conv.
 
     # 1x1
+    gr = growth_rate * 4
     a_layer = K.layers.BatchNormalization()(X)
     a_layer = K.layers.Activation('relu')(a_layer)
-    a_layer = K.layers.Conv2D(filters=growth_rate,
+    a_layer = K.layers.Conv2D(filters=gr,
                               kernel_size=(1, 1),
                               kernel_initializer='he_normal',
                               padding='same')(a_layer)
@@ -58,4 +56,5 @@ def conv_layer(X, growth_rate):
                               kernel_size=(3, 3),
                               kernel_initializer='he_normal',
                               padding='same')(a_layer)
+
     return a_layer
