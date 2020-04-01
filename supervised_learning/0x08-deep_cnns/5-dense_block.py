@@ -24,17 +24,26 @@ def dense_block(X, nb_filters, growth_rate, layers):
         number of filters within the concatenated outputs, respectively
     """
 
-    # https://theailearner.com/2018/12/09/densely-connected-convolutional-networks-densenet/
+    # https://bit.ly/2JwVKVS
 
     for i in range(layers):
-        each_layer = conv_layer(X, growth_rate)
+        each_layer = DenseNetB_layer(X, growth_rate)
         X = K.layers.concatenate([X, each_layer])
         nb_filters += growth_rate
 
     return X, nb_filters
 
 
-def conv_layer(X, growth_rate):
+def DenseNetB_layer(X, growth_rate):
+    """
+    Helper function that generates the DenseNet-B (Bottleneck Layers)
+
+    Args:
+    - X is the output from the previous layer
+    - growth_rate is the growth rate for the dense block
+    Returns:
+        A layer with the Densenet-B layers applied
+    """
 
     # 2.2. DenseNet-B (Bottleneck Layers)
     # To reduce the model complexity and size, BN-ReLU-1×1 Conv is done
