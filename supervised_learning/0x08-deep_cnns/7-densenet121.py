@@ -31,7 +31,7 @@ def densenet121(growth_rate=32, compression=1.0):
     # 1. You can assume the input data will have shape (224, 224, 3)
     i = K.Input(shape=(224, 224, 3))
 
-    # init_ = K.initializers.he_normal(seed=None)
+    init_ = K.initializers.he_normal(seed=None)
 
     # 2. All convolutions should be preceded by Batch Normalization and a
     # rectified linear activation (ReLU), respectively
@@ -41,7 +41,8 @@ def densenet121(growth_rate=32, compression=1.0):
     x = K.layers.Conv2D(filters=64,
                         kernel_size=(7, 7),
                         padding="same",
-                        strides=(2, 2))(x)
+                        strides=(2, 2),
+                        kernel_initializer=init_)(x)
 
     x = K.layers.MaxPooling2D(pool_size=(3, 3),
                               strides=(2, 2),
