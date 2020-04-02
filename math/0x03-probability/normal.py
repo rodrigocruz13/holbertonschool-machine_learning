@@ -54,14 +54,17 @@ class Normal:
                0 if x is out of range
         """
 
-        k = x
-        λ = self.lambtha
-        e = self.e
+        μ = self.mean
+        σ = self.stddev
+        π = 3.1415926536
+        e = 2.7182818285
 
-        if k < 0:
-            return 0
+        exp = -1 * ((x - μ) ** 2) / (2 * (σ ** 2))
+        den = 2 * π * (σ ** 2)
 
-        return λ * e ** (-1 * λ * k)
+        pdf = (1 / (den) ** 0.5) * (e ** exp)
+
+        return pdf
 
     def cdf(self, x):
         """
@@ -73,11 +76,19 @@ class Normal:
                cdf (float): The PMF value for k.
         """
 
-        k = x
-        λ = self.lambtha
-        e = self.e
+        μ = self.mean
+        σ = self.stddev
+        π = 3.1415926536
 
-        if k < 0:
-            return 0
+        x1 = (x - μ) / (σ * (2 ** 0.5))
 
-        return 1 - e ** (-1 * λ * k)
+        erf1 = 2 / π ** 0.5
+        erf2 = (x1 -
+                ((x1 ** 3) / 3) +
+                ((x1 ** 5) / 10) -
+                ((x1 ** 7) / 42) +
+                ((x1 ** 9) / 216))
+        erf = erf1 * erf2
+        cdf = (1 + erf) / 2
+
+        return cdf
