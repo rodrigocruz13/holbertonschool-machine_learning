@@ -51,6 +51,17 @@ class Yolo:
         self.nms_t = nms_t
         self.anchors = anchors
 
+    def sigmoid_f(self, x):
+        """
+            sigmoid.
+        # Args
+            x: Tensor.
+        # Returns
+            numpy ndarray.
+        """
+
+        return (1 / (1 + np.exp(-x)))
+
     def process_outputs(self, outputs, image_size):
         """
         Function that
@@ -59,7 +70,7 @@ class Yolo:
                         the Darknet model for a single image: Each output has
                         shape (grid_height, grid_width, anchor_boxes,
                         4 + 1 + classes)
-                    > grid_height:  Height of the grid used for the output 
+                    > grid_height:  Height of the grid used for the output
                                     anchor_boxes
                     > grid_width:   Width of the grid used for the output
                                     anchor_boxes
@@ -94,66 +105,72 @@ class Yolo:
                                 respectively
         """
 
-        num_outpust = len(outputs) # num = 3
-        #print(outputs.__dict__)
+        # shape (13,  13,   3,  [t_x, t_y, t_w, t_h],   1    80)
+        # Dim   ([0], [1], [2],        [3],           [4]   [5])
 
+        # 1. boxes = dim [2]
+        # Procesed according to Fig 2 of paper: https://bit.ly/3emqWp0
+        # Adapted from https://bit.ly/2VEZgmZ
+
+        boxes = []
         for i in range(len(outputs)):
-            # grid_height, grid_width, anchor_boxes
-            x = outputs[i]
-            #print (i, type(x))
-            # len (output[0]) =  13
-            # len (output[1]) =  26
-            # len (output[2]) =  52
-            #print("\t")
-            for j in range(len(x)):
-                #print("\t", i, j, type(x[j]))
-                y = x[j]
-                for k in range(len(y)):
-                    #print("\t\t", i, j, k, type(y[k]))
-                    z = y[k]
-                    for l in range(len(z)):
-                        za = z[l]
-                        for m in range (len(za)): 
-                            pass
-            print("\t",i, "\t",j, "\t",k, "\t",l, "\t",m)
-            #print(outputs[0][12][12][2])
-            #print(outputs[0][12][12][2][84])
-            #print(outputs[0][: , : , : , 3:5])
+            boxes_i = outputs[i][..., 0:4]
+            grid_h_i = outputs[i].shape[0]
+            grid_w_i = outputs[i].shape[1]
+            anchor_box_i = outputs[i].shape[2]
 
-            #print(type(x), x)
-            #print(type(y), y)
-            #print(type(z), z)
-        #print(type(za))
-        #print(za)
-            
-        print("--------------------")
-            
-        """
-            print("grid-height = ", prediction[0])
-            print("grid-width = ", prediction[1])
-            print("anchor_boxes = ", prediction[2])
-            print("t_x = ", prediction[3][0])
-            print("t_y = ", prediction[3][1])
-            print("t_w = ", prediction[3][2])
-            print("t_h = ", prediction[3][3])
-            print("box_confidence = ", prediction[4])
-        """
-        print(image_size)
-        box_confidences = [] 
+            for cy_n in range(grid_h_i):
+                for cx_n in range(grid_w_i):
+                    for anchor_n in range(anchor_box_i):
+
+                        tx_n = outputs[i][cy_n, cx_n, anchor_n, 0:1]
+                        ty_n = outputs[i][cy_n, cx_n, anchor_n, 1:2]
+                        tw_n = outputs[i][cy_n, cx_n, anchor_n, 2:3]
+                        th_n = outputs[i][cy_n, cx_n, anchor_n, 3:4]
+
+                        # size of the anchors
+                        pw_n = self.anchors[i][anchor_n][0]
+                        ph_n = self.anchors[i][anchor_n][1]
+
+                        # calculating center
+                        bx_n = self.sigmoid_f(tx_n) + cx_n
+                        by_n = self.sigmoid_f(ty_n) + cy_n
+
+                        # calculating hight and width
+                        bw_n = pw_n * np.exp(tw_n)
+                        bh_n = ph_n * np.exp(th_n)
+
+                        # generating new center
+                        new_bx_n = bx_n / grid_w_i
+                        new_by_n = by_n / grid_h_i
+
+                        # generating new hight and width
+                        new_bh_n = bh_n / self.model.input.shape[1].value
+                        new_bw_n = bw_n / self.model.input.shape[2].value
+
+                        # calculating (cx1, cy1) and (cx2, cy2) coords
+                        y1 = (new_by_n - (new_bh_n / 2)) * image_size[0]
+                        y2 = (new_by_n + (new_bh_n / 2)) * image_size[0]
+                        x1 = (new_bx_n - (new_bw_n / 2)) * image_size[1]
+                        x2 = (new_bx_n + (new_bw_n / 2)) * image_size[1]
+
+                        boxes_i[cy_n, cx_n, anchor_n, 0] = x1
+                        boxes_i[cy_n, cx_n, anchor_n, 1] = y1
+                        boxes_i[cy_n, cx_n, anchor_n, 2] = x2
+                        boxes_i[cy_n, cx_n, anchor_n, 3] = y2
+
+            boxes.append(boxes_i)
+
+        # 2. box confidence = dim [4]
+        confidence = []
         for i in range(len(outputs)):
-            box_confidences.append(tf.math.sigmoid(outputs[i][:, :, :, 4:5]))
-        
-        print("outputs = ", len(outputs), type(outputs) )
-        print("outputs[i] = ", len(outputs[i]), outputs[i].shape, type(outputs[i]))
-        
-        print("outputs[0] = ", len(outputs[0]), outputs[0].shape, type(outputs[0]))
-        print("outputs[1] = ", len(outputs[1]), outputs[1].shape, type(outputs[1]))
-        print("outputs[2] = ", len(outputs[2]), outputs[2].shape, type(outputs[2]))
+            confidence_i = self.sigmoid_f(outputs[i][..., 4:5])
+            confidence.append(confidence_i)
 
+        # 3. box class_probs = dim [5:]
+        probs = []
+        for i in range(len(outputs)):
+            probs_i = self.sigmoid_f(outputs[i][:, :, :, 5:])
+            probs.append(probs_i)
 
-        print("outputs[i][j] = ", len(outputs[i][j]), outputs[i][j].shape, type(outputs[i][j]))
-        print("outputs[i][j][k] = ", len(outputs[i][j][k]), outputs[i][j][k].shape, type(outputs[i][j][k]))
-        print("outputs[i][j][k][l] = ", len(outputs[i][j][k][l]), outputs[i][j][k][l].shape, type(outputs[i][j][k][l]))
-#        print("outputs[i][j][k][l][m] = ", len(outputs[i][j][k][l][m]), outputs[i][j][k][l][m].shape, type(outputs[i][j][k][l][m]))
-
-        return([], [], [])
+        return (boxes, confidence, probs)
