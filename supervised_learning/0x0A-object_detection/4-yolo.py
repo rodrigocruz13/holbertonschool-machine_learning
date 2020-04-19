@@ -177,7 +177,6 @@ class Yolo:
 
         return (boxes, confidence, probs)
 
-
     @staticmethod
     def load_images(folder_path):
         """
