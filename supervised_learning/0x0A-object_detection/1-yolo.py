@@ -145,8 +145,8 @@ class Yolo:
                         new_by_n = by_n / grid_h_i
 
                         # generating new hight and width
-                        new_bh_n = bh_n / self.model.input.shape[1].value
-                        new_bw_n = bw_n / self.model.input.shape[2].value
+                        new_bh_n = bh_n / self.model.input.shape[2].value
+                        new_bw_n = bw_n / self.model.input.shape[1].value
 
                         # calculating (cx1, cy1) and (cx2, cy2) coords
                         y1 = (new_by_n - (new_bh_n / 2)) * image_size[0]
