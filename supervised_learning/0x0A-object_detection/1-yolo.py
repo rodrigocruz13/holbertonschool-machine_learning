@@ -119,9 +119,9 @@ class Yolo:
             grid_w_i = outputs[i].shape[1]
             anchor_box_i = outputs[i].shape[2]
 
-            for cy_n in range(grid_h_i):
-                for cx_n in range(grid_w_i):
-                    for anchor_n in range(anchor_box_i):
+            for anchor_n in range(anchor_box_i):
+                for cy_n in range(grid_h_i):
+                    for cx_n in range(grid_w_i):
 
                         tx_n = outputs[i][cy_n, cx_n, anchor_n, 0:1]
                         ty_n = outputs[i][cy_n, cx_n, anchor_n, 1:2]
