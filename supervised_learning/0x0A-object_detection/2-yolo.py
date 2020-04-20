@@ -244,7 +244,7 @@ class Yolo:
         boxes = np.concatenate(boxes, axis=0)
 
         # filtro
-        #boxes[box_classes_scores >= self.class_t]
+        # boxes[box_classes_scores >= self.class_t]
         filtro = np.where(box_classes_scores >= self.class_t)
 
         return (boxes[filtro], box_classes[filtro], box_classes_scores[filtro])
