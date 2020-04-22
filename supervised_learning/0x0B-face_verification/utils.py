@@ -52,3 +52,31 @@ def load_images(images_path, as_array=True):
     if (not as_array):
         return images_files, filenames
     return np.asarray(images_files), filenames
+
+
+def load_csv(csv_path, params={}):
+    """
+    Function that loads the contents of a csv file as a list of lists:
+
+    Args:
+        - csv_path:     Path to the csv to load
+        - params:       Parameters to load the csv with
+
+    Returns
+        - []            List of lists representing the contents
+                        found in csv_path
+    """
+
+    import csv
+
+    args = ','.join(['%s=%s' % x for x in params.items()])
+    if (len(args) > 0):
+        file_Reader = csv.reader(open(csv_path, args))
+    else:
+        file_Reader = csv.reader(open(csv_path))
+
+    csv_info = []
+
+    for row in file_Reader:
+        csv_info.append([', '.join(row)])
+    return csv_info
