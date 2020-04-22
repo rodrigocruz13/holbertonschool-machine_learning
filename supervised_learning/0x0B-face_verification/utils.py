@@ -33,7 +33,7 @@ def load_images(images_path, as_array=True):
     """
 
     # creating a correct full path argument
-    images_locations = glob.glob(images_path + '/*', recursive=False)
+    images_locations = glob.glob(images_path + '/*', recursive=True)
     filenames = sorted([s.replace('HBTN/', '') for s in images_locations])
 
     # creating the images lists
@@ -42,11 +42,13 @@ def load_images(images_path, as_array=True):
     for file_i in filenames:
         long_path = 'HBTN/' + file_i
         image_i = cv2.imread(long_path)
-        if (as_array):
-            m = 1
-            h, w, c = image_i.shape
-            images_files.append(np.array([m, h, w, c]))
-        else:
-            images_files.append(image_i)
 
-    return images_files, filenames
+        # making sure images are RGB formatted
+        b, g, r = cv2.split(image_i)
+        image_i = cv2.merge([r, g, b])
+
+        images_files.append(image_i)
+
+    if (not as_array):
+        return images_files, filenames
+    return np.asarray(images_files), filenames
