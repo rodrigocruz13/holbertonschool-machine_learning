@@ -261,13 +261,13 @@ class Yolo:
 
         """
 
-        xx1 = np.maximum(x1[pos1], x1[pos2])
-        yy1 = np.maximum(y1[pos1], y1[pos2])
-        xx2 = np.minimum(x2[pos1], x2[pos2])
-        yy2 = np.minimum(y2[pos1], y2[pos2])
+        a = np.maximum(x1[pos1], x1[pos2])
+        b = np.maximum(y1[pos1], y1[pos2])
+        c = np.minimum(x2[pos1], x2[pos2])
+        d = np.minimum(y2[pos1], y2[pos2])
 
-        height = np.maximum(0.0, yy2 - yy1)
-        width = np.maximum(0.0, xx2 - xx1)
+        height = np.maximum(0.0, d - b)
+        width = np.maximum(0.0, c - a)
 
         intersection = (width * height)
         union = area[pos1] + area[pos2] - intersection
