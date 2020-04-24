@@ -259,16 +259,22 @@ class Yolo:
             - pos2      xxx
             - area      xxx
 
+        Returns:
+            The intersection over union %
+
         """
 
+        # find the coordinates
         a = np.maximum(x1[pos1], x1[pos2])
         b = np.maximum(y1[pos1], y1[pos2])
+
         c = np.minimum(x2[pos1], x2[pos2])
         d = np.minimum(y2[pos1], y2[pos2])
 
         height = np.maximum(0.0, d - b)
         width = np.maximum(0.0, c - a)
 
+        # overlap ratio betw bounding box
         intersection = (width * height)
         union = area[pos1] + area[pos2] - intersection
         iou = intersection / union
@@ -310,28 +316,35 @@ class Yolo:
         for classes in set(box_classes):
             index = np.where(box_classes == classes)
 
+            # function arrays
             filtered = filtered_boxes[index]
             scores = box_scores[index]
             classe = box_classes[index]
 
+            # coordinates of the bounding boxes
             x1 = filtered[:, 0]
             y1 = filtered[:, 1]
             x2 = filtered[:, 2]
             y2 = filtered[:, 3]
 
-            keep = []
+            # calculate area of the bounding boxes and sort from high to low
             area = (x2 - x1) * (y2 - y1)
             index_list = np.flip(scores.argsort(), axis=0)
 
+            # loop remaining indexes to hold list of picked indexes
+            keep = []
             while (len(index_list) > 0):
                 pos1 = index_list[0]
                 pos2 = index_list[1:]
                 keep.append(pos1)
 
+                # find the intersection over union %
                 iou = self.iou(x1, x2, y1, y2, pos1, pos2, area)
+
                 below_threshold = np.where(iou <= self.nms_t)[0]
                 index_list = index_list[below_threshold + 1]
 
+            # array of piked indexes
             keep = np.array(keep)
 
             box_predictions.append(filtered[keep])
