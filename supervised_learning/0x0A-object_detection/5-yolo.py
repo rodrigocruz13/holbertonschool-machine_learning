@@ -177,27 +177,110 @@ class Yolo:
 
         return (boxes, confidence, probs)
 
-    def iou(self, boxA, boxB):
+    def filter_boxes(self, boxes, box_confidences, box_class_probs):
+        """
+        Function that
+        Args:
+            - boxes:            List of numpy.ndarrays of shape (grid_height,
+                                grid_width, anchor_boxes, 4) containing the
+                                processed boundary boxes for each output,
+                                respectively
+            - box_confidences:  list of numpy.ndarrays of shape (grid_height,
+                                grid_width, anchor_boxes, 1) containing the
+                                processed box confidences for each output,
+                                respectively
+            - box_class_probs:  list of numpy.ndarrays of shape (grid_height,
+                                grid_width, anchor_boxes, classes) containing
+                                the processed box class probabilities for each
+                                output, respectively
+
+        Returns:
+            A tuple of (filtered_boxes, box_classes, box_scores):
+                > filtered_boxes:   numpy.ndarray of shape (?, 4) containing
+                                    all of the filtered bounding boxes
+                > box_classes:      a numpy.ndarray of shape (?,) containing
+                                    the class number that each box in
+                                    filtered_boxes predicts, respectively
+                > box_scores:       numpy.ndarray of shape (?) containing the
+                                    box scores for each box in filtered_boxes,
+                                    respectively
         """
 
-        Taken from :https://bit.ly/2VlstnN
+        scores = []
+        classes = []
+        box_classes_scores = []
+        index_arg_max = []
+        box_classes = []
+
+        # 1. Multiply confidence x probs to find real confidence of each class
+        for bc_i, probs_j in zip(box_confidences, box_class_probs):
+            scores.append(bc_i * probs_j)
+
+        # 2. find temporal indices de clas cajas con los arg mas altos
+        for box_scoreee in scores:
+            index_arg_max = np.argmax(box_scoreee, axis=-1)
+            # -1 = last dimension)
+
+            # 3. Flatten each array
+            index_arg_max_flat = index_arg_max.flatten()
+
+            # 4. Everything in one single array
+            classes.append(index_arg_max_flat)
+
+            # find the values
+            score_max = np.max(box_scoreee, axis=-1)
+            score_max_flat = score_max.flatten()
+            box_classes_scores.append(score_max_flat)
+
+        boxes = [box.reshape(-1, 4) for box in boxes]
+        # (13, 13, 3, 4) ----> (507, 4)
+
+        box_classes = np.concatenate(classes, axis=-1)
+        # -1 = add to the end
+
+        box_classes_scores = np.concatenate(box_classes_scores, axis=-1)
+        # -1 = add to the end
+
+        boxes = np.concatenate(boxes, axis=0)
+
+        # filtro
+        # boxes[box_classes_scores >= self.class_t]
+        filtro = np.where(box_classes_scores >= self.class_t)
+
+        return (boxes[filtro], box_classes[filtro], box_classes_scores[filtro])
+
+    def iou(self, x1, x2, y1, y2, pos1, pos2, area):
         """
-        # determine the (x, y)-coordinates of the intersection rectangle
-        xA = max(boxA[0], boxB[0])
-        yA = max(boxA[1], boxB[1])
-        xB = min(boxA[2], boxB[2])
-        yB = min(boxA[3], boxB[3])
-        # compute the area of intersection rectangle
-        interArea = max(0, xB - xA + 1) * max(0, yB - yA + 1)
-        # compute the area of both the prediction and ground-truth
-        # rectangles
-        boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
-        boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
-        # compute the intersection over union by taking the intersection
-        # area and dividing it by the sum of prediction + ground-truth
-        # areas - the interesection area
-        iou = interArea / float(boxAArea + boxBArea - interArea)
-        # return the intersection over union value
+        Function that
+        Args:
+            - x1:       xxx
+            - x2:       xxx
+            - y1        xxx
+            - yy2       xxx
+            - pos1      xxx
+            - pos2      xxx
+            - area      xxx
+
+        Returns:
+            The intersection over union %
+
+        """
+
+        # find the coordinates
+        a = np.maximum(x1[pos1], x1[pos2])
+        b = np.maximum(y1[pos1], y1[pos2])
+
+        c = np.minimum(x2[pos1], x2[pos2])
+        d = np.minimum(y2[pos1], y2[pos2])
+
+        height = np.maximum(0.0, d - b)
+        width = np.maximum(0.0, c - a)
+
+        # overlap ratio betw bounding box
+        intersection = (width * height)
+        union = area[pos1] + area[pos2] - intersection
+        iou = intersection / union
+
         return iou
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
@@ -228,23 +311,53 @@ class Yolo:
                                             box score, respectively
         """
 
-        inds_sorted = np.argsort(box_classes)
-        box_scores_sorted = box_scores[inds_sorted]
-        box_classes_sorted = box_classes[inds_sorted]
-        filtered_boxes_sorted = filtered_boxes[inds_sorted]
-        idx = []
-        for i in range(len(box_scores_sorted)):
-            for j in range(i + 1, len(box_scores_sorted)):
-                if (box_classes_sorted[j] == box_classes_sorted[i]):
-                    union_score = self.iou(filtered_boxes_sorted[j],
-                                           filtered_boxes_sorted[i])
-                    if union_score < self.nms_t:
-                        idx.append(j)
-        box_predictions = filtered_boxes_sorted[idx]
-        predicted_box_classes = box_classes_sorted[idx]
-        predicted_box_scores = box_scores_sorted[idx]
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
 
-        return(box_predictions, predicted_box_classes, predicted_box_scores)
+        for classes in set(box_classes):
+            index = np.where(box_classes == classes)
+
+            # function arrays
+            filtered = filtered_boxes[index]
+            scores = box_scores[index]
+            classe = box_classes[index]
+
+            # coordinates of the bounding boxes
+            x1 = filtered[:, 0]
+            y1 = filtered[:, 1]
+            x2 = filtered[:, 2]
+            y2 = filtered[:, 3]
+
+            # calculate area of the bounding boxes and sort from high to low
+            area = (x2 - x1) * (y2 - y1)
+            index_list = np.flip(scores.argsort(), axis=0)
+
+            # loop remaining indexes to hold list of picked indexes
+            keep = []
+            while (len(index_list) > 0):
+                pos1 = index_list[0]
+                pos2 = index_list[1:]
+                keep.append(pos1)
+
+                # find the intersection over union %
+                iou = self.iou(x1, x2, y1, y2, pos1, pos2, area)
+
+                below_threshold = np.where(iou <= self.nms_t)[0]
+                index_list = index_list[below_threshold + 1]
+
+            # array of piked indexes
+            keep = np.array(keep)
+
+            box_predictions.append(filtered[keep])
+            predicted_box_classes.append(classe[keep])
+            predicted_box_scores.append(scores[keep])
+
+        box_predictions = np.concatenate(box_predictions)
+        predicted_box_classes = np.concatenate(predicted_box_classes)
+        predicted_box_scores = np.concatenate(predicted_box_scores)
+
+        return (box_predictions, predicted_box_classes, predicted_box_scores)
 
     @staticmethod
     def load_images(folder_path):
@@ -292,14 +405,14 @@ class Yolo:
         dims = []
         res_images = []
 
-        input_h = self.model.input.shape[2].value
-        input_w = self.model.input.shape[1].value
+        input_h = self.model.input.shape[1].value
+        input_w = self.model.input.shape[2].value
         for image in images:
             dims.append(image.shape[:2])
 
         dims = np.stack(dims, axis=0)
 
-        newtam = (input_w, input_h)
+        newtam = (input_h, input_w)
 
         interpolation = cv2.INTER_CUBIC
         for image in images:
