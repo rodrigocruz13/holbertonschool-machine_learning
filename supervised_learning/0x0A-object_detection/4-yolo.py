@@ -5,6 +5,8 @@ class Yolo that uses the Yolo v3 algorithm to perform object detection:
 
 import numpy as np
 import tensorflow as tf
+import glob
+import cv2
 
 
 class Yolo:
