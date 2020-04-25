@@ -516,3 +516,4 @@ class Yolo:
                 cv2.imwrite(file_name, image)
                 os.chdir('../')
             cv2.destroyAllWindows()
+ 
