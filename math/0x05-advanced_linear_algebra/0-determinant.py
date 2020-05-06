@@ -5,6 +5,11 @@ def aux_det_mat(matrix, mul):
     """
     Auxiliar function that calculate the determinand of a matrix by
     by accumulatin values
+    Args:
+        - matrix:       list of lists whose determinant should be calculated
+        - mul:          constant value to multiplicate the matrix
+    Returns:
+            The value of the determinant
     """
 
     width = len(matrix)
@@ -12,7 +17,7 @@ def aux_det_mat(matrix, mul):
         return mul * matrix[0][0]
     else:
         sign = -1
-        sum = 0
+        deter = 0
         for i in range(width):
             m = []
             for j in range(1, width):
@@ -22,8 +27,8 @@ def aux_det_mat(matrix, mul):
                         buff.append(matrix[j][k])
                 m.append(buff)
             sign *= -1
-            sum += mul * aux_det_mat(m, sign * matrix[0][i])
-        return sum
+            deter += mul * aux_det_mat(m, sign * matrix[0][i])
+        return deter
 
 
 def determinant(matrix):
