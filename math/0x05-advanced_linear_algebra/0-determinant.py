@@ -48,8 +48,15 @@ def determinant(matrix):
 
     # validate list of list
     _is = isinstance
-    if not _is(matrix, list) or not any(_is(row, list) for row in matrix):
+    if not _is(matrix, list):
         raise TypeError('matrix must be a list of lists')
+
+    if not matrix:
+        raise TypeError('matrix must be a list of lists')
+
+    for row in matrix:
+        if not _is(row, list):
+            raise TypeError('matrix must be a list of lists')
 
     # list with one row but that row is empty
     if len(matrix) == 1 and len(matrix[0]) == 0:
