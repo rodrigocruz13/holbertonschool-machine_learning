@@ -13,23 +13,42 @@ def aux_det_mat(matrix, mul):
             The value of the determinant
     """
 
-    width = len(matrix)
-    if width == 1:
-        return mul * matrix[0][0]
-    else:
-        sign = -1
-        deter = 0
-        for i in range(width):
-            m = []
-            for j in range(1, width):
-                buff = []
-                for k in range(width):
-                    if k != i:
-                        buff.append(matrix[j][k])
-                m.append(buff)
-            sign *= -1
-            deter += mul * aux_det_mat(m, sign * matrix[0][i])
-        return deter
+
+def recursive_determinant(matrix, total=0):
+    """ calculates recursively the determinant of a matrix
+    Args:
+        matrix - is a list of lists whose determinant should be calculated
+        total - summatory of determinants
+    Returns:
+        the determinant of 2D matrix
+    """
+    # Extract all indices of matrix
+    indices = list(range(len(matrix)))
+
+    # This method works recursively, always we gonna calculate the
+    # determinant of a 2D matrix
+    if len(matrix) == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+    for index in indices:
+        cp_matrix = matrix.copy()
+        # Remove the first column
+        cp_matrix = cp_matrix[1:]
+
+        rows_length = len(cp_matrix)
+
+        for i in range(rows_length):
+            # Removes column
+            cp_matrix[i] = cp_matrix[i][0:index] + cp_matrix[i][index + 1:]
+
+        # Change the sign of all pairs indices
+        sign = (-1) ** (index % 2)
+
+        sub_det = recursive_determinant(cp_matrix)
+
+        total += sign * matrix[0][index] * sub_det
+
+    return total
 
 
 def determinant(matrix):
@@ -67,7 +86,7 @@ def determinant(matrix):
         return matrix[0][0]
 
     # matrix wih size m x n
-    if len(matrix) != len(matrix[0]) and len(matrix[0]):
+    if len(matrix) != len(matrix[0]):
         raise ValueError('matrix must be a square matrix')
 
-    return aux_det_mat(matrix, 1)
+    return recursive_determinant(matrix)
