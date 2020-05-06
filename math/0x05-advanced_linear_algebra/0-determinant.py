@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+""" module """
 
 
 def aux_det_mat(matrix, mul):
