@@ -32,7 +32,6 @@ def aux_det_mat(matrix, mul):
 
 
 def determinant(matrix):
-
     """
     Calculates the determinant of a matrix:
     Args:
@@ -48,16 +47,18 @@ def determinant(matrix):
 
     # validate list of list
     _is = isinstance
-
     if not _is(matrix, list) or not any(_is(row, list) for row in matrix):
         raise TypeError('matrix must be a list of lists')
 
-    if len(matrix[0]) == 0:
+    # list with one row but that row is empty
+    if len(matrix) == 1 and len(matrix[0]) == 0:
         return 1
 
-    if len(matrix[0]) == 1:
+    # list with one row and 1 element
+    if len(matrix[0]) == 1 and len(matrix[0]) == 1:
         return matrix[0][0]
 
+    # matrix wih size m x n
     if len(matrix) != len(matrix[0]) and len(matrix[0]):
         raise ValueError('matrix must be a square matrix')
 
