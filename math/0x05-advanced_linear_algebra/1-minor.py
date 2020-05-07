@@ -2,34 +2,30 @@
 """ module """
 
 
-def aux_det_mat(matrix, mul):
+def aux_det(matrix, n):
     """
     Auxiliar function that calculate the determinand of a matrix by
     by accumulatin values
     Args:
         - matrix:       list of lists whose determinant should be calculated
-        - mul:          constant value to multiplicate the matrix
+        - m:            constant value to multiplicate the matrix
     Returns:
             The value of the determinant
     """
 
-    width = len(matrix)
-    if width == 1:
-        return mul * matrix[0][0]
-    else:
-        sign = -1
-        deter = 0
-        for i in range(width):
-            m = []
-            for j in range(1, width):
-                buff = []
-                for k in range(width):
-                    if k != i:
-                        buff.append(matrix[j][k])
-                m.append(buff)
-            sign *= -1
-            deter += mul * aux_det_mat(m, sign * matrix[0][i])
-        return deter
+    if len(matrix) == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+    n = len(matrix)
+    ret = 0
+    for i in range(n):
+        if i % 2 == 0:
+            ret += matrix[0][i] * aux_det([row[:i] + row[i + 1:]
+                                           for row in matrix[1:]], n - 1)
+        else:
+            ret -= matrix[0][i] * aux_det([row[:i] + row[i + 1:]
+                                           for row in matrix[1:]], n - 1)
+    return ret
 
 
 def determinant(matrix):
@@ -46,22 +42,33 @@ def determinant(matrix):
         - the determinant of matrix
     """
 
-    # validate list of list
-    _is = isinstance
-
-    if not _is(matrix, list) or not any(_is(row, list) for row in matrix):
+    # there is no matrix
+    if not matrix:
         raise TypeError('matrix must be a list of lists')
 
-    if len(matrix[0]) == 0:
+    # the shell is not a list
+    if not isinstance(matrix, list):
+        raise TypeError('matrix must be a list of lists')
+
+    # each row has to be a list
+    for row in matrix:
+        if not isinstance(row, list):
+            raise TypeError('matrix must be a list of lists')
+
+    # matrix with one row but that row is empty
+    if len(matrix) == 1 and len(matrix[0]) == 0:
         return 1
 
-    if len(matrix[0]) == 1:
+    # list with one row and 1 element
+    if len(matrix) == 1 and len(matrix[0]) == 1:
         return matrix[0][0]
 
-    if len(matrix) != len(matrix[0]) and len(matrix[0]):
-        raise ValueError('matrix must be a square matrix')
+    # matrix wih size m x n
+    for row in matrix:
+        if len(matrix) != len(row):
+            raise ValueError('matrix must be a square matrix')
 
-    return aux_det_mat(matrix, 1)
+    return aux_det(matrix, len(matrix))
 
 
 def create_mini_matrix(matrix, i, j):
@@ -97,26 +104,34 @@ def minor(matrix):
     """
     Calculates the determinant of a matrix:
     Args:
-        - matrix:       list of lists whose determinant should be calculated
-                - If matrix is not a list of lists, raise a TypeError with
-                  the message matrix must be a list of lists.
-                - If matrix is not square, raise a ValueError with the message
-                  matrix must be a square matrix
-                The list [[]] represents a 0x0 matrix
+    - matrix:       list of lists whose minor matrix should be calculated
+            1. If matrix is not a list of lists, raise a TypeError with the
+               message matrix must be a list of lists
+            2. If matrix is not square or is empty, raise a ValueError with
+               the message matrix must be a non-empty square matrix
     Returns:
-        - the determinant of matrix
+        the minor matrix of matrix
     """
 
-    # validate list of list
-    _is = isinstance
-    if not _is(matrix, list) or not any(_is(row, list) for row in matrix):
+    # 1. There is no matrix
+    if not matrix:
         raise TypeError('matrix must be a list of lists')
 
-    # validate is not square or is empty
-    if len(matrix) != len(matrix[0]):
-        raise ValueError('matrix must be a non-empty square matrix')
+    # 1. The shell is not a list
+    if not isinstance(matrix, list):
+        raise TypeError('matrix must be a list of lists')
 
-    # validate is not empty
+    # 1. Each row has to be a list
+    for row in matrix:
+        if not isinstance(row, list):
+            raise TypeError('matrix must be a list of lists')
+
+    # 2.validate is not square or is empty
+    for row in matrix:
+        if len(matrix) != len(row):
+            raise ValueError('matrix must be a non-empty square matrix')
+
+    # 2. Validate is not empty
     if (matrix == [] or matrix[0] == []):
         raise ValueError('matrix must be a non-empty square matrix')
 
