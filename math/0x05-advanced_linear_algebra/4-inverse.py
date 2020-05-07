@@ -137,7 +137,7 @@ def inverse(matrix):
 
     # calculate minor for each cell of the matrix
     if len(matrix) == 1 and len(matrix[0]) == 1:
-        return [[1]]
+        return [[1/matrix[0][0]]]
 
     cof = []
     for i in range(len(matrix)):
