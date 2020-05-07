@@ -2,53 +2,30 @@
 """ module """
 
 
-def aux_det_mat(matrix, mul):
+def aux_det(matrix, n):
     """
     Auxiliar function that calculate the determinand of a matrix by
     by accumulatin values
     Args:
         - matrix:       list of lists whose determinant should be calculated
-        - mul:          constant value to multiplicate the matrix
+        - m:            constant value to multiplicate the matrix
     Returns:
             The value of the determinant
     """
 
-
-def recursive_determinant(matrix, total=0):
-    """ calculates recursively the determinant of a matrix
-    Args:
-        matrix - is a list of lists whose determinant should be calculated
-        total - summatory of determinants
-    Returns:
-        the determinant of 2D matrix
-    """
-    # Extract all indices of matrix
-    indices = list(range(len(matrix)))
-
-    # This method works recursively, always we gonna calculate the
-    # determinant of a 2D matrix
     if len(matrix) == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
-    for index in indices:
-        cp_matrix = matrix.copy()
-        # Remove the first column
-        cp_matrix = cp_matrix[1:]
-
-        rows_length = len(cp_matrix)
-
-        for i in range(rows_length):
-            # Removes column
-            cp_matrix[i] = cp_matrix[i][0:index] + cp_matrix[i][index + 1:]
-
-        # Change the sign of all pairs indices
-        sign = (-1) ** (index % 2)
-
-        sub_det = recursive_determinant(cp_matrix)
-
-        total += sign * matrix[0][index] * sub_det
-
-    return total
+    n = len(matrix)
+    ret = 0
+    for i in range(n):
+        if i % 2 == 0:
+            ret += matrix[0][i] * aux_det([row[:i] + row[i + 1:]
+                                           for row in matrix[1:]], n - 1)
+        else:
+            ret -= matrix[0][i] * aux_det([row[:i] + row[i + 1:]
+                                           for row in matrix[1:]], n - 1)
+    return ret
 
 
 def determinant(matrix):
@@ -89,4 +66,7 @@ def determinant(matrix):
     if len(matrix) != len(matrix[0]):
         raise ValueError('matrix must be a square matrix')
 
-    return recursive_determinant(matrix)
+    if len(matrix) == 1:
+        return matrix[0][0]
+
+    return aux_det(matrix, len(matrix))
