@@ -102,7 +102,7 @@ def create_mini_matrix(matrix, i, j):
 
 def minor(matrix):
     """
-    Calculates the determinant of a matrix:
+    Calculates the minor matrix of a matrix:
     Args:
     - matrix:       list of lists whose minor matrix should be calculated
             1. If matrix is not a list of lists, raise a TypeError with the
@@ -126,7 +126,7 @@ def minor(matrix):
         if not isinstance(row, list):
             raise TypeError('matrix must be a list of lists')
 
-    # 2.validate is not square or is empty
+    # 2.validate is not square
     for row in matrix:
         if len(matrix) != len(row):
             raise ValueError('matrix must be a non-empty square matrix')
