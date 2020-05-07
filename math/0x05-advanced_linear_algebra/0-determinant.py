@@ -63,8 +63,9 @@ def determinant(matrix):
         return matrix[0][0]
 
     # matrix wih size m x n
-    if len(matrix) != len(matrix[0]):
-        raise ValueError('matrix must be a square matrix')
+    for row in matrix:
+        if len(matrix) != len(row):
+            raise ValueError('matrix must be a square matrix')
 
     if len(matrix) == 1:
         return matrix[0][0]
