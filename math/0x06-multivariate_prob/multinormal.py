@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Class for the Multinirmal probabilities
 """
@@ -7,9 +8,7 @@ import numpy as np
 
 
 class MultiNormal:
-    """
-    Class that represents a Multivariate Normal distribution:
-    """
+    """ Represents a Multivariate Normal distribution"""
 
     def __init__(self, data):
         """
