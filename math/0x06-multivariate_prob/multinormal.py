@@ -38,7 +38,7 @@ class MultiNormal:
             raise TypeError("data must be a 2D numpy.ndarray")
 
         if (data.shape[1] < 2):
-            raise TypeError("data must contain multiple data points")
+            raise ValueError("data must contain multiple data points")
 
         data = data.T
         mean = data.mean(axis=0)
