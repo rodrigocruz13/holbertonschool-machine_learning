@@ -15,19 +15,19 @@ class MultiNormal:
         class constructor
 
         Args:
-            - Data:     numpy.ndarray       Array of shape (d, n) containing
+            - data:     numpy.ndarray       Array of shape (d, n) containing
                                             the dataset:
                 - n     int             number of data points
                 - d     int             number of dimensions in each data point
 
-            If Data is not a 2D numpy.ndarray, raise a TypeError with the msg:
+            If data is not a 2D numpy.ndarray, raise a TypeError with the msg:
             data must be a 2D numpy.ndarray
             If n is less than 2, raise a ValueError with the message
             data must contain multiple data points
 
             Set the public instance variables:
             mean - a numpy.ndarray of shape (d, 1) containing the mean of data
-            cov - a numpy.ndarray of shape (d, d) containing the covariance 
+            cov -  a numpy.ndarray of shape (d, d) containing the covariance
             matrix data
         """
 
@@ -53,4 +53,3 @@ class MultiNormal:
         self.d = d
         self.mean = mean.T
         self.cov = cov.T
-
