@@ -32,16 +32,16 @@ class MultiNormal:
             matrix data
         """
 
-        if(isinstance(data, type(None))):
-            raise TypeError('data must be a 2D numpy.ndarray')
-
-        if (not isinstance(data, np.ndarray)) or (len(data.shape) != 2):
-            raise TypeError('data must be a 2D numpy.ndarray')
-
-        if data.shape[0] < 2:
-            raise ValueError("data must contain multiple data points")
-
         dataT = data.T
+
+        if(isinstance(dataT, type(None))):
+            raise TypeError('data must be a 2D numpy.ndarray')
+
+        if (not isinstance(dataT, np.ndarray)) or (len(dataT.shape) != 2):
+            raise TypeError('data must be a 2D numpy.ndarray')
+
+        if dataT.shape[0] < 2:
+            raise ValueError("data must contain multiple data points")
 
         mean = dataT.mean(axis=0)
         mean = np.reshape(mean, (-1, dataT.shape[1]))
