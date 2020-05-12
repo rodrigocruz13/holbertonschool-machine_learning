@@ -41,7 +41,11 @@ class MultiNormal:
         if data.shape[0] < 2:
             raise ValueError("data must contain multiple data points")
 
+        d - data.shape[0]
         n = data.shape[1] - 1
+
+        self.d = d
+        self.n = n
 
         mean = np.mean(data.T, axis=0).reshape(1, data.shape[0])
         x = data.T - mean
