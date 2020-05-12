@@ -48,5 +48,5 @@ class MultiNormal:
         x = data - mean
         cov = np.dot(x.T, x) / n
 
-        self.mean = mean
+        self.mean = mean.T
         self.cov = cov
