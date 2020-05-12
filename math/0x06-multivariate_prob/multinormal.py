@@ -32,8 +32,9 @@ class MultiNormal:
             matrix data
         """
 
-        if(isinstance(data, type(None))):
+        """if(isinstance(data, type(None))):
             raise TypeError('data must be a 2D numpy.ndarray')
+        """
 
         if not isinstance(data, np.ndarray) or len(data.shape) != 2:
             raise TypeError("data must be a 2D numpy.ndarray")
