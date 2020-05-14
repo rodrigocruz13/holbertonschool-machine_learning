@@ -25,20 +25,11 @@ def pca(X, var=0.95):
 
     """
 
-    # calculate the mean of each column
-    # M = mean(A.T, axis=1)
-    # print(M)
-    # center columns by subtracting column means
-    # C = A - M
-    # print(C)
     # calculate covariance matrix of centered matrix
-    V = np.cov(X.T)
-    # print(V)
+    vh = np.linalg.svd(X)[2]
+    s = np.linalg.svd(X)[1]
 
-    # eigendecomposition of covariance matrix
-    vectors = np.linalg.eig(V)[1]
+    accum_var = np.cumsum(s) / np.sum(s)
+    results = np.argwhere(accum_var >= var)[0, 0]
 
-    # project data
-    P = np.array(vectors.T.dot(X.T))
-
-    return P
+    return vh[:results + 1].T
