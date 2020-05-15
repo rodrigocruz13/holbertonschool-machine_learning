@@ -23,8 +23,7 @@ def pca(X, ndim):
                 transformed version of X
     """
 
-
-    https://towardsdatascience.com/pca-and-svd-explained-with-numpy-5d13b0d2a4d8
+    # https://bit.ly/2zH844p
 
     # 1. Normalize
     normal = np.mean(X, axis=0)
