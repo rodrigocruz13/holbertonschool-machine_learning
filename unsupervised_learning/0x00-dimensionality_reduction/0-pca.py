@@ -39,5 +39,5 @@ def pca(X, var=0.95):
     results = np.argwhere(accum_var >= var)
     res = results[0, 0] + 1
     weights = vectors_horizontal[: res].T
-
+    # print("weights ", weights)
     return weights
