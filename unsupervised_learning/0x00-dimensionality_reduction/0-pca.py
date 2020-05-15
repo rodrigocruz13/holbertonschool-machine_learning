@@ -33,11 +33,11 @@ def pca(X, var=0.95):
     # with K = min(M, N).
     num = np.cumsum(singular_values)
     denom = np.sum(singular_values)
-    accum_var =  num / denom
+    accum_var = num / denom
 
     # filter according specs of var
     results = np.argwhere(accum_var >= var)
     res = results[0, 0] + 1
-    weights = vectors_horizontal[ : res].T
+    weights = vectors_horizontal[: res].T
 
     return weights
