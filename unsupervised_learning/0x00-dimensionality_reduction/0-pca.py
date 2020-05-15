@@ -25,11 +25,19 @@ def pca(X, var=0.95):
 
     """
 
-    # calculate covariance matrix of centered matrix
-    vh = np.linalg.svd(X)[2]
-    s = np.linalg.svd(X)[1]
+    # 1. calculate the single value decomposition
+    singular_values = np.linalg.svd(X)[1]
+    vectors_horizontal = np.linalg.svd(X)[2]
 
-    accum_var = np.cumsum(s) / np.sum(s)
-    results = np.argwhere(accum_var >= var)[0, 0]
+    # The singular values (s), sorted in non-increasing order. Of shape (K,),
+    # with K = min(M, N).
+    num = np.cumsum(singular_values)
+    denom = np.sum(singular_values)
+    accum_var =  num / denom
 
-    return vh[:results + 1].T
+    # filter according specs of var
+    results = np.argwhere(accum_var >= var)
+    res = results[0, 0] + 1
+    weights = vectors_horizontal[ : res].T
+
+    return weights
