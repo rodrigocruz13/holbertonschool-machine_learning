@@ -68,8 +68,7 @@ def HP(Di, beta):
         - Pi:     numpy.ndarray     Array of shape (n - 1,) containing the
                                     P affinities of the points
     """
-    exp_ = -Di * beta
-    Pi = np.exp(exp_) / np.sum(np.exp(exp_))
-    Hi = -1 * np.sum(Pi * np.log2(Pi))
+    Pi = np.exp(-Di * beta) / np.sum(np.exp(-Di * beta))
+    Hi = np.sum(Pi * np.log2(Pi))
 
-    return Hi, Pi
+    return -Hi, Pi
