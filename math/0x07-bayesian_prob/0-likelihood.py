@@ -62,13 +62,14 @@ def likelihood(x, n, P):
         P must be a 1D numpy.ndarray
         - If any value in P is not in the range [0, 1], raise a ValueError
         with the message All values in P must be in the range [0, 1]
-
+    Returns:    A 1D numpy.ndarray containing the likelihood of obtaining the
+                data, x and n, for each probability in P, respectively
     """
 
     if not isinstance(n, int):
         raise ValueError("n must be a positive integer")
 
-    if (n < 0):
+    if (n <= 0):
         raise ValueError("n must be a positive integer")
 
     if not isinstance(x, int):
