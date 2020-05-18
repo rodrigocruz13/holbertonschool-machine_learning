@@ -66,6 +66,8 @@ def likelihood(x, n, P):
                 data, x and n, for each probability in P, respectively
     """
 
+    msg1 = "x must be an integer that is greater than or equal to 0"
+
     if not isinstance(n, int):
         raise ValueError("n must be a positive integer")
 
@@ -73,12 +75,10 @@ def likelihood(x, n, P):
         raise ValueError("n must be a positive integer")
 
     if not isinstance(x, int):
-        raise ValueError(
-            "x must be an integer that is greater than or equal to 0")
+        raise ValueError(msg1)
 
     if not (x >= 0):
-        raise ValueError(
-            "x must be an integer that is greater than or equal to 0")
+        raise ValueError(msg1)
 
     if (x > n):
         raise ValueError("x cannot be greater than n")
