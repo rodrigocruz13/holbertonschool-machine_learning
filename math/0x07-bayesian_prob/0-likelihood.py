@@ -74,7 +74,7 @@ def likelihood(x, n, P):
     if (n <= 0):
         raise ValueError("n must be a positive integer")
 
-    if not isinstance(x, int):
+    if not isinstance(x, (float, int)):
         raise ValueError(msg1)
 
     if (x < 0):
