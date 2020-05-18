@@ -74,13 +74,10 @@ def likelihood(x, n, P):
     if (n <= 0):
         raise ValueError("n must be a positive integer")
 
-    if not isinstance(x, (float, int)):
+    if not isinstance(x, (int, float)) or x < 0:
         raise ValueError(msg1)
 
-    if (x < 0):
-        raise ValueError(msg1)
-
-    if (x > n):
+    if x > n:
         raise ValueError("x cannot be greater than n")
 
     if not isinstance(P, np.ndarray):
