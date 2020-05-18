@@ -86,7 +86,7 @@ def likelihood(x, n, P):
     if not isinstance(P, np.ndarray):
         raise TypeError("P must be a 1D numpy.ndarray")
 
-    if (P.ndim != 1) or (P.shape[0] < 1):
+    if (len(P.shape) != 1):
         raise TypeError("P must be a 1D numpy.ndarray")
 
     if (np.any(P < 0) or np.any(P > 1)):
