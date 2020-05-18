@@ -34,9 +34,9 @@ def n_choose_x(n, x):
                                 elements from a fixed set of n elements
     """
 
-    n_fact = fact(n)
-    x_fact = fact(x)
-    nx_fact = fact(n - x)
+    n_fact = np.math.factorial(n)
+    x_fact = np.math.factorial(x)
+    nx_fact = np.math.factorial(n - x)
     return n_fact / (x_fact * nx_fact)
 
 
