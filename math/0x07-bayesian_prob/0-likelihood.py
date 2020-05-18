@@ -49,7 +49,7 @@ def likelihood(x, n, P):
                 data, x and n, for each probability in P, respectively
     """
 
-    if (n <= 0):
+    if (n < 0):
         raise ValueError("n must be a positive integer")
 
     if not isinstance(x, int):
