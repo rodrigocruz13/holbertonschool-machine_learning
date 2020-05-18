@@ -145,7 +145,7 @@ def marginal(x, n, P, Pr):
     Returns: the marginal probability of obtaining x and n
     """
 
-    if not isinstance(P, np.ndarray) or len(P.shape) != 1 or P.shape[0] < 1:
-        raise TypeError("P must be a 1D numpy.ndarray")
+    if np.any(P > 1) or np.any(P < 0):
+        raise ValueError("All values in P must be in the range [0, 1]")
 
     return sum(intersection(x, n, P, Pr))
