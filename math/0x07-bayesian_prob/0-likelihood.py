@@ -6,23 +6,6 @@ Module used to
 import numpy as np
 
 
-# Factorial of a number using recursion
-
-def fact(n):
-    """
-    Function that calculates the factorial of a positive integer:
-    Args:
-    - n     int                 number of patients that develop side effects
-    Returns
-            int                 factorial of n
-    """
-
-    if n == 1:
-        return n
-    else:
-        return n * fact(n - 1)
-
-
 def n_choose_x(n, x):
     """
     Function that calculates the factorial of a positive integer:
@@ -66,18 +49,24 @@ def likelihood(x, n, P):
                 data, x and n, for each probability in P, respectively
     """
 
-    msg1 = "x must be an integer that is greater than or equal to 0"
-
-    if not isinstance(n, (int, float)) or n <= 0:
+    if (n <= 0):
         raise ValueError("n must be a positive integer")
 
-    if not isinstance(x, (int, float)) or x < 0:
-        raise ValueError(msg1)
+    if not isinstance(x, int):
+        raise ValueError(
+            "x must be an integer that is greater than or equal to 0")
 
-    if x > n:
+    if not (x >= 0):
+        raise ValueError(
+            "x must be an integer that is greater than or equal to 0")
+
+    if (x > n):
         raise ValueError("x cannot be greater than n")
 
-    if not isinstance(P, np.ndarray) or len(P.shape) != 1 or P.shape[0] < 1:
+    if not isinstance(P, np.ndarray):
+        raise TypeError("P must be a 1D numpy.ndarray")
+
+    if (P.ndim != 1):
         raise TypeError("P must be a 1D numpy.ndarray")
 
     if np.any(P > 1) or np.any(P < 0):
