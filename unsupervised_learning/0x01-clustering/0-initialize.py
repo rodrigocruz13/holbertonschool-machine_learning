@@ -33,15 +33,28 @@ def initialize(X, k):
     for each cluster, or None on failure
     """
 
+    n = X.shape[0]
     d = X.shape[1]
 
-    low = np.amin(X)
-    high = np.amax(X)
+    if not isinstance(X, np.ndarray):
+        return None
 
-    # generate n random points in d dimensions with elements
-    # in [-deviation, deviation]
+    if (len(X.shape) != 2):
+        return None
 
-    # generate k points in d dimensions with elements in [0, max_value]
-    cluster_centers = np.random.uniform(low=low, high=high, size=(k, d))
+    if not isinstance(k, int):
+        return None
 
-    return cluster_centers
+    if not (0 <= k <= n):
+        return None
+
+    min_ = np.amin(X, axis=0)
+    max_ = np.amax(X, axis=0)
+
+    # generate cluster centers (CC)
+    try:
+        CC = np.random.uniform(low=min_, high=max_, size=(k, d))
+        return CC
+
+    except BaseException:
+        return None
