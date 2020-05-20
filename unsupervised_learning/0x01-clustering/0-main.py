@@ -13,6 +13,6 @@ if __name__ == "__main__":
     e = np.random.multivariate_normal([20, 70], [[16, 0], [0, 16]], size=50)
     X = np.concatenate((a, b, c, d, e), axis=0)
     np.random.shuffle(X)
-    plt.scatter(X[:, 0], X[:, 1], s=10)
+    plt.scatter(X[:, 0], X[:, 1], s=15)
     plt.show()
     print(initialize(X, 5))
