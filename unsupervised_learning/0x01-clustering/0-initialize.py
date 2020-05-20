@@ -47,7 +47,8 @@ def initialize(X, k):
     # generate cluster centers (CC)
     try:
         CC = np.random.uniform(low=min_, high=max_, size=(k, d))
-        return CC
 
     except BaseException:
         return None
+
+    return CC
