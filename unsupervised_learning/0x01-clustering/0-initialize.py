@@ -33,13 +33,12 @@ def initialize(X, k):
     for each cluster, or None on failure
     """
 
-    n = X.shape[0]
     d = X.shape[1]
 
     if not isinstance(X, np.ndarray) or not isinstance(k, int):
         return None
 
-    if not (0 <= k or k < 1):
+    if (0 < k or k < 1):
         return None
 
     min_ = np.amin(X, axis=0)
