@@ -45,7 +45,7 @@ def initialize(X, k):
     if not isinstance(k, int):
         return None
 
-    if not (0 <= k <= n):
+    if not ((0 <= k) and (k <= n)):
         return None
 
     min_ = np.amin(X, axis=0)
