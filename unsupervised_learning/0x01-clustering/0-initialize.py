@@ -38,7 +38,7 @@ def initialize(X, k):
     if not isinstance(X, np.ndarray) or not isinstance(k, int):
         return None
 
-    if (0 < k or k < 1):
+    if (k < 1):
         return None
 
     min_ = np.amin(X, axis=0)
