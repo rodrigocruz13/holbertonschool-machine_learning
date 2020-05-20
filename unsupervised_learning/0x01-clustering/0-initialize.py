@@ -36,16 +36,10 @@ def initialize(X, k):
     n = X.shape[0]
     d = X.shape[1]
 
-    if not isinstance(X, np.ndarray):
+    if not isinstance(X, np.ndarray) or not isinstance(k, int):
         return None
 
-    if (len(X.shape) != 2):
-        return None
-
-    if not isinstance(k, int):
-        return None
-
-    if not ((0 <= k) and (k <= n)):
+    if not (0 <= k or k < 1):
         return None
 
     min_ = np.amin(X, axis=0)
