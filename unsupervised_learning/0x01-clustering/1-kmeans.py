@@ -150,7 +150,6 @@ def kmeans(X, k, iterations=1000):
         iter_ = 0
         error = 100
         while iter_ < iterations:
-            print("iter = ", iter_)
 
             # 1. Generate distances
             deltas = X[:, np.newaxis, :] - new_centers
