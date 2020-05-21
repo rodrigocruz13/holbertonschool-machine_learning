@@ -113,20 +113,21 @@ def asign_clusters(X, distances, k, new_centers):
 
     clusters = np.argmin(distances, axis=1)
     used_clusters = np.unique(clusters, return_counts=True)[0]
-    clusters_no_data = np.setdiff1d(np.array(range(k)), used_clusters)
+    clusters_with_no_data = np.setdiff1d(np.array(range(k)), used_clusters)
 
     # If a cluster has no data points, reinitialize its centroid
-    while (len(clusters_no_data) > 0):
+    while (len(clusters_with_no_data) > 0):
 
-        for i in clusters_no_data:
+        for i in clusters_with_no_data:
             temp_centers = initialize(X, k)
             new_centers[i] = temp_centers[(i - 1) % k]
+            # new_centers[i] = temp_centers[i]
 
         # asign each datapoint to a clusters
         distances = calculate_distances(k, X, new_centers)
         clusters = np.argmin(distances, axis=1)
         used_clusters = np.unique(clusters, return_counts=True)[0]
-        clusters_no_data = np.setdiff1d(np.array(range(k)), used_clusters)
+        clusters_with_no_data = np.setdiff1d(np.array(range(k)), used_clusters)
     return clusters
 
 
@@ -185,10 +186,11 @@ def kmeans(X, k, iterations=1000):
     iter_ = 0
     while (error != 0 and iter_ < iterations):
 
-       # 1. Measure the distance to every center
+        # 1. Measure the distance to every center
         distances = calculate_distances(k, X, new_centers)
 
-        # 2. Assign data to closest cluster
+        # 2. Assign points to each cluster
+        # If a cluster has no data points, reinitialize its centroid
         clusters = asign_clusters(X, distances, k, new_centers)
 
         # 3. Calculate & update new center (mean) for all clusters
@@ -197,7 +199,6 @@ def kmeans(X, k, iterations=1000):
             new_centers[i] = np.mean(X[clusters == i], axis=0)
 
         error = np.linalg.norm(new_centers - old_centers)
-
         iter_ += 1
 
     return new_centers, clusters
