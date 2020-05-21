@@ -51,7 +51,7 @@ def variance(X, C):
     if (len(X.shape) != 2) or (len(C.shape) != 2):
         return None
 
-    if (X.shape[1] < 1) or (C.shape[0] < 1):
+    if (X.size < 1) or (C.size < 1):
         return None
 
     try:
