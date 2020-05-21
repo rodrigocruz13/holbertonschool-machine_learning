@@ -51,6 +51,9 @@ def variance(X, C):
     if (len(X.shape) != 2) or (len(C.shape) != 2):
         return None
 
+    if (X.shape[1] < 1) or (C.shape[0] < 1):
+        return None
+
     try:
         # https://paris-swc.github.io/advanced-numpy-lesson/05-kmeans.html
 
