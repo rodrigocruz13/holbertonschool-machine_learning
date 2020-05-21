@@ -52,44 +52,6 @@ def initialize(X, k):
     return CC
 
 
-def calculate_distances(k, X, C):
-    """
-    Args:
-        - X         numpy.ndarray       Array of shape (n, d) containing the
-                                        dataset that will be used for K-means
-                                        clustering
-            - n     int                 Number of data points
-            - d     int                 Number of dims for each data point
-
-        - k         int                 Positive integer containing the number
-                                        of clusters
-        - C         numpy.ndarray       Array of shape (n, d) containing the
-                                        cluster centers
-            - k     int                 Positive integer containing the number
-                                        of clusters
-            - d     int                 Number of dims for each data point
-    """
-
-    n = X.shape[0]
-
-    distances = np.zeros((n, k))
-    for i in range(k):
-        distances[:, i] = np.linalg.norm(X - C[i], axis=1)
-    """
-    # C_expandido = expand(fila N veces) for fila in C
-    # X_expandido = expand( X) K veces)
-    C_ext = np.asarray([np.tile(C[i],(n ,1)) for i in range(len(C))])
-    X_ext = np.tile(X, (k, 1))
-    C_ext = C_ext.reshape(X_ext.shape[0], X_ext.shape[1])
-    print("C shape", type(C), C.shape)
-    print("X shape", type(X), X.shape)
-    print("C_ext shape", type(C_ext), C_ext.shape)
-    print("X_ext shape", type(X_ext), X_ext.shape)
-    d = (X_ext - C_ext).reshape(n, k, 1)
-    """
-    return distances
-
-
 def asign_clusters(X, distances, k, new_centers):
     """
     Funtion that assings to a data point the number of the closer cluster
@@ -124,7 +86,9 @@ def asign_clusters(X, distances, k, new_centers):
             # new_centers[i] = temp_centers[i]
 
         # asign each datapoint to a clusters
-        distances = calculate_distances(k, X, new_centers)
+        deltas = X[:, np.newaxis] - new_centers
+        distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
+
         clusters = np.argmin(distances, axis=1)
         used_clusters = np.unique(clusters, return_counts=True)[0]
         clusters_with_no_data = np.setdiff1d(np.array(range(k)), used_clusters)
@@ -189,22 +153,40 @@ def kmeans(X, k, iterations=1000):
         while (error != 0 and iter_ < iterations):
 
             # 1. Measure the distance to every center
-            distances = calculate_distances(k, X, new_centers)
+            deltas = X[:, np.newaxis] - new_centers
+            distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
 
             # 2. Assign points to each cluster
-            # If a cluster has no data points, reinitialize its centroid
-            clusters = asign_clusters(X, distances, k, new_centers)
+            clust = np.argmin(distances, axis=1)
+
+            # 2a. If a cluster has no data points, reinitialize its centroid
+            used_clusts = np.unique(clust, return_counts=True)[0]
+            clust_with_0_data = np.setdiff1d(np.array(range(k)), used_clusts)
+
+            if (len(clust_with_0_data) > 0):
+                temp_clusters = initialize(X, k)
+                if (temp_clusters is None):
+                    return None, None
+
+                for i in clust_with_0_data:
+                    new_centers[i] = temp_clusters[(i - 1) % k]
+
+            # 2b.  Asign data to each cluster
+            deltas = X[:, np.newaxis] - new_centers
+            distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
+            clust = np.argmin(distances, axis=1)
 
             # 3. Calculate & update new center (mean) for all clusters
             old_centers = np.ndarray.copy(new_centers)
             for i in range(k):
-                new_centers[i] = np.mean(X[clusters == i], axis=0)
+                new_centers[i] = np.mean(X[clust == i], axis=0)
 
             error = np.linalg.norm(new_centers - old_centers)
             iter_ += 1
 
         C = new_centers
-        clss = clusters
+        clss = clust
+
         return C, clss
 
     except BaseException:
