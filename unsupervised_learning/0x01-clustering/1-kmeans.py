@@ -180,25 +180,32 @@ def kmeans(X, k, iterations=1000):
     if (old_centers.any() is None):
         return None, None
 
-    new_centers = np.ndarray.copy(old_centers)
+    try:
 
-    error = 1
-    iter_ = 0
-    while (error != 0 and iter_ < iterations):
+        new_centers = np.ndarray.copy(old_centers)
 
-        # 1. Measure the distance to every center
-        distances = calculate_distances(k, X, new_centers)
+        error = 1
+        iter_ = 0
+        while (error != 0 and iter_ < iterations):
 
-        # 2. Assign points to each cluster
-        # If a cluster has no data points, reinitialize its centroid
-        clusters = asign_clusters(X, distances, k, new_centers)
+            # 1. Measure the distance to every center
+            distances = calculate_distances(k, X, new_centers)
 
-        # 3. Calculate & update new center (mean) for all clusters
-        old_centers = np.ndarray.copy(new_centers)
-        for i in range(k):
-            new_centers[i] = np.mean(X[clusters == i], axis=0)
+            # 2. Assign points to each cluster
+            # If a cluster has no data points, reinitialize its centroid
+            clusters = asign_clusters(X, distances, k, new_centers)
 
-        error = np.linalg.norm(new_centers - old_centers)
-        iter_ += 1
+            # 3. Calculate & update new center (mean) for all clusters
+            old_centers = np.ndarray.copy(new_centers)
+            for i in range(k):
+                new_centers[i] = np.mean(X[clusters == i], axis=0)
 
-    return new_centers, clusters
+            error = np.linalg.norm(new_centers - old_centers)
+            iter_ += 1
+
+        C = new_centers
+        clss = clusters
+        return C, clss
+
+    except BaseException:
+        return None, None
