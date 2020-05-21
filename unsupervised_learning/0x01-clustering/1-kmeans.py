@@ -147,45 +147,43 @@ def kmeans(X, k, iterations=1000):
     try:
 
         new_centers = np.ndarray.copy(old_centers)
-
-        error = 1
         iter_ = 0
-        while (error != 0 and iter_ < iterations):
+        error = 100
+        while iter_ < iterations:
+            print("iter = ", iter_)
 
-            # 1. Measure the distance to every center
-            deltas = X[:, np.newaxis] - new_centers
-            distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
+            # 1. Generate distances
+            deltas = X[:, np.newaxis, :] - new_centers
+            distances = np.sqrt(np.sum((deltas) ** 2, 2))
 
-            # 2. Assign points to each cluster
-            clust = np.argmin(distances, axis=1)
+            # 2. assign points to clusters
+            clusters = distances.argmin(1)
 
-            # 2a. If a cluster has no data points, reinitialize its centroid
-            used_clusts = np.unique(clust, return_counts=True)[0]
-            clust_with_0_data = np.setdiff1d(np.array(range(k)), used_clusts)
+            # 3. calculate new centroids
+            for j in range(k):
+                # If a cluster has no data points, reinitialize its centroid
+                if (X[clusters == j].size == 0):
+                    print("Cluster with no data",)
+                    d = X.shape[1]
+                    min_ = np.amin(X, axis=0)
+                    max_ = np.amax(X, axis=0)
+                    new_centers[j, :] = np.random.uniform(min_,
+                                                          max_,
+                                                          size=(1, d))
+                else:
+                    new_centers[j, :] = (X[clusters == j].mean(axis=0))
 
-            if (len(clust_with_0_data) > 0):
-                temp_clusters = initialize(X, k)
-                if (temp_clusters is None):
-                    return None, None
+            new_error = np.linalg.norm(new_centers - old_centers)
+            C = new_centers
+            clss = clusters
+            iter_ = iter_ + 1
 
-                for i in clust_with_0_data:
-                    new_centers[i] = temp_clusters[(i - 1) % k]
+            # If no change occurs between iterations, your function
+            # should return
 
-            # 2b.  Asign data to each cluster
-            deltas = X[:, np.newaxis] - new_centers
-            distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
-            clust = np.argmin(distances, axis=1)
-
-            # 3. Calculate & update new center (mean) for all clusters
-            old_centers = np.ndarray.copy(new_centers)
-            for i in range(k):
-                new_centers[i] = np.mean(X[clust == i], axis=0)
-
-            error = np.linalg.norm(new_centers - old_centers)
-            iter_ += 1
-
-        C = new_centers
-        clss = clust
+            if (error - new_error == 0):
+                return C, clss
+            error = new_error
 
         return C, clss
 
