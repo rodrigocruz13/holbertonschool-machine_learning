@@ -52,14 +52,41 @@ def initialize(X, k):
     return CC
 
 
-def calculate_distances(k, X, new_centers):
+def calculate_distances(k, X, C):
     """
+    Args:
+        - X         numpy.ndarray       Array of shape (n, d) containing the
+                                        dataset that will be used for K-means
+                                        clustering
+            - n     int                 Number of data points
+            - d     int                 Number of dims for each data point
+
+        - k         int                 Positive integer containing the number
+                                        of clusters
+        - C         numpy.ndarray       Array of shape (n, d) containing the
+                                        cluster centers
+            - k     int                 Positive integer containing the number
+                                        of clusters
+            - d     int                 Number of dims for each data point
     """
 
     n = X.shape[0]
+
     distances = np.zeros((n, k))
     for i in range(k):
-        distances[:, i] = np.linalg.norm(X - new_centers[i], axis=1)
+        distances[:, i] = np.linalg.norm(X - C[i], axis=1)
+    """
+    # C_expandido = expand(fila N veces) for fila in C
+    # X_expandido = expand( X) K veces)
+    C_ext = np.asarray([np.tile(C[i],(n ,1)) for i in range(len(C))])
+    X_ext = np.tile(X, (k, 1))
+    C_ext = C_ext.reshape(X_ext.shape[0], X_ext.shape[1])
+    print("C shape", type(C), C.shape)
+    print("X shape", type(X), X.shape)
+    print("C_ext shape", type(C_ext), C_ext.shape)
+    print("X_ext shape", type(X_ext), X_ext.shape)
+    d = (X_ext - C_ext).reshape(n, k, 1)
+    """
     return distances
 
 
@@ -138,26 +165,27 @@ def kmeans(X, k, iterations=1000):
 
     """
 
-    cc = (initialize(X, k))
+    # Validations
 
-    # Cluster with no data points during the update step, then reinitialize
-    if (cc.any() is None):
-        cc = (initialize(X, k))
+    if not isinstance(X, np.ndarray) or not isinstance(k, int):
+        return None, None
 
-    old_centers = np.zeros(cc.shape)
-    new_centers = np.ndarray.copy(cc)
+    if (k < 1) or (iterations < 1):
+        return None, None
 
-    n = X.shape[0]
-    distances = np.zeros((n, k))
+    # Generate centers for each cluster
+    old_centers = initialize(X, k)
 
-    error = np.linalg.norm(new_centers - old_centers)
-    error_lst = []
-    error_lst.append(error)
+    if (old_centers.any() is None):
+        return None, None
+
+    new_centers = np.ndarray.copy(old_centers)
+
+    error = 1
     iter_ = 0
-    # while error != 0:
     while (error != 0 and iter_ < iterations):
 
-        # 1. Measure the distance to every center
+       # 1. Measure the distance to every center
         distances = calculate_distances(k, X, new_centers)
 
         # 2. Assign data to closest cluster
