@@ -38,11 +38,10 @@ def pdf(X, m, S):
         if (X.ndim != 2) or (m.ndim != 1) or (S.ndim != 2):
             return None
 
-        d = X.shape[1]
+        n, d = X.shape
         if (m.shape != (d,)) or (S.shape != (d, d)):
             return None
 
-        n = X.shape[0]
         if (n < 1) or (d < 1):
             return None
 
