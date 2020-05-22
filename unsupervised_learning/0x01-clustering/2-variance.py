@@ -37,6 +37,12 @@ def variance(X, C):
         if (X.size < 1) or (C.size < 1):
             return None
 
+        if (C.shape[1] != X.shape[1]):
+            return None
+
+        if (C.shape[0] >= X.shape[0]):
+            return None
+
         # https://paris-swc.github.io/advanced-numpy-lesson/05-kmeans.html
         deltas = X[:, np.newaxis] - C
         dist = np.sqrt(np.sum((deltas) ** 2, axis=2))
