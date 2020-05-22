@@ -11,7 +11,7 @@ variance = __import__('2-variance').variance
 
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     """
-    Funtion that tests for the optimum number of clusters by variance:
+    Funtion that tests for the optimum number of clusters by variance
 
     Args:
     - X         numpy.ndarray       Array of shape (n, d) containing the
@@ -28,12 +28,12 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
                                     number of iterations for K-means
 
     Returns:
-    results, d_vars, or None, None on failure
+    results, d_vars, or None, None on failure.
 
     - results is a list containing the outputs of K-means 4 each cluster size
 
     - d_vars is a list containing the difference in variance from the smallest
-      cluster size for each cluster size
+      cluster size for each cluster size.
 
     """
     try:
