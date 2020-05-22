@@ -46,7 +46,7 @@ def expectation(X, pi, m, S):
         if (X.ndim != 2) or (m.ndim != 2) or (S.ndim != 3):
             return None, None
 
-        if (pi.sum() != 1):
+        if not (np.isclose(np.sum(pi), 1)):
             return None, None
 
         n, d = X.shape
