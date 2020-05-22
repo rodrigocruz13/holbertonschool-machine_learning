@@ -71,9 +71,13 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
 
         for i in range(min_, max_):
             centroids, clusters = kmeans(X, i, iterations)
+            if (centroids is None) or (clusters is None):
+                return None, None
             results.append((centroids, clusters))
 
             current_variance = variance(X, centroids)
+            if (current_variance is None):
+                return None, None
             d_vars.append(original_variance - current_variance)
 
         return results, d_vars
