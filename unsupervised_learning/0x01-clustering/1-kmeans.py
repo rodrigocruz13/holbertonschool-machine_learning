@@ -122,6 +122,8 @@ def kmeans(X, k, iterations=1000):
                 # If a cluster has no data points, reinitialize its centroid
                 if (X[clusters == j].size == 0):
                     new_centers[j, :] = np.random.uniform(m, M, size=(1, d))
+                    if (new_centers.any() is None):
+                        return None, None
                 else:
                     new_centers[j, :] = (X[clusters == j].mean(axis=0))
 
