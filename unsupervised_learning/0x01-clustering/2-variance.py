@@ -27,36 +27,17 @@ def variance(X, C):
     - var       float               (total variance), or None on failure
     """
 
-    """
-    k = C.shape[0]
     try:
-        # Calculate the distance
+        if (not isinstance(X, np.ndarray)) or (not isinstance(C, np.ndarray)):
+            return None
 
-        n = X.shape[0]
-        distances = np.zeros((n, k))
-        for i in range(k):
-            distances[:, i] = np.linalg.norm(X - C[i], axis=1)
+        if (len(X.shape) != 2) or (len(C.shape) != 2):
+            return None
 
-        σ = np.sum(distances) - np.sum(np.min(distances, axis=0))
+        if (X.size < 1) or (C.size < 1):
+            return None
 
-        return  (σ)/n
-
-    except Exception:
-        return None
-    """
-
-    if (not isinstance(X, np.ndarray)) or (not isinstance(C, np.ndarray)):
-        return None
-
-    if (len(X.shape) != 2) or (len(C.shape) != 2):
-        return None
-
-    if (X.size < 1) or (C.size < 1):
-        return None
-
-    try:
         # https://paris-swc.github.io/advanced-numpy-lesson/05-kmeans.html
-
         deltas = X[:, np.newaxis] - C
         dist = np.sqrt(np.sum((deltas) ** 2, axis=2))
         min_dist = np.min(dist, axis=1)
