@@ -36,31 +36,30 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
       cluster size for each cluster size
 
     """
-
-    # 1. Validations
-
-    if not isinstance(X, np.ndarray):
-        return None, None
-
-    if (len(X.shape) != 2):
-        return None, None
-
-    if (X.shape[0] < 1 or X.shape[1] < 1):
-        return None, None
-
-    if (not isinstance(kmin, int)) or (not isinstance(kmax, int)):
-        return None, None
-
-    if (kmin < 1) or (kmax < 1):
-        return None, None
-
-    if (kmin >= kmax) or (kmax >= X.shape[0]):
-        return None, None
-
-    if (not isinstance(iterations, int)) or iterations < 1:
-        return None, None
-
     try:
+        # 1. Validations
+
+        if not isinstance(X, np.ndarray):
+            return None, None
+
+        if (len(X.shape) != 2):
+            return None, None
+
+        if (X.shape[0] < 1 or X.shape[1] < 1):
+            return None, None
+
+        if (not isinstance(kmin, int)) or (not isinstance(kmax, int)):
+            return None, None
+
+        if (kmin < 1) or (kmax < 1):
+            return None, None
+
+        if (kmin >= kmax) or (kmax >= X.shape[0]):
+            return None, None
+
+        if (not isinstance(iterations, int)) or iterations < 1:
+            return None, None
+
         d_vars = []
         results = []
 
