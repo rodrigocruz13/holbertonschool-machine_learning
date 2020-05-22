@@ -33,29 +33,21 @@ def initialize(X, k):
         - S         numpy.ndarray   Array of shape (k, d, d) containing the
                                     covariance matrices for each cluster,
                                     initialized as identity matrices
-    You should use kmeans = __import__('1-kmeans').kmeans
     """
 
-    if not isinstance(X, np.ndarray) or not isinstance(k, int):
-        return None, None, None
-
-    if (len(X.shape) != 2):
-        return None, None, None
-
-    if (not isinstance(X.shape[0], int)) or (not isinstance(X.shape[1], int)):
-        return None, None, None
-
-    if (X.shape[0] < 1) or (X.shape[1] < 1):
-        return None, None, None
-
-    if (k < 1):
-        return None, None, None
-
-    # generate priors for each cluster, initialized evenly
-
-    d = X.shape[1]
-
     try:
+        if not isinstance(X, np.ndarray) or not isinstance(k, int):
+            return None, None, None
+
+        if (X.ndim != 2):
+            return None, None, None
+
+        if (k < 1):
+            return None, None, None
+
+        # generate priors for each cluster, initialized evenly
+        d = X.shape[1]
+
         pi = np.array([1 / k] * k).reshape((k, ))
         m = kmeans(X, k)[0]
         S = np.array([np.identity(d, dtype=float)] * k)
