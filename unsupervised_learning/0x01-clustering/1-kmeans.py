@@ -96,7 +96,10 @@ def kmeans(X, k, iterations=1000):
         return None, None
 
     # Generate centers for each cluster
-    old_centers = initialize(X, k)
+    d = X.shape[1]
+    min_ = np.amin(X, axis=0)
+    max_ = np.amax(X, axis=0)
+    old_centers = np.random.uniform(min_, max_, size=(k, d))
 
     if (old_centers.any() is None):
         return None, None
@@ -119,9 +122,6 @@ def kmeans(X, k, iterations=1000):
             for j in range(k):
                 # If a cluster has no data points, reinitialize its centroid
                 if (X[clusters == j].size == 0):
-                    d = X.shape[1]
-                    min_ = np.amin(X, axis=0)
-                    max_ = np.amax(X, axis=0)
                     new_centers[j, :] = np.random.uniform(min_,
                                                           max_,
                                                           size=(1, d))
