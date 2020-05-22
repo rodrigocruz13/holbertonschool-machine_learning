@@ -32,15 +32,15 @@ def initialize(X, k):
     A numpy.ndarray of shape (k, d) containing the initialized centroids
     for each cluster, or None on failure
     """
-
-    if not isinstance(X, np.ndarray) or not isinstance(k, int):
-        return None
-
-    if (k < 1):
-        return None
-
-    # generate cluster centers (CC)
     try:
+
+        if not isinstance(X, np.ndarray) or not isinstance(k, int):
+            return None
+
+        if (k < 1):
+            return None
+
+        # generate cluster centers (CC)
         d = X.shape[1]
         min_ = np.amin(X, axis=0)
         max_ = np.amax(X, axis=0)
@@ -89,22 +89,21 @@ def kmeans(X, k, iterations=1000):
 
     # Validations
 
-    if not isinstance(X, np.ndarray) or not isinstance(k, int):
-        return None, None
-
-    if (k < 1) or (iterations < 1):
-        return None, None
-
-    # Generate centers for each cluster
-    d = X.shape[1]
-    min_ = np.amin(X, axis=0)
-    max_ = np.amax(X, axis=0)
-    old_centers = np.random.uniform(min_, max_, size=(k, d))
-
-    if (old_centers.any() is None):
-        return None, None
-
     try:
+        if not isinstance(X, np.ndarray) or not isinstance(k, int):
+            return None, None
+
+        if (k < 1) or (iterations < 1):
+            return None, None
+
+        # Generate centers for each cluster
+        d = X.shape[1]
+        m = np.amin(X, axis=0)
+        M = np.amax(X, axis=0)
+        old_centers = np.random.uniform(m, M, size=(k, d))
+
+        if (old_centers.any() is None):
+            return None, None
 
         new_centers = np.ndarray.copy(old_centers)
         iter_ = 0
@@ -122,9 +121,7 @@ def kmeans(X, k, iterations=1000):
             for j in range(k):
                 # If a cluster has no data points, reinitialize its centroid
                 if (X[clusters == j].size == 0):
-                    new_centers[j, :] = np.random.uniform(min_,
-                                                          max_,
-                                                          size=(1, d))
+                    new_centers[j, :] = np.random.uniform(m, M, size=(1, d))
                 else:
                     new_centers[j, :] = (X[clusters == j].mean(axis=0))
 
