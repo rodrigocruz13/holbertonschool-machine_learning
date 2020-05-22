@@ -42,7 +42,7 @@ def initialize(X, k):
         if (X.ndim != 2):
             return None, None, None
 
-        if (k < 1):
+        if (k < 1) or (X.shape[0] <= k):
             return None, None, None
 
         # generate priors for each cluster, initialized evenly
@@ -51,6 +51,9 @@ def initialize(X, k):
         pi = np.array([1 / k] * k).reshape((k, ))
         m = kmeans(X, k)[0]
         S = np.array([np.identity(d, dtype=float)] * k)
+
+        if (m is None):
+            return None, None, None
 
         return pi, m, S
 
