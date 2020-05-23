@@ -57,13 +57,14 @@ def maximization(X, g):
             pi[i] = g_i_acum / n
 
             # 2 Calculate centroids
-            m[i] = np.sum(np.matmul(g[i], X), axis=0) / g_i_acum
+            gi_alt = g[i].reshape(1, n)
+            m[i] = np.matmul(gi_alt, X).sum(axis=0) / g_i_acum
 
             # 3. Calculate covariances (matrix of shape k, d d)
             diff = (X - m[i])
             S[i] = np.dot(g[i] * diff.T, diff) / g_i_acum
 
-            return pi, m, S
+        return pi, m, S
 
     except BaseException:
         return None, None, None
