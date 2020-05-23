@@ -33,7 +33,10 @@ def maximization(X, g):
         if (not isinstance(g, np.ndarray)):
             return None, None, None
 
-        if not (np.isclose(np.sum(g, axis=0), 1).all):
+        if not (np.isclose(np.sum(g, axis=0), 1).all()):
+            return None, None, None
+
+        if (X.ndim != 2) or (g.ndim != 2):
             return None, None, None
 
         n, d = X.shape
