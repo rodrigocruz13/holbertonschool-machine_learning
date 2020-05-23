@@ -31,8 +31,8 @@ def kmeans(X, k):
 
     # Validations
 
-    kmeans = skl.KMeans(n_clusters=k).fit(X)
-    centers = kmeans.cluster_centers_
-    clusters_classes = kmeans.labels_
+    k = skl.KMeans(n_clusters=k).fit(X)
+    centers = k.cluster_centers_
+    clusters_classes = k.labels_
 
     return centers, clusters_classes
