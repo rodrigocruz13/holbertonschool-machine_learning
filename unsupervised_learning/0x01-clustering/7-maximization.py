@@ -40,7 +40,7 @@ def maximization(X, g):
 
         n, d = X.shape
         k = g.shape[0]
-        if (g.shape != (k,n)) or (X.shape != (n, d)):
+        if (g.shape != (k, n)) or (X.shape != (n, d)):
             return None, None, None
 
         if (n < 1) or (d < 1) or (k < 1) or (k > n):
@@ -57,7 +57,7 @@ def maximization(X, g):
             pi[i] = g_i_acum / n
 
             # 2 Calculate centroids
-            m[i] = np.sum(np.matmul(g[i],  X), axis=0) / g_i_acum
+            m[i] = np.sum(np.matmul(g[i], X), axis=0) / g_i_acum
 
             # 3. Calculate covariances (matrix of shape k, d d)
             diff = (X - m[i])
@@ -67,14 +67,3 @@ def maximization(X, g):
 
     except BaseException:
         return None, None, None
-
-"""
-n_components, n_features = means.shape
-    covariances = np.empty((n_components, n_features, n_features))
-    for k in range(n_components):
-        diff = X - means[k]
-        covariances[k] = np.dot(resp[:, k] * diff.T, diff) / nk[k]
-        covariances[k].flat[::n_features + 1] += reg_covar
-    return covariances
-
-"""
