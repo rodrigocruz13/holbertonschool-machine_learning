@@ -5,8 +5,6 @@ PCA: principal components analysis
 
 import numpy as np
 
-pdf = __import__('5-pdf').pdf
-
 
 def maximization(X, g):
     """
