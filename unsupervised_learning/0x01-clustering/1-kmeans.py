@@ -90,32 +90,35 @@ def kmeans(X, k, iterations=1000):
     # Validations
 
     try:
-        if not isinstance(X, np.ndarray) or not isinstance(k, int):
+        if (not isinstance(X, np.ndarray)) or (len(X.shape) != 2):
             return None, None
 
-        if (k < 1) or (iterations < 1):
+        if not isinstance(iterations, int) or (iterations < 1):
+            return None, None
+
+        n, d = X.shape
+        if not isinstance(k, int) or (k < 1) or (n < k):
             return None, None
 
         # Generate centers for each cluster
-        d = X.shape[1]
         m = np.amin(X, axis=0)
         M = np.amax(X, axis=0)
-        old_centers = np.random.uniform(m, M, size=(k, d))
 
+        old_centers = np.random.uniform(m, M, size=(k, d))
+        new_centers = np.ndarray.copy(old_centers)
         if (old_centers.any() is None):
             return None, None
 
-        new_centers = np.ndarray.copy(old_centers)
-        iter_ = 0
         error = 100
-        while iter_ < iterations:
 
+        # distances = np.zeros((n, k))
+        for iter_ in range(iterations):
             # 1. Generate distances
-            deltas = X[:, np.newaxis, :] - new_centers
-            distances = np.sqrt(np.sum((deltas) ** 2, 2))
+            distances = np.sqrt(
+                ((X - new_centers[:, np.newaxis])**2).sum(axis=-1))
 
             # 2. assign points to clusters
-            clusters = distances.argmin(1)
+            clusters = np.argmin(distances, axis=0)
 
             # 3. calculate new centroids
             for j in range(k):
@@ -130,16 +133,16 @@ def kmeans(X, k, iterations=1000):
             new_error = np.linalg.norm(new_centers - old_centers)
             C = new_centers
             clss = clusters
-            iter_ = iter_ + 1
 
             # If no change occurs between iterations, your function
             # should return
 
-            if (error - new_error == 0):
+            if ((error - new_error == 0) or (iter_ == iterations)):
                 return C, clss
             error = new_error
 
         return C, clss
 
-    except BaseException:
+    except BaseException as e:
+        print(e)
         return None, None
