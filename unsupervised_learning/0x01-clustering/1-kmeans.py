@@ -114,11 +114,11 @@ def kmeans(X, k, iterations=1000):
         # distances = np.zeros((n, k))
         for iter_ in range(iterations):
             # 1. Generate distances
-            distances = np.sqrt(
-                ((X - new_centers[:, np.newaxis])**2).sum(axis=-1))
+            deltas = X[:, np.newaxis] - new_centers
+            distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
 
             # 2. assign points to clusters
-            clusters = np.argmin(distances, axis=0)
+            clusters = np.argmin(distances, axis=1)
 
             # 3. calculate new centroids
             for j in range(k):
@@ -143,6 +143,5 @@ def kmeans(X, k, iterations=1000):
 
         return C, clss
 
-    except BaseException as e:
-        print(e)
+    except BaseException:
         return None, None
