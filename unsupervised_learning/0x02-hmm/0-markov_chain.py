@@ -42,9 +42,9 @@ def markov_chain(P, s, t=1):
         if (P.shape != (n, n)) or (s.shape != (1, n)):
             return None
 
-        while t >0 :
+        while (t > 0):
             s = np.matmul(s, P)
-            t =  t -1
+            t = t - 1
         return s
     except BaseException:
         return None, None
