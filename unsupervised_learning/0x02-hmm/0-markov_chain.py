@@ -47,4 +47,4 @@ def markov_chain(P, s, t=1):
             t = t - 1
         return s
     except BaseException:
-        return None, None
+        return None
