@@ -150,10 +150,7 @@ def absorbing(P):
             return True
         return False
 
-        return False
-
-    except BaseException as e:
-        print(e)
+    except BaseException:
         return False
 
 
@@ -218,7 +215,7 @@ def forward(Observation, Emission, Transition, Initial):
         # https://tinyurl.com/ybl8y8uh
 
         T = Observation.shape[0]
-        N, M = Emission.shape
+        N = Emission.shape[0]
 
         forward = np.zeros((N, T))
         forward[:, 0] = Initial.T * Emission[:, Observation[0]]
