@@ -192,17 +192,44 @@ def forward(Observation, Emission, Transition, Initial):
                                             given the previous observations
     """
 
-    # https://tinyurl.com/ybl8y8uh
-    T = Observation.shape[0]
-    N = Emission.shape[0]
+    try:
 
-    alpha = np.zeros((N, T))
-    alpha[:, 0] = Initial.T * Emission[:, Observation[0]]
+        # 1. Type validations
+        if (not isinstance(Observation, np.ndarray)) or (
+                not isinstance(Emission, np.ndarray)) or (
+                not isinstance(Transition, np.ndarray)) or (
+                not isinstance(Initial, np.ndarray)):
+            return None, None
 
-    for t in range(1, T):
-        for j in range(N):
-            alpha[j, t] = (alpha[:, t - 1].dot(Transition[:, j])
-                           * Emission[j, Observation[t]])
+        # 2. Dim validations
+        if (Observation.ndim != 1) or (
+                Emission.ndim != 2) or (
+                Transition.ndim != 2) or (
+                Initial.ndim != 2):
+            return None, None
 
-    likelihood = np.sum(alpha[:, t])
-    return likelihood, alpha
+        # 3. Structure validations
+        if (not np.sum(Emission, axis=1).all() == 1) or (
+                not np.sum(Transition, axis=1).all() == 1) or (
+                not np.sum(Initial).all() == 1):
+            return None, None
+
+        # https://tinyurl.com/ych6jm2z
+        # https://tinyurl.com/ybl8y8uh
+
+        T = Observation.shape[0]
+        N, M = Emission.shape
+
+        forward = np.zeros((N, T))
+        forward[:, 0] = Initial.T * Emission[:, Observation[0]]
+
+        for t in range(1, T):
+            for j in range(N):
+                forward[j, t] = (forward[:, t - 1].dot(Transition[:, j])
+                               * Emission[j, Observation[t]])
+
+        likelihood = np.sum(forward[:, t])
+        return likelihood, forward
+
+    except BaseException:
+        return None, None
