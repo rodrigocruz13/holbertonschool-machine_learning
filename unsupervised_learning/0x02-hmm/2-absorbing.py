@@ -97,6 +97,7 @@ def regular(P):
     except BaseException:
         return None
 
+
 def absorbing(P):
     """
     Function that determines determines if a markov chain is absorbing:
@@ -131,22 +132,23 @@ def absorbing(P):
 
         # P is an identity matrix
         identity = np.eye(n)
-        if (np.equal(P, identity).all() == True):
+        if (np.equal(P, identity).all()):
             return True
 
-        rows = []
         # Some rows of P is = row of identity matrix
-        if (P[0,:] == identity[0,:]).any():
-            rows = (P[:, np.newaxis] == identity).all(axis=2).sum(axis=1)
-            rows = np.array(np.where(rows == 1)).tolist()[0]
-        zeros = []
-        for i in rows:
-            y = n - np.count_nonzero(P[:, i])
-            zeros.append(True) if y < n - 1 else zeros.append(False)
+        abs = np.zeros(n)
+        for i in range(n):
+            if P[i][i] == 1:
+                abs[i] = 1
 
-        if len(zeros) > 0 and np.array(zeros).all() == True:
+        prev = np.zeros(n)
+        while (not np.array_equal(abs, prev) and abs.sum() != n):
+            prev = abs.copy()
+            for absorbed in P[:, np.nonzero(abs)[0]].T:
+                abs[np.nonzero(absorbed)] = 1
+        if (abs.sum() == n):
             return True
         return False
-    except BaseException as e:
-        print(e)
-        return None
+
+    except BaseException:
+        return False
