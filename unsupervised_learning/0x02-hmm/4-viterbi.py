@@ -320,15 +320,8 @@ def viterbi(Observation, Emission, Transition, Initial):
         for i in reversed(range(1, T)):
             p[i - 1] = T2[p[i], i]
 
-        probability = np.max(T1[:, -1])
 
-        return p.tolist(), probability
-
-    except BaseException:
-        return None, None
-
-    """
-
+        # code for prorbability
         Tra = Transition
         Emi = Emission
         Obs = Observation
@@ -355,5 +348,7 @@ def viterbi(Observation, Emission, Transition, Initial):
         # the highest probability
         probability = max(V[-1].values())
 
-        return path, probability[0]
-        """
+        return p, probability
+
+    except BaseException:
+        return None, None
