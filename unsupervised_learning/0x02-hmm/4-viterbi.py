@@ -237,33 +237,39 @@ def viterbi(Observation, Emission, Transition, Initial):
     Function that  calculates the most likely sequence of hidden states for a
     hidden markov model:
 
-    Args:
-    - Observation       numpy.ndarray       Array of shape (T,) that contains
-                                            the index of the observation
-                T       int                 Number of observations
-    - Emission          numpy.ndarray       Array of shape (N, M) containing
-                                            the emission probability of a
-                                            specific observation given a
-                                            hidden state
-                                            - Emission[i, j] is the probability
-                                            of observing j given the hidden
-                                            state i
-            - N         int                 Number of hidden states
-            - M         int                 Number of all possible observations
-    - Transition        numpy.ndarray       2D array of shape (N, N) containing
-                                            the transition probabilities
-                                            - Transition[i, j] is the prob
-                                            of transitioning from the hidden
-                                            state i to j
-    - Initial           numpy.ndarray       Array of shape (N, 1) containing
-                                            the probability of starting in a
-                                            particular hidden state
-    Returns: path, P, or None, None on failure
-    - path              list                list of length T containing the
-                                            most likely sequence of hidden
-                                            states
-    - p                                     is the probability of obtaining
-                                            the path sequence
+    Arguments
+    ---------
+    - Observation : numpy.ndarray
+                    Array of shape (T,) that contains the index of the obs
+                T : int
+                    Number of observations
+    - Emission    : numpy.ndarray
+                    Array of shape (N, M) containing the emission probability
+                    of a specific observation given a hidden state
+                    Emission[i, j] is the probability of observing j given the
+                    hidden state i
+                N : int
+                    Number of hidden states
+                M : int
+                    Number of all possible observations
+
+    - Transition  : numpy.ndarray
+                    2D array of shape (N, N) containing the transition probs
+                    Transition[i, j] is the prob of transitioning from the
+                    hidden state i to j
+    - Initial     : numpy.ndarray
+                    Array of shape (N, 1) containing the probability of
+                    starting in a particular hidden state
+
+    Returns
+    -------
+
+    path, P, or None, None on failure
+    - path        : list
+                    list of length T containing the most likely sequence of
+                    hidden states
+    - p           : float
+                    The probability of obtaining the path sequence
     """
 
     try:
@@ -288,24 +294,60 @@ def viterbi(Observation, Emission, Transition, Initial):
                 not np.sum(Initial).all() == 1):
             return None, None
 
-        # https://tinyurl.com/ych6jm2z
-        # https://tinyurl.com/ybl8y8uh
+        # https://tinyurl.com/y7j9x4oy
 
         N = Emission.shape[0]
+        T = Observation.shape[0]
+
+        Initial = Initial.flatten()
+        T1 = np.empty((N, T), 'd')
+        T2 = np.empty((N, T), 'B')
+
+        # Initilaize the tracking tables from first observation
+        T1[:, 0] = np.matmul(Initial, Emission[:, Observation[0]])
+        T2[:, 0] = 0
+
+        # Iterate throught the observations updating the tracking tables
+        for i in range(1, T):
+            T1[:, i] = np.max(T1[:, i - 1] *
+                              Transition.T *
+                              Emission[np.newaxis, :, Observation[i]].T, 1)
+            T2[:, i] = np.argmax(T1[:, i - 1] * Transition.T, 1)
+
+        # Build the output, optimal model trajectory
+        p = np.empty(T, 'B')
+        p[-1] = np.argmax(T1[:, T - 1])
+        for i in reversed(range(1, T)):
+            p[i - 1] = T2[p[i], i]
+
+        probability = np.max(T1[:, -1])
+        probability = np.amax(T1, axis=0)
+        probability = np.amin(probability)
+
+        return p.tolist(), probability
+
+    except BaseException:
+        return None, None
+
+    """
+
+        Tra = Transition
+        Emi = Emission
+        Obs = Observation
+        Ini = Initial
 
         V = [{}]
         for i in range(N):
-            V[0][i] = Initial[i] * Emission[i][Observation[0]]
+            V[0][i] = Ini[i] * Emi[i][Obs[0]]
 
         # Run Viterbi when t > 0
-        T = len(Observation)
+        T = len(Obs)
         for t in range(1, T):
             V.append({})
+
             for y in range(N):
-                em = Emission[y][Observation[t]]
-                prob = max((V[t - 1][y0] * Transition[y0][y] * em, y0)
-                           for y0 in range(N))[0]
-                V[t][y] = prob
+                V[t][y] = max((V[t - 1][x] * Tra[x][y] * Emi[y][Obs[t]], x)
+                for x in range(N))[0]
 
             path = []
             for j in V:
@@ -316,6 +358,4 @@ def viterbi(Observation, Emission, Transition, Initial):
         probability = max(V[-1].values())
 
         return path, probability[0]
-
-    except BaseException:
-        return None, None
+        """
