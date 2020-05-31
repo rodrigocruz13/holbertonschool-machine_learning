@@ -339,11 +339,6 @@ def viterbi(Observation, Emission, Transition, Initial):
                 V[t][y] = max((V[t - 1][x] * Tra[x][y] * Emi[y][Obs[t]], x)
                               for x in range(N))[0]
 
-            path = []
-            for j in V:
-                for x, y in j.items():
-                    if j[x] == max(j.values()):
-                        path.append(x)
         # the highest probability
         probability = max(V[-1].values())
 
