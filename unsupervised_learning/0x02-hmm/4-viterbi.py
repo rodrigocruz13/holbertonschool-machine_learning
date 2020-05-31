@@ -320,7 +320,6 @@ def viterbi(Observation, Emission, Transition, Initial):
         for i in reversed(range(1, T)):
             p[i - 1] = T2[p[i], i]
 
-
         # code for prorbability
         Tra = Transition
         Emi = Emission
@@ -338,7 +337,7 @@ def viterbi(Observation, Emission, Transition, Initial):
 
             for y in range(N):
                 V[t][y] = max((V[t - 1][x] * Tra[x][y] * Emi[y][Obs[t]], x)
-                for x in range(N))[0]
+                              for x in range(N))[0]
 
             path = []
             for j in V:
