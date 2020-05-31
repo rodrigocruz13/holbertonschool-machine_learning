@@ -321,8 +321,6 @@ def viterbi(Observation, Emission, Transition, Initial):
             p[i - 1] = T2[p[i], i]
 
         probability = np.max(T1[:, -1])
-        probability = np.amax(T1, axis=0)
-        probability = np.amin(probability)
 
         return p.tolist(), probability
 
