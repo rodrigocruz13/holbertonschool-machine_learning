@@ -223,7 +223,7 @@ def forward(Observation, Emission, Transition, Initial):
         for t in range(1, T):
             for j in range(N):
                 forward[j, t] = (forward[:, t - 1].dot(Transition[:, j])
-                               * Emission[j, Observation[t]])
+                                 * Emission[j, Observation[t]])
 
         likelihood = np.sum(forward[:, t])
         return likelihood, forward
