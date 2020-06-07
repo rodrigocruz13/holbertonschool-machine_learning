@@ -40,3 +40,12 @@ At the end of this project, you are expected to be able to explain to anyone, wi
   * What is Numpy?
   * What is parallelization and why is it important?
   * What is broadcasting?
+
+
+# Requirements
+ - Matplotlib 3.0
+
+```
+cd $HOME
+sudo pip install matplotlib==3.0.2
+```
