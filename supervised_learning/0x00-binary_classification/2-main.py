@@ -13,4 +13,4 @@ neuron = Neuron(X.shape[0])
 neuron._Neuron__b = 1
 A = neuron.forward_prop(X)
 if (A is neuron.A):
-        print(A)
+    print(A)

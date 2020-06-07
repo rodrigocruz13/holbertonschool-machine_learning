@@ -2,16 +2,14 @@
 
 import numpy as np
 
-Neuron = __import__('0-neuron').Neuron
+NN = __import__('11-neural_network').NeuralNetwork
 
 lib_train = np.load('../data/Binary_Train.npz')
 X_3D, Y = lib_train['X'], lib_train['Y']
 X = X_3D.reshape((X_3D.shape[0], -1)).T
 
 np.random.seed(0)
-neuron = Neuron(X.shape[0])
-print(neuron.W)
-print(neuron.b)
-print(neuron.A)
-neuron.A = 10
-print(neuron.A)
+nn = NN(X.shape[0], 3)
+_, A = nn.forward_prop(X)
+cost = nn.cost(Y, A)
+print(cost)
