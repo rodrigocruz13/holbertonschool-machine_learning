@@ -22,5 +22,5 @@ plt.rcParams.update({'font.size': 16})
 
 # display
 plt.plot(x_data, y_data, line_color, linewidth=3)
-plt.grid(True)
+plt.grid(False)
 plt.show()
