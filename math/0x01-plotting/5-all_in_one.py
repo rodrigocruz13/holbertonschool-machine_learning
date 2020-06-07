@@ -25,61 +25,77 @@ y32 = np.exp((r3 / t32) * x3)
 np.random.seed(5)
 student_grades = np.random.normal(68, 15, 50)
 
+# your code goes here ---------------------->
+
 #  General layout
-figure = plt.figure()
-figure.suptitle("All in One")
-fontsize="x-small"
+fontsize_main = 14
+fontsize_title = 'x-small'
+fontsize_reg = 'x-small'
+
+figure = plt.figure(figsize=(10, 7))
+figure.suptitle("All in One", fontsize=fontsize_main)
+figure.set_facecolor("white")   # background color
 
 #  Graph 1
 figure.add_subplot(321)  # rows, columns, position
 x = range(0, 11)
-c = "r"  # red
-plt.plot(y0, color=c)
+line_color = "r"  # red
+plt.xlim(0, 10)
+plt.ylim(-50, 1050)
+plt.plot(y0, color=line_color, linewidth=2)
+plt.yticks(np.arange(0, 1001, step=500))
 plt.xlim(0, 10)
 
-#  Graph 2
+
+#  Graph 2 "Men's Height vs Weight"
 figure.add_subplot(322)
-s = 4  # point size
-c = "m"  # mangenta color
-marker = 'o'  # marker circle
-plt.xlabel("Height (in)", fontsize=fontsize)
-plt.ylabel("Weight (lbs)", fontsize=fontsize)
-plt.title("Men's Height vs Weight", fontsize=fontsize)
-plt.scatter(x1, y1, s, c, marker)
+plt.xlabel("Height (in)", fontsize=fontsize_reg)
+plt.ylabel("Weight (lbs)", fontsize=fontsize_reg)
+plt.title("Men's Height vs Weight", fontsize=fontsize_title)
+plt.xlim(54, 83)
+plt.ylim(165, 194)
+plt.xticks(np.arange(60, 90, step=10))
+plt.yticks(np.arange(170, 200, step=10))
 
-#  Graph 3
+volume = 22  # point size
+plt.scatter(x1, y1, c='magenta', s=volume, edgecolors='magenta')
+
+#  Graph 3 "Exponential Decay of C-14"
 figure.add_subplot(323)
-plt.xlabel("Time (years)", fontsize=fontsize)
-plt.ylabel("Fraction Remaining", fontsize=fontsize)
-plt.title("Exponential Decay of Radioactive Elements", fontsize=fontsize)
+plt.xlabel("Time (years)", fontsize=fontsize_reg)
+plt.ylabel("Fraction Remaining", fontsize=fontsize_reg)
+plt.title("Exponential Decay of C-14", fontsize=fontsize_title)
 plt.xlim(0, 28650)
+plt.ylim(0.025, 1.25)
+plt.xticks(np.arange(0, 28650, step=10000))
 plt.yscale('log')
-plt.plot(x2, y2)
+plt.plot(x2, y2, c='steelblue', linewidth=2)
 
-#  Graph 4
+#  Graph 4 "Exponential Decay of Radioactive Elements"
 figure.add_subplot(324)
 color1 = "r--"  # red dash
 color2 = "g"  # green
-graph1, graph2 = plt.plot(x3, y31, color1, x3, y32, color2)
-
-plt.xlabel("Time (years)", fontsize=fontsize)
-plt.ylabel("Fraction Remaining", fontsize=fontsize)
-plt.title("Exponential Decay of C-14", fontsize=fontsize)
-plt.legend([graph1, graph2], ["C-14", "Ra-226"])
+graph1, graph2 = plt.plot(x3, y31, color1, x3, y32, color2, linewidth=2.5)
+plt.xlabel("Time (years)", fontsize=fontsize_reg)
+plt.ylabel("Fraction Remaining", fontsize=fontsize_reg)
+plt.title("Exponential Decay of Radioactive Elements", fontsize=fontsize_title)
+legend = plt.legend([graph1, graph2], ["C-14", "Ra-226"])
+legend.get_frame().set_edgecolor('silver')
+plt.yticks(np.arange(0, 1.01, step=0.5))
 plt.xlim(0, 20000)
 plt.ylim(0, 1)
 
-#  Graph 5 (313)
+#  Graph 5 (313) "Project A"
 figure.add_subplot(313)
-plt.xlabel("Grades", fontsize=fontsize)
-plt.ylabel("Number of Students", fontsize=fontsize)
-plt.title("Project A", fontsize=fontsize)
-
+plt.xlabel("Grades", fontsize=fontsize_reg)
+plt.ylabel("Number of Students", fontsize=fontsize_reg)
+plt.title("Project A", fontsize=fontsize_title)
 align = "mid"  # aligment
 edgecolor = 'black'  # edgecolor
 n_bins = range(0, 110, 10)
-plt.xticks(np.arange(0, 100, step=10))
-plt.hist(student_grades, bins=n_bins, edgecolor=edgecolor)
+plt.xticks(np.arange(0, 101, step=10))
+plt.yticks(np.arange(0, 31, step=10))
+plt.hist(student_grades, bins=n_bins, edgecolor=edgecolor, color='steelblue')
 
 plt.xlim(0, 100)
 plt.ylim(0, 30)
