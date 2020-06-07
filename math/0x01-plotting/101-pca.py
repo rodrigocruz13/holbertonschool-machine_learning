@@ -1,28 +1,30 @@
 #!/usr/bin/env python3
-import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import numpy as np
 
-np.random.seed(5)
-fruit = np.random.randint(0, 20, (4, 3))
+lib = np.load("pca.npz")
+data = lib["data"]
+labels = lib["labels"]
 
-w = .5
-pp = ["Farrah", "Fred", "Felicia"]
-col = ["red", "yellow", "#ff8000", "#ffe5b4"]
-lab = ["Apples", "Bananas", "Oranges", "Peaches"]
+data_means = np.mean(data, axis=0)
+norm_data = data - data_means
+_, _, Vh = np.linalg.svd(norm_data)
+pca_data = np.matmul(norm_data, Vh[:3].T)
 
-b0 = None
-b1 = fruit[0]
-b2 = fruit[0] + fruit[1]
-b3 = fruit[0] + fruit[1] + fruit[2]
+# your code here ------------------------>
 
-plt.title("Number of Fruit per Person")
-plt.ylabel("Quantity of Fruit")
-plt.ylim(0, 80)
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(pca_data[:, 0],
+           pca_data[:, 1],
+           pca_data[:, 2],
+           c=labels,
+           cmap='plasma',
+           s = 50)
+ax.set_xlabel('U1')
+ax.set_ylabel('U2')
+ax.set_zlabel('U3')
+plt.title('PCA of Iris Dataset')
 
-apple_ = plt.bar(pp, fruit[0], width=w, color=col[0], label=lab[0], bottom=b0)
-banana = plt.bar(pp, fruit[1], width=w, color=col[1], label=lab[1], bottom=b1)
-orange = plt.bar(pp, fruit[2], width=w, color=col[2], label=lab[2], bottom=b2)
-peach_ = plt.bar(pp, fruit[3], width=w, color=col[3], label=lab[3], bottom=b3)
-
-plt.legend(handles=[apple_, banana, orange, peach_])  # Mostrar convenciones
 plt.show()

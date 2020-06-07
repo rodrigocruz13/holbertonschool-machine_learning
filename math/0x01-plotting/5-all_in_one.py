@@ -28,7 +28,7 @@ student_grades = np.random.normal(68, 15, 50)
 # your code goes here ---------------------->
 
 #  General layout
-fontsize_main = 14
+fontsize_main = 12
 fontsize_title = 'x-small'
 fontsize_reg = 'x-small'
 
@@ -82,6 +82,7 @@ plt.title("Exponential Decay of Radioactive Elements", fontsize=fontsize_title)
 legend = plt.legend([graph1, graph2], ["C-14", "Ra-226"])
 legend.get_frame().set_edgecolor('silver')
 plt.yticks(np.arange(0, 1.01, step=0.5))
+plt.xticks(np.arange(0, 20001, step=5000))
 plt.xlim(0, 20000)
 plt.ylim(0, 1)
 
