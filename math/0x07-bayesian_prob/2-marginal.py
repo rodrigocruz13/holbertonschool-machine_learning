@@ -144,14 +144,14 @@ def marginal(x, n, P, Pr):
     - Pr    1D numpy.ndarray    containing the prior beliefs of P
     Returns: the marginal probability of obtaining x and n
     """
-    if not isinstance(n, int) or n <= 0:
+    if not isinstance(n, int) or (n <= 0):
         raise ValueError("n must be a positive integer")
 
-    if not isinstance(x, int) or x < 0:
+    if not isinstance(x, int) or (x < 0):
         message = "x must be an integer that is greater than or equal to 0"
         raise ValueError(message)
 
-    if x > n:
+    if (x > n):
         raise ValueError("x cannot be greater than n")
 
     if not isinstance(P, np.ndarray) or len(P.shape) != 1 or P.shape[0] < 1:
