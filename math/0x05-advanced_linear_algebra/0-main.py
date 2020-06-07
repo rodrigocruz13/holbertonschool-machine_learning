@@ -11,7 +11,10 @@ if __name__ == '__main__':
     mat5 = []
     mat6 = [[1, 2, 3], [4, 5, 6]]
 
-    print(determinant(mat0))
+    try:
+        print(determinant(mat0))
+    except Exception as e:
+        print(e)
     print(determinant(mat1))
     print(determinant(mat2))
     print(determinant(mat3))

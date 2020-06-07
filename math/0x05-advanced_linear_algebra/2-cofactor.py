@@ -104,7 +104,7 @@ def cofactor(matrix):
     """
     Calculates the cofactor matrix of a matrix:
     Args:
-    - matrix:       list of lists whose minor matrix should be calculated
+    - matrix:       list of lists whose cofactor matrix should be calculated
             1. If matrix is not a list of lists, raise a TypeError with the
                message matrix must be a list of lists
             2. If matrix is not square or is empty, raise a ValueError with
