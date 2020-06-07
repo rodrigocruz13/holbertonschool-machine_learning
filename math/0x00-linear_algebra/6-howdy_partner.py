@@ -8,7 +8,7 @@ def cat_arrays(arr1, arr2):
     """Matrix concatenate function
     """
 
-    if (type(arr1) is not list) or (type(arr2) is not list):
+    if (not isinstance(arr1, list)) or (not isinstance(arr2, list)):
         return None
 
     new_array = []

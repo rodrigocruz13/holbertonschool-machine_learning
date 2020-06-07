@@ -9,7 +9,7 @@ def mat_mul(mat1, mat2):
     Matrix add function
     """
 
-    if (type(mat1) is not list or type(mat2) is not list):
+    if (not isinstance(mat1, list) or not isinstance(mat2, list)):
         return None
 
     if (len(mat1[0]) != len(mat2)):
