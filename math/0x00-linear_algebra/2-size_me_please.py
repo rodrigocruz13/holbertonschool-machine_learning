@@ -10,11 +10,11 @@ def matrix_shape(matrix):
     """
 
     size = []
-    if type(matrix) is list:
+    if isinstance(matrix, list):
         size.append(len(matrix))
 
         e = matrix[0]
-        if type(e) is list:
+        if isinstance(e, list):
             matrix_shape_rec(e, size)
     return size
 
@@ -23,10 +23,10 @@ def matrix_shape_rec(matrix, size):
     """
     Matrix shape recursive function
     """
-    if type(matrix) is list:
+    if isinstance(matrix, list):
         size.append(len(matrix))
 
         e = matrix[0]
-        if type(e) is list:
+        if isinstance(e, list):
             matrix_shape_rec(e, size)
     return size
