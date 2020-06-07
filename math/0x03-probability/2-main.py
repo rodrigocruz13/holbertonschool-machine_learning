@@ -3,6 +3,8 @@
 import numpy as np
 Poisson = __import__('poisson').Poisson
 
+#
+
 np.random.seed(0)
 data = np.random.poisson(5., 100).tolist()
 p1 = Poisson(data)
