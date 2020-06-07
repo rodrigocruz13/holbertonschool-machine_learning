@@ -16,7 +16,7 @@ def poly_derivative(poly):
         deriv (lst): list with the coefficient of de derivate
     """
 
-    if type(poly) is not list:
+    if not isinstance(poly, list):
         return None
     elif len(poly) == 0:
         return None
@@ -25,7 +25,7 @@ def poly_derivative(poly):
     else:
         deriv = [0] * (len(poly) - 1)
         for i in range(len(poly) - 1):
-            if (type(poly[i]) is not int):
+            if (not isinstance(poly[i], int)):
                 return None
             deriv[i] = poly[i + 1] * (i + 1)
     return deriv
