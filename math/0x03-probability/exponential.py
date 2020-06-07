@@ -46,13 +46,13 @@ class Exponential:
         """
 
         π = self.π
-        root_π = π**(1/2)
+        root_π = π**(1 / 2)
         x3 = x**3
         x5 = x**5
         x7 = x**7
         x9 = x**9
 
-        return (2/root_π) * x - x3/3 + x5/10 - x7/42 + x9/216
+        return (2 / root_π) * x - x3 / 3 + x5 / 10 - x7 / 42 + x9 / 216
 
     def factorial(self, k):
         """

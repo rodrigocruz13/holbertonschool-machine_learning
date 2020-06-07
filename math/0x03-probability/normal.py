@@ -43,6 +43,45 @@ class Normal:
             σ = variance ** 0.5
             self.stddev = σ
 
+    def z_score(self, x):
+        """
+        Calculates the z-score of a given x-value
+        Args:
+            x (float):  is the time period
+
+        Returns:
+            z-score
+        """
+        return (x - self.mean) / self.stddev
+
+    def x_value(self, z):
+        """
+        Calculates the x-value of a given z-score
+        Args:
+            z (float):  is the time period
+
+        Returns:
+            z-score
+
+        """
+        return (z * self.stddev) + self.mean
+
+    def erf(self, x):
+        """
+        Calculates the x-value of a given z-score
+        Args:
+            z (float):  is the time period
+
+        Returns:
+            z-score
+
+        """
+        π = 3.1415926536
+
+        a = ((4 / π)**0.5)
+        b = (x - (x**3) / 3 + (x**5) / 10 - x**7 / 42 + (x**9) / 216)
+        return a * b
+
     def pdf(self, x):
         """
         Calculates the value of the PDF for a given number of “successes”
@@ -54,17 +93,9 @@ class Normal:
                0 if x is out of range
         """
 
-        μ = self.mean
-        σ = self.stddev
-        π = 3.1415926536
-        e = 2.7182818285
-
-        exp = -1 * ((x - μ) ** 2) / (2 * (σ ** 2))
-        den = 2 * π * (σ ** 2)
-
-        pdf = (1 / (den) ** 0.5) * (e ** exp)
-
-        return pdf
+        a = (1 / (self.stddev * ((2 * Normal.pi)**(1 / 2))))
+        b = (-1 / 2) * ((x - self.mean) / self.stddev)**2
+        return a * (Normal.e**b)
 
     def cdf(self, x):
         """
@@ -76,19 +107,6 @@ class Normal:
                cdf (float): The PMF value for k.
         """
 
-        μ = self.mean
-        σ = self.stddev
-        π = 3.1415926536
-
-        x1 = (x - μ) / (σ * (2 ** 0.5))
-
-        erf1 = 2 / π ** 0.5
-        erf2 = (x1 -
-                ((x1 ** 3) / 3) +
-                ((x1 ** 5) / 10) -
-                ((x1 ** 7) / 42) +
-                ((x1 ** 9) / 216))
-        erf = erf1 * erf2
-        cdf = (1 + erf) / 2
-
-        return cdf
+        a = (x - self.mean) / (self.stddev * (2**0.5))
+        erf = self.erf(a)
+        return (1 + erf) / 2
