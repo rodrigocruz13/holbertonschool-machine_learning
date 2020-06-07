@@ -19,7 +19,6 @@ plt.title("Exponential Decay of C-14")
 # 2. Colors
 line_color = '#67c2db'  # line color blue
 
-
 # 3. font
 plt.rcParams.update({'font.size': 16})
 plt.yscale('log')
