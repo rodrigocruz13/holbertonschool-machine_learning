@@ -16,23 +16,29 @@ def poly_integral(poly, C=0):
         inte (lst): list with the coefficient of the integral
     """
 
-    if type(poly) is not list:
+    if not isinstance(poly, list):
         return None
-    if type(poly) is None:
+
+    if len(poly) == 0:
         return None
-    if type(C) is None or type(C) is int or type(C) is float:
-        if len(poly) == 0:
-            return [C]
-        else:
-            inte = [0] * (len(poly) + 1)
-            for i in range(len(poly)):
-                if type(poly[i]) is not int:
-                    return None 
-                temp = poly[i] / (i + 1)
-                if temp % 1 != 0:
-                    inte[i + 1] = float(poly[i])/(i + 1)
-                else:
-                    inte[i + 1] = int((poly[i])/(i + 1))
-            inte[0] = C
-        return inte
-    return None
+
+    if not isinstance(C, int):
+        return None
+
+    derivative = [C]
+    if poly == [0]:
+        return derivative
+
+    if isinstance(poly, list):
+        for i in range(len(poly)):
+            if isinstance(poly[i], int) or isinstance(poly[i], float):
+                val = poly[i] / (i + 1)
+                derivative.append(int(val) if val.is_integer() else val)
+            else:
+                return None
+        for summatory in range(len(derivative)):
+            if (sum(derivative[summatory:]) is 0):
+                return derivative[:summatory]
+        return derivative
+    else:
+        return None
