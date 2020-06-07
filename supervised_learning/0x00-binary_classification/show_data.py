@@ -9,7 +9,9 @@ X_3D, Y = lib_train['X'], lib_train['Y']
 fig = plt.figure(figsize=(10, 10))
 for i in range(100):
     fig.add_subplot(10, 10, i + 1)
-    plt.imshow(X_3D[i])
+    image = X_3D[i]
+    plt.imshow(image, cmap='viridis')
+
     plt.title(Y[0, i])
     plt.axis('off')
 plt.tight_layout()

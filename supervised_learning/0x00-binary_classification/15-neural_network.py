@@ -185,11 +185,11 @@ class NeuralNetwork:
 
         # Generate forward propagation.
         # This creates the value of each activation
-        predictions = self.forward_prop(X)
+        predictions = self.forward_prop(X)[1]
 
         # Calculate cost
         cost = self.cost(Y, self.__A2)
-        labels = np.where(self.__A2 < 0.5, 0, 1)
+        labels = np.where(predictions < 0.5, 0, 1)
 
         return (labels, cost)
 
@@ -219,8 +219,6 @@ class NeuralNetwork:
 
         α = alpha
         m = 1 / len(X[0])
-
-        dz = A2 - Y
 
         # Derivative respect to weight
         dz2 = A2 - Y
@@ -283,13 +281,7 @@ class NeuralNetwork:
 
         α = alpha
 
-        for i in range(0, iterations):
-            self.forward_prop(X)
-            cost = self.evaluate(X, Y)
+        for _ in range(iterations):
+            self.__A1, self.__A2 = self.forward_prop(X)
             self.gradient_descent(X, Y, self.__A1, self.__A2, α)
-            if i % step == 0:
-                print("Cost after {} iterations: {} ".format(i, cost[1]))
-
-        if i == 5000:
-            print("Cost after {} iterations: {} ".format(i, cost[1]))
-        return(self.evaluate(X, Y))
+        return self.evaluate(X, Y)

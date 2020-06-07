@@ -155,3 +155,114 @@ class DeepNeuralNetwork:
 
         cost = j * np.sum(np.multiply(Y, log_A) + np.multiply(Ŷ, log_Â))
         return cost
+
+    def evaluate(self, X, Y):
+        """
+        Calculates the cost of the model using logistic regression
+        Arguments:
+         - X is a numpy.ndarray with shape (nx, m) & contains the input data
+
+        - Y is a numpy.ndarray with shape (1, m) that contains the correct
+            labels for the input data
+        Return:
+        - Prediction: The prediction should be a numpy.ndarray with shape
+                      (1, m) containing the predicted labels for each
+                      example. The label values should be 1 if the output
+                      of the network is >= 0.5 and 0 otherwise
+        - cost: the cost
+        Answer from: https://bit.ly/37x9YzM
+        """
+
+        # Generate forward propagation.
+        # This creates the value of each activation
+        self.forward_prop(X)
+
+        # Calculate cost
+        cost = self.cost(Y, self.__cache["A" + str(self.L)])
+
+        # evaluate
+        labels = np.where(self.__cache["A" + str(self.L)] < 0.5, 0, 1)
+
+        return (labels, cost)
+
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """
+        Calculates one pass of gradient descent on the neural network
+
+        Arguments
+        - Y       : numpy.ndarray
+                    Array with shape (1, m) that contains the correct labels
+                    for the input data
+        - cache   : dictionary
+                    Dictionary containing all the intermediary values of the
+                    network
+        - alpha   : learning rate
+
+        Returns
+            Updated the private attribute __weights
+        """
+
+        m = Y.shape[1]
+        cp_w = self.__weights.copy()
+        la = self.__L
+        dz = self.__cache['A' + str(la)] - Y
+        dw = np.dot(self.__cache['A' + str(la - 1)], dz.T) / m
+        db = np.sum(dz, axis=1, keepdims=True) / m
+
+        self.__weights['W' + str(la)] = cp_w['W' + str(la)] - alpha * dw.T
+        self.__weights['b' + str(la)] = cp_w['b' + str(la)] - alpha * db
+
+        for la in range(self.__L - 1, 0, -1):
+            g = self.__cache['A' + str(la)] * (1 - self.__cache['A' + str(la)])
+            dz = np.dot(cp_w['W' + str(la + 1)].T, dz) * g
+            dw = np.dot(self.__cache['A' + str(la - 1)], dz.T) / m
+            db = np.sum(dz, axis=1, keepdims=True) / m
+
+            self.__weights['W' + str(la)] = cp_w['W' + str(la)] - alpha * dw.T
+            self.__weights['b' + str(la)] = cp_w['b' + str(la)] - alpha * db
+
+    def train(self, X, Y, iterations=5000, alpha=0.05):
+        """
+        Trains the deep neural network and uupdates the private attributes
+        __weights and __cache
+
+        Arguments
+
+        - X           : numpy.ndarray
+                        Array with shape (nx, m) that contains the input data
+             nx       : int
+                        number of input features to the neuron
+             m        : number of examples
+
+        - Y           : numpy.ndarray
+                        Array with shape (1, m) that contains the correct
+                        labels for the input data
+        - iterations  : int
+                        number of iterations to train over
+        - alpha       : float
+                        learning rate
+
+        Returns
+        Evaluation    : float
+                        the evaluation of the training data after iterations
+                        of training have occurred
+        """
+
+        if not isinstance(iterations, int):
+            raise TypeError("iterations must be an integer")
+
+        if (iterations < 0):
+            raise ValueError("iterations must be a positive integer")
+
+        if not isinstance(alpha, float):
+            raise TypeError("alpha must be a float")
+
+        if (alpha < 0):
+            raise ValueError("alpha must be positive")
+
+        for _ in range(iterations):
+            self.forward_prop(X)
+            cache = self.__cache
+            self.gradient_descent(Y, cache, alpha)
+
+        return self.evaluate(X, Y)

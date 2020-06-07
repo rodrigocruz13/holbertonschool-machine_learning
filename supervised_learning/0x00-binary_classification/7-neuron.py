@@ -3,6 +3,7 @@
 Class Neuron
 """
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -196,3 +197,92 @@ class Neuron:
 
         # Update b: = α * db, where ": = means actualization"
         self.__b = self.__b - (α * db).T
+
+    def train(self, X, Y, iterations=2000, alpha=0.05, verbose=True,
+              graph=True, step=100):
+        """
+        Trains the neuron and updates __W, __b, and __A
+        Arguments
+        - X         : numpy.ndarray
+                      Array with shape (nx, m) & contains the input data
+        - Y         : numpy.ndarray
+                      Array with shape (1, m) that contains the correct labels
+                      for the input data
+        - iterations: int
+                      number of iterations to train over.
+                    - if iterations is not an integer, raise a TypeError with
+                      the exception iterations must be an integer
+                    - if iterations is not positive, raise a ValueError with
+                      the exception iterations must be a positive integer
+        - alpha     : float
+                      learning rate.
+                    - if alpha is not a float, raise a TypeError with the
+                      exception alpha must be a float
+                    - if alpha is not positive, raise a ValueError with the
+                      exception alpha must be positive
+        - verbose   : bool
+                      Defines whether or not to print information about the
+                      training. If True, print Cost after {iteration}
+                      iterations: {cost} every step iterations:
+        - graph     : boolean
+                      defines whether or not to graph information about the
+                      training once the training has completed. If True:
+                      Plot the training data every step iterations as a blue
+                      line
+                        Label the x-axis as iteration
+                        Label the y-axis as cost
+                        Title the plot Training Cost
+                        Include data from the 0th and last iteration
+        Only if either verbose or graph are True:
+                        - if step is not an integer, raise a TypeError with
+                          the exception step must be an integer
+                        - if step is not positive or is greater than
+                          iterations, raise a ValueError with the exception
+                          step must be positive and <= iterations
+
+        Return:
+        - Eval      : float
+                      the evaluation of the training data after iterations of
+                      training have occurred
+        """
+
+        α = alpha
+
+        if not isinstance(iterations, int):
+            raise TypeError("iterations must be an integer")
+
+        if (iterations <= 0):
+            raise ValueError("iterations must be a positive integer")
+
+        if not isinstance(alpha, float):
+            raise TypeError("alpha must be a float")
+
+        if (α <= 0):
+            raise ValueError("alpha must be positive")
+
+        if (verbose is True) or (graph is True):
+            if not isinstance(step, int):
+                raise TypeError("step must be an integer")
+            if (step < 0) or (step > iterations):
+                raise ValueError("step must be positive and <= iterations")
+
+        cost_list = []
+        for i in range(iterations + 1):
+            self.__A = self.forward_prop(X)
+            self.gradient_descent(X, Y, self.__A, α)
+            cost = self.cost(Y, self.__A)
+            if verbose is True:
+                if (i % step == 0 or step == iterations):
+                    print("Cost after {} iterations: {}".format(i, cost))
+                    if i < iterations:
+                        cost_list.append(cost)
+        if graph is True:
+            x_list = np.arange(0, iterations, step)
+            y_list = cost_list
+            plt.plot(x_list, y_list, linewidth=4)
+
+            plt.title('Training Cost')
+            plt.xlabel('iterations')
+            plt.ylabel('cost')
+            plt.show()
+        return self.evaluate(X, Y)

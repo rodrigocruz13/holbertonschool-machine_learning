@@ -132,3 +132,91 @@ class DeepNeuralNetwork:
             self.__cache["A" + str(layer + 1)] = forward_prop
 
         return self.__cache["A" + str(self.__L)], self.__cache
+
+    def cost(self, Y, A):
+        """
+        Calculates the cost of the model using logistic regression
+        Arguments:
+        - Y is a numpy.ndarray with shape (1, m) that contains the correct
+            labels for the input data
+        - A is a numpy.ndarray with shape (1, m) containing the activated
+        output of the neuron for each example
+        Return:
+        - cost: the cost
+        Answer from: https://bit.ly/37x9YzM
+        """
+        m = Y.shape[1]
+        j = - (1 / m)
+
+        Â = 1.0000001 - A
+        Ŷ = 1 - Y
+        log_A = np.log(A)
+        log_Â = np.log(Â)
+
+        cost = j * np.sum(np.multiply(Y, log_A) + np.multiply(Ŷ, log_Â))
+        return cost
+
+    def evaluate(self, X, Y):
+        """
+        Calculates the cost of the model using logistic regression
+        Arguments:
+         - X is a numpy.ndarray with shape (nx, m) & contains the input data
+
+        - Y is a numpy.ndarray with shape (1, m) that contains the correct
+            labels for the input data
+        Return:
+        - Prediction: The prediction should be a numpy.ndarray with shape
+                      (1, m) containing the predicted labels for each
+                      example. The label values should be 1 if the output
+                      of the network is >= 0.5 and 0 otherwise
+        - cost: the cost
+        Answer from: https://bit.ly/37x9YzM
+        """
+
+        # Generate forward propagation.
+        # This creates the value of each activation
+        self.forward_prop(X)
+
+        # Calculate cost
+        cost = self.cost(Y, self.__cache["A" + str(self.L)])
+
+        # evaluate
+        labels = np.where(self.__cache["A" + str(self.L)] < 0.5, 0, 1)
+
+        return (labels, cost)
+
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """
+        Calculates one pass of gradient descent on the neural network
+
+        Arguments
+        - Y       : numpy.ndarray
+                    Array with shape (1, m) that contains the correct labels
+                    for the input data
+        - cache   : dictionary
+                    Dictionary containing all the intermediary values of the
+                    network
+        - alpha   : learning rate
+
+        Returns
+            Updated the private attribute __weights
+        """
+
+        m = Y.shape[1]
+        cp_w = self.__weights.copy()
+        la = self.__L
+        dz = self.__cache['A' + str(la)] - Y
+        dw = np.dot(self.__cache['A' + str(la - 1)], dz.T) / m
+        db = np.sum(dz, axis=1, keepdims=True) / m
+
+        self.__weights['W' + str(la)] = cp_w['W' + str(la)] - alpha * dw.T
+        self.__weights['b' + str(la)] = cp_w['b' + str(la)] - alpha * db
+
+        for la in range(self.__L - 1, 0, -1):
+            g = self.__cache['A' + str(la)] * (1 - self.__cache['A' + str(la)])
+            dz = np.dot(cp_w['W' + str(la + 1)].T, dz) * g
+            dw = np.dot(self.__cache['A' + str(la - 1)], dz.T) / m
+            db = np.sum(dz, axis=1, keepdims=True) / m
+
+            self.__weights['W' + str(la)] = cp_w['W' + str(la)] - alpha * dw.T
+            self.__weights['b' + str(la)] = cp_w['b' + str(la)] - alpha * db

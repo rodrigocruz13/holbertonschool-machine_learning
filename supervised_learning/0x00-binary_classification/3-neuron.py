@@ -11,16 +11,21 @@ class Neuron:
 
     def __init__(self, nx):
         """
-        Initialize Neuron
-        Args:
-            - nx: nx is the number of input features to the neuron
+        Initialize the Neuron class
+
+        Arguments
+        ---------
+        - nx   : number of input features to the neuron
+
+        Return
+        ------
         Public attributes:
-        - W: The weights vector for the neuron.
-              It is initialized with a random normal distribution.
-        - b: The bias for the neuron. Upon instantiation.
-             It is initialized to 0.
-        - A: The activated output of the neuron (prediction).
-            It is initialized to 0.
+        - W    : The weights vector for the neuron.
+                 It is initialized with a random normal distribution.
+        - b    : The bias for the neuron. Upon instantiation.
+                 It is initialized to 0.
+        - A    : The activated output of the neuron (prediction).
+                 It is initialized to 0.
         """
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
@@ -68,15 +73,22 @@ class Neuron:
 
     def forward_prop(self, X):
         """
-        Calculates the forward propagation of the neuron
-        Updates the private attribute __A
-        Uses a sigmoid activation function
-        Arguments:
-        - X is a numpy.ndarray with shape (nx, m) that contains the input data
-          - nx (int) is the number of input features to the neuron
-          - m (int) is the number of examples
-        Return:
-        - __A: The value of the attribute __A.
+        Calculates the forward propagation of the neuron. It also updates the
+        private attribute __A by using a sigmoid activation function
+
+        Arguments
+        ---------
+
+        - X     : numpy.ndarray
+                  Array with shape (nx, m) that contains the input data
+             nx : int
+                  number of input features to the neuron
+             m  : int
+                  number of examples
+        Return
+        ------
+        - __A   : float
+                  Value of the attribute __A.
         """
         # z = w.X + b
         z = np.matmul(self.W, X) + self.b
@@ -87,20 +99,25 @@ class Neuron:
     def cost(self, Y, A):
         """
         Calculates the cost of the model using logistic regression
-        Arguments:
-        - Y is a numpy.ndarray with shape (1, m) that contains the correct
-            labels for the input data
-        - A is a numpy.ndarray with shape (1, m) containing the activated
-        output of the neuron for each example
+        Arguments
+        ---------
+        - Y   : numpy.ndarray
+                Array with shape (1, m) with the correct labels for the inputs
+        - A   : numpy.ndarray
+                Array with shape (1, m) containing the activated output of the
+                neuron for each example
         Return:
-        - cost: the cost
-        Answer from: https://bit.ly/37x9YzM
+        - cost: float
+                the cost of the model
         """
+
+        # Answer from: https://bit.ly/37x9YzM  - Compute cost
         m = Y.shape[1]
         j = - (1 / m)
 
-        Ä = 1.0000001 - A
-        Ÿ = 1 - Y
-        cost = j * np.sum(np.multiply(Y, np.log(A)) +
-                          np.multiply(Ÿ, np.log(Ä)))
+        Â = 1.0000001 - A
+        Ŷ = 1 - Y
+        log_A = np.log(A)
+        log_Â = np.log(Â)
+        cost = j * np.sum(np.multiply(Y, log_A) + np.multiply(Ŷ, log_Â))
         return cost
