@@ -5,24 +5,28 @@ import matplotlib.pyplot as plt
 np.random.seed(5)
 fruit = np.random.randint(0, 20, (4, 3))
 
-w = .5
-pp = ["Farrah", "Fred", "Felicia"]
-col = ["red", "yellow", "#ff8000", "#ffe5b4"]
-lab = ["Apples", "Bananas", "Oranges", "Peaches"]
+# your code goes here ------------------>
+width = 0.5
 
-b0 = None
-b1 = fruit[0]
-b2 = fruit[0] + fruit[1]
-b3 = fruit[0] + fruit[1] + fruit[2]
+people = ['Farrah', 'Fed', 'Felicia']
+f = ['apples', 'bananas', 'oranges', 'peaches']
+c = ['red', 'yellow', '#ff8000', '#ffe5b4']
 
-plt.title("Number of Fruit per Person")
-plt.ylabel("Quantity of Fruit")
+pos0 = None
+pos1 = fruit[0]
+pos2 = fruit[0] + fruit[1]
+pos3 = fruit[0] + fruit[1] + fruit[2]
+
+plt.yticks(np.arange(0, 90, 10))
 plt.ylim(0, 80)
+plt.suptitle('Number of Fruit per Person')
+plt.ylabel('Quantity of Fruit')
 
-apple_ = plt.bar(pp, fruit[0], width=w, color=col[0], label=lab[0], bottom=b0)
-banana = plt.bar(pp, fruit[1], width=w, color=col[1], label=lab[1], bottom=b1)
-orange = plt.bar(pp, fruit[2], width=w, color=col[2], label=lab[2], bottom=b2)
-peach_ = plt.bar(pp, fruit[3], width=w, color=col[3], label=lab[3], bottom=b3)
+v = plt.bar(people, fruit[0], width=width, color=c[0], label=f[0], bottom=pos0)
+x = plt.bar(people, fruit[1], width=width, color=c[1], label=f[1], bottom=pos1)
+y = plt.bar(people, fruit[2], width=width, color=c[2], label=f[2], bottom=pos2)
+z = plt.bar(people, fruit[3], width=width, color=c[3], label=f[3], bottom=pos3)
 
-plt.legend(handles=[apple_, banana, orange, peach_])  # Mostrar convenciones
+plt.legend(handles=[v, x, y, z])
+
 plt.show()
