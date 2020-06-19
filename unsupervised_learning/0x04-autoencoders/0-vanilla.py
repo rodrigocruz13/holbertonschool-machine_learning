@@ -32,21 +32,22 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     """
 
     # https://towardsdatascience.com/deep-inside-autoencoders-7e41f319999f
+    # https://blog.keras.io/building-autoencoders-in-keras.html
 
     n = len(hidden_layers)
     # 1. Encoder
     encoded = x = K.Input(shape=(input_dims, ))
     for i in range(n):
-        x = K.layers.Dense(hidden_layers[i], activation='relu')(x)
-    h = K.layers.Dense(latent_dims, activation='relu')(x)
+        x = K.layers.Dense(hidden_layers[i], activation="relu")(x)
+    h = K.layers.Dense(latent_dims, activation="relu")(x)
     encoder = K.models.Model(inputs=encoded, outputs=h)
 
     # 2. Decoder
     decoded = y = K.Input(shape=(latent_dims, ))
     # start = n-1, stop = -1, step = -1
     for j in range((n - 1), -1, -1):
-        y = K.layers.Dense(hidden_layers[j], activation='relu')(y)
-    r = K.layers.Dense(input_dims, activation='sigmoid')(y)
+        y = K.layers.Dense(hidden_layers[j], activation="relu")(y)
+    r = K.layers.Dense(input_dims, activation="sigmoid")(y)
     decoder = K.models.Model(inputs=decoded, outputs=r)
 
     # 3. Autoencoder
@@ -54,6 +55,6 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     outputs = decoder(encoder(inputs))
 
     autoencoder = K.models.Model(inputs=inputs, outputs=outputs)
-    autoencoder.compile(optimizer='Adam', loss='binary_crossentropy')
+    autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
     return encoder, decoder, autoencoder
