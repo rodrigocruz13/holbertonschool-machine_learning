@@ -3,7 +3,7 @@
 Autoencoders
 """
 import numpy as np
-import tensorflow.keras as K
+import tensorflow.keras as keras
 
 
 def sparse(input_dims, hidden_layers, latent_dims, lambtha):
@@ -38,33 +38,30 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
 
     n = len(hidden_layers)
     # 1. Encoder
-    encoded = x = K.Input(shape=(input_dims, ))
-    regularizater = K.regularizers.l1(lambtha)
+    encoded = x = keras.Input(shape=(input_dims, ))
+    regularizater = keras.regularizers.l1(lambtha)
 
     for i in range(n):
-        x = K.layers.Dense(hidden_layers[i],
+        x = keras.layers.Dense(hidden_layers[i],
+                               activation="relu")(x)
+    h = keras.layers.Dense(latent_dims,
                            activation="relu",
-                           regularizater=regularizater)(x)
-    h = K.layers.Dense(latent_dims,
-                       activation="relu",
-                       regularizater=regularizater)(x)
-    encoder = K.models.Model(inputs=encoded, outputs=h)
+                           activity_regularizer=regularizater)(x)
+    encoder = keras.models.Model(inputs=encoded, outputs=h)
 
     # 2. Decoder
-    decoded = y = K.Input(shape=(latent_dims, ))
-    # start = n-1, stop = -1, step = -1
-    for j in range((n - 1), -1, -1):
-        y = K.layers.Dense(hidden_layers[j],
-                           activation="relu",
-                           regularizater=regularizater)(y)
-    r = K.layers.Dense(input_dims, activation="sigmoid")(y)
-    decoder = K.models.Model(inputs=decoded, outputs=r)
+    decoded = y = keras.Input(shape=(latent_dims, ))
+    for j in range((n - 1), -1, -1):  # start = n-1, stop = -1, step = -1
+        y = keras.layers.Dense(hidden_layers[j],
+                               activation="relu")(y)
+    r = keras.layers.Dense(input_dims, activation="sigmoid")(y)
+    decoder = keras.models.Model(inputs=decoded, outputs=r)
 
     # 3. Autoencoder
-    inputs = K.Input(shape=(input_dims, ))
+    inputs = keras.Input(shape=(input_dims, ))
     outputs = decoder(encoder(inputs))
 
-    autoencoder = K.models.Model(inputs=inputs, outputs=outputs)
+    autoencoder = keras.models.Model(inputs=inputs, outputs=outputs)
     autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
     return encoder, decoder, autoencoder
