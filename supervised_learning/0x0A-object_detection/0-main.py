@@ -12,12 +12,9 @@ if __name__ == '__main__':
     # size 26    30, 6q, 62 ....
     # size 52    1, 13, ....
 
-    yolo = Yolo(
-        '../data/yolo.h5',
-        '../data/coco_classes.txt',
-        0.6,
-        0.5,
-        anchors)
+    yolo_file = '../data/yolo.h5'
+    classes_file = '../data/coco_classes.txt'
+    yolo = Yolo(yolo_file, classes_file, 0.6, 0.5, anchors)
     yolo.model.summary()
     print('Class names:', yolo.class_names)
     print('Class threshold:', yolo.class_t)
