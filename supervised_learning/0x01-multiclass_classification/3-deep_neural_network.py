@@ -98,6 +98,7 @@ class DeepNeuralNetwork:
         """
         return self.__weights
 
+
     def forward_prop(self, X):
         """
         Calculates the forward propagation of the neural network
@@ -118,22 +119,27 @@ class DeepNeuralNetwork:
 
         self.__cache["A0"] = X
 
-        for layer in range(self.__L):
+        for layer in range(1, self.__L + 1):
 
-            weights = self.__weights["W" + str(layer + 1)]
-            a_ = self.__cache["A" + str(layer)]
-            b = self.__weights["b" + str(layer + 1)]
+            w = self.__weights["W" + str(layer)]
+            a = self.__cache["A" + str(layer - 1)]
+            b = self.__weights["b" + str(layer)]
 
             # z1 = w . X1 + b1
-            z = np.matmul(weights, a_) + b
+            z = np.matmul(w, a) + b
 
             # sigmoid function
-            forward_prop = 1 / (1 + np.exp(-1 * z))
+            if (layer == self.__L):
+                e = np.exp(z)
+                forward_prop = e / np.sum(e, axis=0, keepdims=True)
+            else:
+                e = np.exp(-1 * z)
+                forward_prop = 1 / (1 + e)
 
             # updating cache
-            self.__cache["A" + str(layer + 1)] = forward_prop
+            self.__cache["A" + str(layer)] = forward_prop
 
-        return self.__cache["A" + str(self.__L)], self.__cache
+        return (forward_prop, self.__cache)
 
     def cost(self, Y, A):
         """
@@ -148,14 +154,7 @@ class DeepNeuralNetwork:
         Answer from: https://bit.ly/37x9YzM
         """
         m = Y.shape[1]
-        j = - (1 / m)
-
-        Â = 1.0000001 - A
-        Ŷ = 1 - Y
-        log_A = np.log(A)
-        log_Â = np.log(Â)
-
-        cost = j * np.sum(np.multiply(Y, log_A) + np.multiply(Ŷ, log_Â))
+        cost = -1 * (1 / m) * np.sum(Y * np.log(A))
         return cost
 
     def evaluate(self, X, Y):
@@ -176,16 +175,16 @@ class DeepNeuralNetwork:
         """
 
         # Generate forward propagation.
-        # This creates the value of each activation
+        labels = one_hot_encode(Y.T, (Y.max() + 1))
+
         self.forward_prop(X)
+        A = self.__cache['A' + str(self.__L)]
 
-        # Calculate cost
-        cost = self.cost(Y, self.__cache["A" + str(self.L)])
+        evaluate_predict = np.where(A < 0.5, 0, 1)
+        cost = self.cost(labels, A)
 
-        # evaluate
-        labels = np.where(self.__cache["A" + str(self.L)] < 0.5, 0, 1)
+        return (evaluate_predict, cost)
 
-        return (labels, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -355,3 +354,36 @@ class DeepNeuralNetwork:
 
         except BaseException:
             return None
+
+
+    def one_hot_encode(Y, classes):
+        """
+        Converts a numeric label vector into a one-hot matrix:
+        Args:
+            - Y is a numpy.ndarray with shape (m, )
+            containing numeric class labels
+            - m is the number of examples
+
+        Returns:
+            a one-hot encoding of Y with shape (classes, m),
+            None on failure
+        """
+
+        if not isinstance(Y, np.ndarray):
+            return None
+
+        if len(Y) == 0:
+            return None
+
+        if (not isinstance(classes, int)):
+            return None
+
+        if (classes <= Y.max()):
+            return None
+
+        m = Y.shape[0]
+        one_hot = np.zeros((classes, m))
+        colum = np.arange(m)
+        one_hot[Y, colum] = 1
+
+        return one_hot

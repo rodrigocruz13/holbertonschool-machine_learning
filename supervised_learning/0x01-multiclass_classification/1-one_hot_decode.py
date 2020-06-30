@@ -27,17 +27,7 @@ def one_hot_decode(one_hot):
     if len(one_hot.shape) != 2:
         return None
 
-    if isinstance(one_hot, np.ndarray):
-        if (one_hot.shape[0] > 0 and isinstance(one_hot.shape[0], int)):
-            if (np.max(one_hot) > 0):
-                lenght_ = one_hot.shape[1]
-                a_list = []
+    X = np.where(one_hot.T)
+    Y = np.array(X[1])
 
-                for i in range(lenght_):
-                    column = one_hot[:, i]
-                    key = np.unique(column, return_index=True, axis=None)
-                    a_list.append(key[1][1])
-
-                one_hot_decode = np.asarray(a_list)
-            return (one_hot_decode)
-    return None
+    return Y
