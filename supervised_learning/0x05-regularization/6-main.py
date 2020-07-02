@@ -2,7 +2,8 @@
 
 import numpy as np
 import tensorflow as tf
-dropout_create_layer = __import__('6-dropout_create_layer').dropout_create_layer
+dropout_create_layer = __import__(
+    '6-dropout_create_layer').dropout_create_layer
 
 if __name__ == '__main__':
     tf.set_random_seed(0)
