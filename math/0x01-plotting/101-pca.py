@@ -21,7 +21,7 @@ ax.scatter(pca_data[:, 0],
            pca_data[:, 2],
            c=labels,
            cmap='plasma',
-           s = 50)
+           s=50)
 ax.set_xlabel('U1')
 ax.set_ylabel('U2')
 ax.set_zlabel('U3')
