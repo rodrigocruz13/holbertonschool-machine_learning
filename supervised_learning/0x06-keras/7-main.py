@@ -23,24 +23,16 @@ if __name__ == '__main__':
     tf.set_random_seed(0)
     lambtha = 0.0001
     keep_prob = 0.95
-    network = build_model(784,
-                          [256, 256, 10],
-                          ['relu', 'relu', 'softmax'],
-                          lambtha,
-                          keep_prob)
+    network = build_model(
+        784, [
+            256, 256, 10], [
+            'relu', 'relu', 'softmax'], lambtha, keep_prob)
     alpha = 0.001
     beta1 = 0.9
     beta2 = 0.999
     optimize_model(network, alpha, beta1, beta2)
     batch_size = 64
     epochs = 1000
-    train_model(network,
-                X_train,
-                Y_train_oh,
-                batch_size,
-                epochs,
-                validation_data=(X_valid, Y_valid_oh),
-                early_stopping=True,
-                patience=3,
-                learning_rate_decay=True,
-                alpha=alpha)
+    train_model(network, X_train, Y_train_oh, batch_size, epochs,
+                validation_data=(X_valid, Y_valid_oh), early_stopping=True,
+                patience=3, learning_rate_decay=True, alpha=alpha)
