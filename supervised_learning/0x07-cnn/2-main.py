@@ -15,4 +15,3 @@ if __name__ == "__main__":
 
     dZ = np.random.randn(10, h - 2, w - 2, 2)
     print(conv_backward(dZ, X_train_c, W, b, padding="valid"))
-

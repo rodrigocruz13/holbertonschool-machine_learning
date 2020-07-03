@@ -25,7 +25,7 @@ if __name__ == "__main__":
     batch_size = 32
     epochs = 5
     model.fit(X_train_c, Y_train_oh, batch_size=batch_size, epochs=epochs,
-                       validation_data=(X_valid_c, Y_valid_oh))
+              validation_data=(X_valid_c, Y_valid_oh))
 
     Y_pred = model.predict(X_valid_c)
     print(Y_pred[0])

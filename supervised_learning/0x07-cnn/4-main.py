@@ -26,20 +26,40 @@ if __name__ == "__main__":
     with tf.Session() as sess:
         sess.run(init)
         for epoch in range(epochs):
-            cost, accuracy = sess.run((loss, acc), feed_dict={x:X_train_c, y:Y_train})
-            cost_valid, accuracy_valid = sess.run((loss, acc), feed_dict={x:X_valid_c, y:Y_valid})
-            print("After {} epochs: {} cost, {} accuracy, {} validation cost, {} validation accuracy".format(epoch, cost, accuracy, cost_valid, accuracy_valid))
+            cost, accuracy = sess.run(
+                (loss, acc), feed_dict={
+                    x: X_train_c, y: Y_train})
+            cost_valid, accuracy_valid = sess.run(
+                (loss, acc), feed_dict={x: X_valid_c, y: Y_valid})
+            print("After {} epochs: {} cost, {} accuracy, {} validation cost, \
+                  {} validation accuracy".format(
+                epoch,
+                cost,
+                accuracy,
+                cost_valid,
+                accuracy_valid))
             p = np.random.permutation(m)
             X_shuffle = X_train_c[p]
             Y_shuffle = Y_train[p]
             for i in range(0, m, batch_size):
-                X_batch = X_shuffle[i:i+batch_size]
-                Y_batch = Y_shuffle[i:i+batch_size]
-                sess.run(train_op, feed_dict={x:X_batch, y:Y_batch})
-        cost, accuracy = sess.run((loss, acc), feed_dict={x:X_train_c, y:Y_train})
-        cost_valid, accuracy_valid = sess.run((loss, acc), feed_dict={x:X_valid_c, y:Y_valid})
-        print("After {} epochs: {} cost, {} accuracy, {} validation cost, {} validation accuracy".format(epochs, cost, accuracy, cost_valid, accuracy_valid))
-        Y_pred = sess.run(y_pred, feed_dict={x:X_valid_c, y:Y_valid})
+                X_batch = X_shuffle[i:i + batch_size]
+                Y_batch = Y_shuffle[i:i + batch_size]
+                sess.run(train_op, feed_dict={x: X_batch, y: Y_batch})
+        cost, accuracy = sess.run(
+            (loss, acc), feed_dict={
+                x: X_train_c, y: Y_train})
+        cost_valid, accuracy_valid = sess.run(
+            (loss, acc), feed_dict={
+                x: X_valid_c, y: Y_valid})
+        print(
+            "After {} epochs: {} cost, {} accuracy, {} validation cost, {} \
+                validation accuracy".format(
+                epochs,
+                cost,
+                accuracy,
+                cost_valid,
+                accuracy_valid))
+        Y_pred = sess.run(y_pred, feed_dict={x: X_valid_c, y: Y_valid})
         print(Y_pred[0])
         Y_pred = np.argmax(Y_pred, 1)
         plt.imshow(X_valid[0])
