@@ -60,6 +60,7 @@ class FaceAlign:
 
         # 1 or more face detected: return max_area(face_i)
         max_ = 0
+        max_face_i = 0
         for rectangle_i in faces_in_pic:
             if rectangle_i.area() > max_:
                 max_ = rectangle_i.area()
