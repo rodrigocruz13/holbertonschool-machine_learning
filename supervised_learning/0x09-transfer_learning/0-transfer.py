@@ -5,6 +5,7 @@ Module used to
 
 import tensorflow.keras as K
 
+
 def preprocess_data(X, Y):
     """
     Function that pre-processes the data model
@@ -18,6 +19,7 @@ def preprocess_data(X, Y):
     X_p = K.applications.vgg16.preprocess_input(X)
     Y_p = K.utils.to_categorical(Y, num_classes=10)
     return (X_p, Y_p)
+
 
 def load_dataset():
     """
@@ -42,6 +44,7 @@ def load_dataset():
     Y_test = K.utils.to_categorical(Y_test, 10)
 
     return X_train, Y_train, X_test, Y_test
+
 
 def create_my_cnn(Y_train):
     """
@@ -72,6 +75,7 @@ def create_my_cnn(Y_train):
     new_model.summary()
 
     return new_model
+
 
 def compile_cnn(a_cnn):
     """
@@ -131,12 +135,10 @@ def train_cnn(a_cnn, X_train, Y_train, X_test, Y_test, bat_, epo_):
                                steps_per_epoch=X_train.shape[0] // bat_,
                                epochs=epo_,
                                verbose=1,
-                               validation_data=(X_test,Y_test))
+                               validation_data=(X_test, Y_test))
 
 
-
-if __name__ == '__main__':
-
+if __name__ != '__main__':
 
     bat_ = 50  # batch size
     epo_ = 50  # epochs
