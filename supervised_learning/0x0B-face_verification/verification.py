@@ -6,6 +6,7 @@ class FaceAlign
 import numpy as np
 import tensorflow.keras as K
 
+
 class FaceVerification():
     """ Class constructor """
 

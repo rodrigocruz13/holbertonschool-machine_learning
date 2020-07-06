@@ -7,7 +7,7 @@ class TripletLoss
 import tensorflow as tf
 
 
-class TripletLoss(tensorflow.keras.layers.Layer):
+class TripletLoss(tf.keras.layers.Layer):
     """
         Inherits from tensorflow.keras.layers.Layer
     """
