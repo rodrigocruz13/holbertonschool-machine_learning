@@ -1,0 +1,10 @@
+# file types
+
+*settings.json
+*.pyc
+.vscode/launch.json
+
+# folders
+
+.vscode/
+__pycache__/
