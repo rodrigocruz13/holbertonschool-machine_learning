@@ -26,20 +26,26 @@ def mean_cov(X):
             - cov:  numpy.ndarray   Array of shape (d, d) containing the
                                     covariance matrix of the data set
     """
+
     if(isinstance(X, type(None))):
         raise TypeError('X must be a 2D numpy.ndarray')
 
     if (not isinstance(X, np.ndarray)) or (len(X.shape) != 2):
         raise TypeError('X must be a 2D numpy.ndarray')
 
-    if X.shape[0] < 2:
+    if (X.shape[0] < 2):
         raise ValueError("X must contain multiple data points")
 
-    mean = X.mean(axis=0)
-    mean = np.reshape(mean, (-1, X.shape[1]))
+    # https://en.wikipedia.org/wiki/Sample_mean_and_covariance
 
+    # Sample mean vector =  [1 / n] *  ⅀ [(xi  - x̅) * (xi  - x̅)ₜ]
+    mean = X.mean(axis=0)
+
+    # Sample cov matrix. It is a matrix Q = q sub(ij) of size d x d where
+    # Q = [1 / (n-1)] * ⅀ [(xi  - x̅) * (xi  - x̅)^ T]
     n = X.shape[0] - 1
     x = X - mean
+
     cov = np.dot(x.T, x) / n
 
     return mean, cov
