@@ -40,6 +40,7 @@ def mean_cov(X):
 
     # Sample mean vector =  [1 / n] *  ⅀ [(xi  - x̅) * (xi  - x̅)ₜ]
     mean = X.mean(axis=0)
+    mean = np.reshape(mean, (-1, X.shape[1]))
 
     # Sample cov matrix. It is a matrix Q = q sub(ij) of size d x d where
     # Q = [1 / (n-1)] * ⅀ [(xi  - x̅) * (xi  - x̅)^ T]
