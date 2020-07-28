@@ -43,7 +43,7 @@ def mean_cov(X):
     mean = np.reshape(mean, (-1, X.shape[1]))
 
     # Sample cov matrix. It is a matrix Q = q sub(ij) of size d x d where
-    # Q = [1 / (n-1)] * ⅀ [(xi  - x̅) * (xi  - x̅)^ T]
+    # Q = [1 / (n-1)] * ⅀ [(xi  - x̅) * (xi  - x̅)^T]
     n = X.shape[0] - 1
     x = X - mean
 
