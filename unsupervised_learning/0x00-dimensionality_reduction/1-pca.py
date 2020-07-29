@@ -30,10 +30,17 @@ def pca(X, ndim):
     X_normal = X - normal
 
     # 2. calculate the single value decomposition
-    vectors_horizontal = np.linalg.svd(X_normal)[2]
+
+    #    - vh { (…, N, N), (…, K, N) } array
+    # Unitary array(s). The first a.ndim - 2 dimensions have the same size as
+    # those of the input a. The size of the last two dimensions depends on the
+    # value of full_matrices. Only returned when compute_uv is True.
+    vh = np.linalg.svd(X_normal)[2]
 
     # 3. filter according ndim
-    res = vectors_horizontal[: ndim].T
-    T = X_normal @ res
+    Weights_r = vh[: ndim].T
+
+    # line 20 of 0-main.py
+    T = np.matmul(X_normal, Weights_r)
 
     return T
