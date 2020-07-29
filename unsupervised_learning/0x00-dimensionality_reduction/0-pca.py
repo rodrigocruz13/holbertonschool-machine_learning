@@ -28,11 +28,11 @@ def pca(X, var=0.95):
     # symbols: ⊤, ⅀, σ²³
 
     # 1. calculate the single value decomposition
-    # s(…, K) array
+    #    - s(…, K) array
     # Vector(s) with the singular values, within each vector sorted in
     # descending order. The first a.ndim - 2 dimensions have the same size as
     # those of the input a.
-    # { (…, N, N), (…, K, N) } array
+    #    - vh { (…, N, N), (…, K, N) } array
     # Unitary array(s). The first a.ndim - 2 dimensions have the same size as
     # those of the input a. The size of the last two dimensions depends on the
     # value of full_matrices. Only returned when compute_uv is True.
