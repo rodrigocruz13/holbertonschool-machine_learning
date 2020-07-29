@@ -25,19 +25,29 @@ def pca(X, var=0.95):
 
     """
 
-    # 1. calculate the single value decomposition
-    singular_values = np.linalg.svd(X)[1]
-    vectors_horizontal = np.linalg.svd(X)[2]
+    # symbols: ⊤, ⅀, σ²³
 
-    # The singular values (s), sorted in non-increasing order. Of shape (K,),
-    # with K = min(M, N).
-    num = np.cumsum(singular_values)
-    denom = np.sum(singular_values)
+    # 1. calculate the single value decomposition
+    # s(…, K) array
+    # Vector(s) with the singular values, within each vector sorted in
+    # descending order. The first a.ndim - 2 dimensions have the same size as
+    # those of the input a.
+    # { (…, N, N), (…, K, N) } array
+    # Unitary array(s). The first a.ndim - 2 dimensions have the same size as
+    # those of the input a. The size of the last two dimensions depends on the
+    # value of full_matrices. Only returned when compute_uv is True.
+
+    s = np.linalg.svd(X)[1]
+    vh = np.linalg.svd(X)[2]
+
+    num = np.cumsum(s)
+    denom = np.sum(s)
     accum_var = num / denom
 
     # filter according specs of var
-    results = np.argwhere(accum_var >= var)
-    res = results[0, 0] + 1
-    weights = vectors_horizontal[: res].T
+    num_truncated_results = np.argwhere(accum_var >= var)
+    num_truncated_results = num_truncated_results[0, 0] + 1
+    weights = vh[: num_truncated_results].T
     # print("weights ", weights)
+
     return weights
