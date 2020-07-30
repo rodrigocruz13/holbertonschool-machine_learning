@@ -49,11 +49,13 @@ def P_init(X, perplexity):
     sum_X = np.sum(np.square(X), 1)
     D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X)
 
+    # forcing the diagonal of D to be 0
+    np.fill_diagonal(D, 0)
+
     # https://leimao.github.io/blog/Entropy-Perplexity/
     # Chapter. Perplexity
     # PP(p) = b ^ (h(p)), where b is the base of the logarithm used.
     # from there hp = log2 (PP)
-
     H = np.log2(perplexity)
 
     return D, P, betas, H
