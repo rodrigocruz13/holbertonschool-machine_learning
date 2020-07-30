@@ -68,6 +68,9 @@ def HP(Di, beta):
         - Pi:     numpy.ndarray     Array of shape (n - 1,) containing the
                                     P affinities of the points
     """
+
+    # Stochastic Neighbor Embedding
+
     Pi = np.exp(-Di * beta) / np.sum(np.exp(-Di * beta))
     Hi = np.sum(Pi * np.log2(Pi))
 
