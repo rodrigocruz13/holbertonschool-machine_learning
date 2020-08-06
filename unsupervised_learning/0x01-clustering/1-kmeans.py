@@ -107,17 +107,17 @@ def kmeans(X, k, iterations=1000):
     M = np.amax(X, axis=0)
 
     # centroids
-    C = np.random.uniform(m, M, size=(k, d))
+    new_centers = np.random.uniform(m, M, size=(k, d))
 
-    if (C.any() is None):
+    if (new_centers.any() is None):
         return None, None
 
     # distances = np.zeros((n, k))
     for iter_ in range(iterations):
 
         # 1. Generate distances
-        old_centers = np.ndarray.copy(C)
-        deltas = X - C[:, np.newaxis]
+        old_centers = np.ndarray.copy(new_centers)
+        deltas = X - new_centers[:, np.newaxis]
         distances = np.sqrt((deltas ** 2).sum(axis=2))
 
         # 2. assign points to clusters
@@ -126,16 +126,16 @@ def kmeans(X, k, iterations=1000):
         # 3. calculate new centroids
         for j in range(k):
             if len(X[clusters == j]) == 0:
-                C[j] = np.random.uniform(m, M, size=(1, d))
+                new_centers[j] = np.random.uniform(m, M, size=(1, d))
             else:
-                C[j] = (X[clusters == j]).mean(axis=0)
+                new_centers[j] = (X[clusters == j]).mean(axis=0)
 
         # 4. calculate distances and recalculate clusters
         distances = np.sqrt((deltas ** 2).sum(axis=2))
         clusters = np.argmin(distances, axis=0)
 
         # if new centroids = old centroids, return
-        if np.all(old_centers == C):
-            return C, clusters
+        if np.all(new_centers == old_centers):
+            return new_centers, clusters
 
-    return C, clusters
+    return new_centers, clusters
