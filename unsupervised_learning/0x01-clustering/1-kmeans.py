@@ -89,59 +89,53 @@ def kmeans(X, k, iterations=1000):
 
     # Validations
 
-    try:
-        if (not isinstance(X, np.ndarray)) or (len(X.shape) != 2):
-            return None, None
-
-        if not isinstance(iterations, int) or (iterations < 1):
-            return None, None
-
-        n, d = X.shape
-        if not isinstance(k, int) or (k < 1) or (n < k):
-            return None, None
-
-        # Generate centers for each cluster
-        m = np.amin(X, axis=0)
-        M = np.amax(X, axis=0)
-
-        old_centers = np.random.uniform(m, M, size=(k, d))
-        new_centers = np.ndarray.copy(old_centers)
-        if (old_centers.any() is None):
-            return None, None
-
-        error = 100
-
-        # distances = np.zeros((n, k))
-        for iter_ in range(iterations):
-            # 1. Generate distances
-            deltas = X[:, np.newaxis] - new_centers
-            distances = np.sqrt(np.sum((deltas) ** 2, axis=2))
-
-            # 2. assign points to clusters
-            clusters = np.argmin(distances, axis=1)
-
-            # 3. calculate new centroids
-            for j in range(k):
-                # If a cluster has no data points, reinitialize its centroid
-                if (X[clusters == j].size == 0):
-                    new_centers[j, :] = np.random.uniform(m, M, size=(1, d))
-                    if (new_centers.any() is None):
-                        return None, None
-                else:
-                    new_centers[j, :] = (X[clusters == j].mean(axis=0))
-
-            new_error = np.linalg.norm(new_centers - old_centers)
-            C = new_centers
-            clss = clusters
-
-            # If no change occurs between iterations, your function
-            # should return
-
-            if ((error - new_error == 0) or (iter_ == iterations)):
-                return C, clss
-            error = new_error
-
-        return C, clss
-
-    except BaseException:
+    if (not isinstance(X, np.ndarray)) or (len(X.shape) != 2):
         return None, None
+
+    if (not isinstance(k, int) or (k < 1)):
+        return None, None
+
+    if not isinstance(iterations, int) or (iterations < 1):
+        return None, None
+
+    n, d = X.shape
+    if (n < k):
+        return None, None
+
+    # Generate centers for each cluster
+    m = np.amin(X, axis=0)
+    M = np.amax(X, axis=0)
+
+    # centroids
+    C = np.random.uniform(m, M, size=(k, d))
+
+    if (C.any() is None):
+        return None, None
+
+    # distances = np.zeros((n, k))
+    for iter_ in range(iterations):
+
+        # 1. Generate distances
+        old_centers = np.ndarray.copy(C)
+        deltas = X - C[:, np.newaxis]
+        distances = np.sqrt((deltas ** 2).sum(axis=2))
+
+        # 2. assign points to clusters
+        clusters = np.argmin(distances, axis=0)
+
+        # 3. calculate new centroids
+        for j in range(k):
+            if len(X[clusters == j]) == 0:
+                C[j] = np.random.uniform(m, M, size=(1, d))
+            else:
+                C[j] = (X[clusters == j]).mean(axis=0)
+
+        # 4. calculate distances and recalculate clusters
+        distances = np.sqrt((deltas ** 2).sum(axis=2))
+        clusters = np.argmin(distances, axis=0)
+
+        # if new centroids = old centroids, return
+        if np.all(old_centers == C):
+            return C, clusters
+
+    return C, clusters
