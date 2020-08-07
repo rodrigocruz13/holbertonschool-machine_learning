@@ -48,16 +48,13 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     if (n < 1 or d < 1):
         return None, None
 
-    if (not isinstance(kmin, int)) or (not isinstance(kmax, int)):
+    if (not isinstance(kmin, int) or kmin < 1):
         return None, None
 
-    if (kmin < 1) or (kmax < 1):
+    if (kmax is not None) and (not isinstance(kmax, int) or kmax < 1):
         return None, None
 
-    if (kmin >= kmax) or (kmax >= X.shape[0]):
-        return None, None
-
-    if (not isinstance(iterations, int)) or (iterations < 1):
+    if (kmax is not None) and (kmin >= kmax):
         return None, None
 
     kmax = n if kmax is None else kmax

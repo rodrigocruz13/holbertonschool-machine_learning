@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     results, d_vars = optimum_k(X, kmax=10)
     print(results)
-    print(d_vars)
+    print(np.round(d_vars, 5))
     plt.scatter(list(range(1, 11)), d_vars)
     plt.xlabel('Clusters')
     plt.ylabel('Delta Variance')
