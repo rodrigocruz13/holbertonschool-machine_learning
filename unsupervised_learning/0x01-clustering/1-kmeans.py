@@ -117,8 +117,8 @@ def kmeans(X, k, iterations=1000):
 
         # 1. Generate distances
         old_centers = np.ndarray.copy(new_centers)
-        deltas = X - new_centers[:, np.newaxis]
-        distances = np.sqrt((deltas ** 2).sum(axis=2))
+        Δ = X - new_centers[:, np.newaxis]
+        distances = np.sqrt((Δ ** 2).sum(axis=2))
 
         # 2. assign points to clusters
         clusters = np.argmin(distances, axis=0)
@@ -131,8 +131,8 @@ def kmeans(X, k, iterations=1000):
                 new_centers[j] = (X[clusters == j]).mean(axis=0)
 
         # 4. calculate distances and recalculate clusters
-        deltas = X - new_centers[:, np.newaxis]
-        distances = np.sqrt((deltas ** 2).sum(axis=2))
+        Δ = X - new_centers[:, np.newaxis]
+        distances = np.sqrt((Δ ** 2).sum(axis=2))
         clusters = np.argmin(distances, axis=0)
 
         # if new centroids = old centroids, then nothing has changed
