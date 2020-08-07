@@ -131,10 +131,11 @@ def kmeans(X, k, iterations=1000):
                 new_centers[j] = (X[clusters == j]).mean(axis=0)
 
         # 4. calculate distances and recalculate clusters
+        deltas = X - new_centers[:, np.newaxis]
         distances = np.sqrt((deltas ** 2).sum(axis=2))
         clusters = np.argmin(distances, axis=0)
 
-        # if new centroids = old centroids, return
+        # if new centroids = old centroids, then nothing has changed
         if np.all(new_centers == old_centers):
             return new_centers, clusters
 
