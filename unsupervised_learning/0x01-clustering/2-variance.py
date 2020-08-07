@@ -9,17 +9,14 @@ import numpy as np
 def variance(X, C):
     """
     Funtion that calculates the total intra-cluster variance for a data set:
-
     Args:
     - X         numpy.ndarray       Array of shape (n, d) containing the
                                     dataset that will be used for K-means
                                     clustering
         - n     int                 Number of data points
         - d     int                 Number of dimensions for each data point
-
     - C         numpy.ndarray       Array of shape (k, d) containing the
                                     centroid means for each cluster
-
         - k     int                 Positive integer containing the number
                                     of clusters
         - d     int                 Number of dimensions for each data point
@@ -40,7 +37,7 @@ def variance(X, C):
         if (C.shape[1] != X.shape[1]):
             return None
 
-        if (C.shape[0] >= X.shape[0]):
+        if (C.shape[0] > X.shape[0]):
             return None
 
         # https://paris-swc.github.io/advanced-numpy-lesson/05-kmeans.html
