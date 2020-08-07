@@ -36,51 +36,45 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
       cluster size for each cluster size.
 
     """
-    try:
-        # 1. Validations
 
-        if not isinstance(X, np.ndarray):
-            return None, None
-
-        if (len(X.shape) != 2):
-            return None, None
-
-        if (X.shape[0] < 1 or X.shape[1] < 1):
-            return None, None
-
-        if (not isinstance(kmin, int)) or (not isinstance(kmax, int)):
-            return None, None
-
-        if (kmin < 1) or (kmax < 1):
-            return None, None
-
-        if (kmin >= kmax) or (kmax >= X.shape[0]):
-            return None, None
-
-        if (not isinstance(iterations, int)) or iterations < 1:
-            return None, None
-
-        d_vars = []
-        results = []
-
-        centroids, clusters = kmeans(X, kmin, iterations)
-        original_variance = variance(X, centroids)
-
-        min_ = kmin
-        max_ = kmax + 1
-
-        for i in range(min_, max_):
-            centroids, clusters = kmeans(X, i, iterations)
-            if (centroids is None) or (clusters is None):
-                return None, None
-            results.append((centroids, clusters))
-
-            current_variance = variance(X, centroids)
-            if (current_variance is None):
-                return None, None
-            d_vars.append(original_variance - current_variance)
-
-        return results, d_vars
-
-    except BaseException:
+    # 1. Validations
+    if not isinstance(X, np.ndarray):
         return None, None
+
+    if (len(X.shape) != 2):
+        return None, None
+
+    n, d = X.shape
+    if (n < 1 or d < 1):
+        return None, None
+
+    if (not isinstance(kmin, int)) or (not isinstance(kmax, int)):
+        return None, None
+
+    if (kmin < 1) or (kmax < 1):
+        return None, None
+
+    if (kmin >= kmax) or (kmax >= X.shape[0]):
+        return None, None
+
+    if (not isinstance(iterations, int)) or (iterations < 1):
+        return None, None
+
+    kmax = n if kmax is None else kmax
+
+    d_vars = []
+    results = []
+
+    min_ = kmin
+    max_ = kmax + 1
+
+    for i in range(min_, max_):
+        centroids, clusters = kmeans(X, i, iterations=1000)
+        results.append((centroids, clusters))
+
+        if (kmin == i):
+            current_variance = variance(X, centroids)
+        original_variance = variance(X, centroids)
+        d_vars.append(current_variance - original_variance)
+
+    return results, d_vars
