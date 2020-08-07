@@ -57,6 +57,9 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     if (kmax is not None) and (kmin >= kmax):
         return None, None
 
+    if (not isinstance(iterations, int)) or (iterations < 1):
+        return None, None
+
     kmax = n if kmax is None else kmax
 
     d_vars = []
