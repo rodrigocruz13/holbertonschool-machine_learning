@@ -272,77 +272,49 @@ def viterbi(Observation, Emission, Transition, Initial):
                     The probability of obtaining the path sequence
     """
 
+    N = Emission.shape[0]
+
     try:
-
-        # 1. Type validations
-        if (not isinstance(Observation, np.ndarray)) or (
-                not isinstance(Emission, np.ndarray)) or (
-                not isinstance(Transition, np.ndarray)) or (
-                not isinstance(Initial, np.ndarray)):
+        if (Observation.ndim != 1 or Emission.ndim != 2):
             return None, None
 
-        # 2. Dim validations
-        if (Observation.ndim != 1) or (
-                Emission.ndim != 2) or (
-                Transition.ndim != 2) or (
-                Initial.ndim != 2):
+        if (Transition.shape != (N, N) or Initial.shape != (N, 1)):
             return None, None
 
-        # 3. Structure validations
-        if (not np.sum(Emission, axis=1).all() == 1) or (
-                not np.sum(Transition, axis=1).all() == 1) or (
-                not np.sum(Initial).all() == 1):
+        if (not np.isclose(np.sum(Emission, axis=1), 1).all()):
             return None, None
 
-        # https://tinyurl.com/y7j9x4oy
+        if (not np.isclose(np.sum(Transition, axis=1), 1).all()):
+            return None, None
 
-        N = Emission.shape[0]
+        if (not np.isclose(np.sum(Initial, axis=0), 1).all()):
+            return None, None
+
         T = Observation.shape[0]
-
-        Initial = Initial.flatten()
-        T1 = np.empty((N, T), 'd')
-        T2 = np.empty((N, T), 'B')
+        F = np.zeros((N, T))
+        prev = np.zeros((N, T))
 
         # Initilaize the tracking tables from first observation
-        T1[:, 0] = np.matmul(Initial, Emission[:, Observation[0]])
-        T2[:, 0] = 0
+        F[:, 0] = Initial.T * Emission[:, Observation[0]]
+        prev[:, 0] = 0
 
         # Iterate throught the observations updating the tracking tables
-        for i in range(1, T):
-            T1[:, i] = np.max(T1[:, i - 1] *
-                              Transition.T *
-                              Emission[np.newaxis, :, Observation[i]].T, 1)
-            T2[:, i] = np.argmax(T1[:, i - 1] * Transition.T, 1)
+        for i, obs in enumerate(Observation):
+            if i != 0:
+                F[:, i] = np.max(F[:, i - 1] * Transition.T *
+                                 Emission[np.newaxis, :, obs].T, 1)
+                prev[:, i] = np.argmax(F[:, i - 1] * Transition.T, 1)
 
-        # Build the output, optimal model trajectory
-        p = np.empty(T, 'B')
-        p[-1] = np.argmax(T1[:, T - 1])
+        # Build the output, optimal model trajectory (path)
+        path = T * [1]
+        path[-1] = np.argmax(F[:, T - 1])
         for i in reversed(range(1, T)):
-            p[i - 1] = T2[p[i], i]
+            path[i - 1] = int(prev[path[i], i])
 
-        # code for prorbability
-        Tra = Transition
-        Emi = Emission
-        Obs = Observation
-        Ini = Initial
+        # calculate the probability of obtaining the path sequence
+        P = np.amin(np.amax(F, axis=0))
 
-        V = [{}]
-        for i in range(N):
-            V[0][i] = Ini[i] * Emi[i][Obs[0]]
-
-        # Run Viterbi when t > 0
-        T = len(Obs)
-        for t in range(1, T):
-            V.append({})
-
-            for y in range(N):
-                V[t][y] = max((V[t - 1][x] * Tra[x][y] * Emi[y][Obs[t]], x)
-                              for x in range(N))[0]
-
-        # the highest probability
-        probability = max(V[-1].values())
-
-        return p, probability
+        return path, P
 
     except BaseException:
         return None, None
