@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
 
 import numpy as np
-backward = __import__('5-backward').backward
+baum_welch = __import__('6-baum_welch').baum_welch
 
 if __name__ == '__main__':
     np.random.seed(1)
-    Emission = np.array([[0.90, 0.10, 0.00, 0.00, 0.00, 0.00],
-                         [0.40, 0.50, 0.10, 0.00, 0.00, 0.00],
-                         [0.00, 0.25, 0.50, 0.25, 0.00, 0.00],
-                         [0.00, 0.00, 0.05, 0.70, 0.15, 0.10],
-                         [0.00, 0.00, 0.00, 0.20, 0.50, 0.30]])
-    Transition = np.array([[0.60, 0.39, 0.01, 0.00, 0.00],
-                           [0.20, 0.50, 0.30, 0.00, 0.00],
-                           [0.01, 0.24, 0.50, 0.24, 0.01],
-                           [0.00, 0.00, 0.15, 0.70, 0.15],
-                           [0.00, 0.00, 0.01, 0.39, 0.60]])
-    Initial = np.array([0.05, 0.20, 0.50, 0.20, 0.05])
-    Hidden = [np.random.choice(5, p=Initial)]
+    Emission = np.array([[0.90, 0.10, 0.00],
+                         [0.40, 0.50, 0.10]])
+    Transition = np.array([[0.60, 0.4],
+                           [0.30, 0.70]])
+    Initial = np.array([0.5, 0.5])
+    Hidden = [np.random.choice(2, p=Initial)]
     for _ in range(364):
-        Hidden.append(np.random.choice(5, p=Transition[Hidden[-1]]))
+        Hidden.append(np.random.choice(2, p=Transition[Hidden[-1]]))
     Hidden = np.array(Hidden)
     Observations = []
     for s in Hidden:
-        Observations.append(np.random.choice(6, p=Emission[s]))
+        Observations.append(np.random.choice(3, p=Emission[s]))
     Observations = np.array(Observations)
-    P, B = backward(Observations, Emission, Transition,
-                    Initial.reshape((-1, 1)))
-    print(P)
-    print(B)
+    T_test = np.ones((2, 2)) / 2
+    E_test = np.abs(np.random.randn(2, 3))
+    E_test = E_test / np.sum(E_test, axis=1).reshape((-1, 1))
+    T, E = baum_welch(Observations, T_test, E_test, Initial.reshape((-1, 1)))
+    print(np.round(T, 2))
+    print(np.round(E, 2))
