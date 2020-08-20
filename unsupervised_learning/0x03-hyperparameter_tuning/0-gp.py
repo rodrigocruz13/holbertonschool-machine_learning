@@ -63,15 +63,20 @@ class GaussianProcess():
 
         Returns
         -------
-        The covariance
+        The covariance matrix
         kernel    : numpy.ndarray
                     Array shape (m, n)
         """
 
         # https://krasserm.github.io/2018/03/19/gaussian-processes/
+        # K(xᵢ, xⱼ) = σ² exp((-0.5 / 2l²)(xᵢ − xⱼ)ᵀ (xᵢ − xⱼ))
 
-        sqr_sumx1 = np.sum(X1**2, 1).reshape(-1, 1)
-        sqr_sumx2 = np.sum(X2**2, 1)
-        sqr_dist = sqr_sumx1 + sqr_sumx2 - 2 * np.dot(X1, X2.T)
-        kernel = self.sigma_f**2 * np.exp(-0.5 / self.l**2 * sqr_dist)
+        σ2 = self.sigma_f ** 2
+        l2 = self.l ** 2
+
+        sqr_sumx1 = np.sum(X1 ** 2, 1).reshape(-1, 1)
+        sqr_sumx2 = np.sum(X2 ** 2, 1)
+        sqr_dist = sqr_sumx1 - 2 * np.dot(X1, X2.T) + sqr_sumx2
+
+        kernel = σ2 * np.exp(-0.5 / l2 * sqr_dist)
         return kernel
