@@ -1,1 +1,2 @@
-# 0x03. GP
+# 0x03. Hyperparameter Tuning
+ Specializations - Machine Learning ― Unsupervised Learning
