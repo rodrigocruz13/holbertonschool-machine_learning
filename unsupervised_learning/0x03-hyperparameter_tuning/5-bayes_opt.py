@@ -140,10 +140,11 @@ class BayesianOptimization():
 
         for iter in range(iterations):
 
-            # calculates the next best sample
+            # Find the next best sample
             X_next = self.acquisition()[0]
 
-            if X_next in self.gp.X:
+            # if X_next already sampled in gp.X, ommit
+            if (X_next in self.gp.X):
                 break
 
             else:
@@ -154,13 +155,11 @@ class BayesianOptimization():
                 self.gp.update(X_next, Y_next)
 
                 # if want to minimize save the least otherwise save the largest
-                if self.minimize and Y_next < Y_opt:
-                    X_opt = X_next
-                    Y_opt = Y_next
+                if (Y_next < Y_opt) and (self.minimize):
+                    X_opt, Y_opt = X_next, Y_next
 
                 if not self.minimize and Y_next > Y_opt:
-                    X_opt = X_next
-                    Y_opt = Y_next
+                    X_opt, Y_opt = X_next, Y_next
 
         # removing last element
         self.gp.X = self.gp.X[:-1]
