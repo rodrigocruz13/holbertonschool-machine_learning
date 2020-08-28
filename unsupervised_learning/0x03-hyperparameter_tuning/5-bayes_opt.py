@@ -134,17 +134,35 @@ class BayesianOptimization():
         """
 
         # https://krasserm.github.io/2018/03/21/bayesian-optimization/
-        
-        old_points = []
-        while(iterations):
-            x_next = self.acquisition()[0]
-            if x_next in old_points:
+
+        X_opt = 0
+        Y_opt = 0
+
+        for iter in range(iterations):
+
+            # calculates the next best sample
+            X_next = self.acquisition()[0]
+
+            if X_next in self.gp.X:
                 break
-            y_next = self.f(x_next)
-            self.gp.update(x_next, y_next)
-            old_points.append(x_next)
-            iterations -= 1
 
-        i = np.min(self.gp.Y) if self.minimize else np.max(self.gp.Y)
+            else:
+                # get Y_next, evaluate X_next is black box function
+                Y_next = self.f(X_next)
 
-        return self.gp.X[i], self.gp.Y[i]
+                # updates a Gaussian Process
+                self.gp.update(X_next, Y_next)
+
+                # if want to minimize save the least otherwise save the largest
+                if self.minimize and Y_next < Y_opt:
+                    X_opt = X_next
+                    Y_opt = Y_next
+
+                if not self.minimize and Y_next > Y_opt:
+                    X_opt = X_next
+                    Y_opt = Y_next
+
+        # removing last element
+        self.gp.X = self.gp.X[:-1]
+
+        return X_opt, Y_opt
