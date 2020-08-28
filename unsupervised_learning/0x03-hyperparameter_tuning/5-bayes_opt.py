@@ -138,7 +138,7 @@ class BayesianOptimization():
         X_opt = 0
         Y_opt = 0
 
-        for iter in range(iterations):
+        for _ in range(iterations):
 
             # Find the next best sample
             X_next = self.acquisition()[0]
