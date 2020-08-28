@@ -151,10 +151,10 @@ class BayesianOptimization():
                 # get Y_next, evaluate X_next is black box function
                 Y_next = self.f(X_next)
 
-                # updates a Gaussian Process
+                # updates a GP
                 self.gp.update(X_next, Y_next)
 
-                # if want to minimize save the least otherwise save the largest
+                # if minimizing save the least otherwise save the largest
                 if (Y_next < Y_opt) and (self.minimize):
                     X_opt, Y_opt = X_next, Y_next
 
