@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from tensorflow.keras.datasets import mnist
-import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
+from tensorflow.keras.datasets import mnist
 
 autoencoder = __import__('1-sparse').sparse
 
@@ -14,8 +14,8 @@ x_train = x_train.reshape((-1, 784))
 x_test = x_test.reshape((-1, 784))
 np.random.seed(0)
 tf.set_random_seed(0)
-encoder, decoder, auto = autoencoder(784, [128, 64], 32, 10e-5)
-auto.fit(x_train, x_train, epochs=50, batch_size=256, shuffle=True,
+encoder, decoder, auto = autoencoder(784, [128, 64], 32, 10e-6)
+auto.fit(x_train, x_train, epochs=100, batch_size=256, shuffle=True,
          validation_data=(x_test, x_test))
 encoded = encoder.predict(x_test[:10])
 print(np.mean(encoded))
