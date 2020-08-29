@@ -38,12 +38,12 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
 
     n = len(hidden_layers)
     # 1. Encoder
+    # Compressing the input to the botneckle
     encoded = x = keras.Input(shape=(input_dims, ))
     regularizater = keras.regularizers.l1(lambtha)
 
     for i in range(n):
-        x = keras.layers.Dense(hidden_layers[i],
-                               activation="relu")(x)
+        x = keras.layers.Dense(hidden_layers[i], activation="relu")(x)
     h = keras.layers.Dense(latent_dims,
                            activation="relu",
                            activity_regularizer=regularizater)(x)
@@ -52,16 +52,18 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
     # 2. Decoder
     decoded = y = keras.Input(shape=(latent_dims, ))
     for j in range((n - 1), -1, -1):  # start = n-1, stop = -1, step = -1
-        y = keras.layers.Dense(hidden_layers[j],
-                               activation="relu")(y)
+        y = keras.layers.Dense(hidden_layers[j], activation="relu")(y)
     r = keras.layers.Dense(input_dims, activation="sigmoid")(y)
+
+    # decoder: mapp the input to reconstruct the original image
     decoder = keras.models.Model(inputs=decoded, outputs=r)
 
     # 3. Autoencoder
     inputs = keras.Input(shape=(input_dims, ))
     outputs = decoder(encoder(inputs))
 
+    # mapping the complete autoencoded model, reconstruc the image
     autoencoder = keras.models.Model(inputs=inputs, outputs=outputs)
-    autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+    autoencoder.compile(optimizer="Adam", loss="binary_crossentropy")
 
     return encoder, decoder, autoencoder
