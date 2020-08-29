@@ -2,14 +2,17 @@
 """
 Autoencoders
 """
-import numpy as np
-import tensorflow.keras as keras
+
+import tensorflow.keras as K
+from tensorflow.keras.layers import Input, Dense, Conv2D
+from tensorflow.keras.layers import MaxPooling2D, UpSampling2D
+from tensorflow.keras.models import Model
+from tensorflow.keras import regularizers
 
 
 def autoencoder(input_dims, filters, latent_dims):
     """
     Function that creates a convolutional autoencoder:
-
     Arguments
     ---------
     - input_dims      : tuple of integer containing the dimensions of the
@@ -19,7 +22,6 @@ def autoencoder(input_dims, filters, latent_dims):
                         Note: the filters should be reversed for the decoder
     - latent_dims     : tuple of integers containing the dimensions of the
                         latent space representation
-
     Notes:
             - Each convolution in the encoder should use a kernel size of
               (3, 3) with same padding and relu activation, followed by max
@@ -36,72 +38,37 @@ def autoencoder(input_dims, filters, latent_dims):
     - encoder           encoder model
     - decoder           decoder model
     - auto              full autoencoder model
-
     The autoencoder model should be compiled using adam optimization and
     binary cross-entropy loss
     All layers should use a relu activation except for the last layer in the
     decoder, which should use a sigmoid function
     """
 
-    # https://towardsdatascience.com/deep-inside-autoencoders-7e41f319999f
+    # https://www.datatechnotes.com/2020/03/convolutional-autoencoder-example-with-keras-in-python.html
     # https://blog.keras.io/building-autoencoders-in-keras.html
 
-    input_encoder = keras.Input(shape=input_dims)
-    kernel_size = 3
-    pool_size = (2, 2)
+    input_img = K.layers.Input(shape=input_dims)
 
-    # 1. Encoder
-    # Compressing the input to the botneckle
-    encoded = keras.layers.Conv2D(filters=filters[0],
-                                  kernel_size=kernel_size,
-                                  padding='same',
-                                  activation='relu')(input_encoder)
-    encoded_pool = keras.layers.MaxPool2D(pool_size=pool_size,
-                                          padding='same')(encoded)
+    enc_conv1 = Conv2D(12, (3, 3), activation='relu',
+                       padding='same')(input_img)
+    enc_pool1 = MaxPooling2D((2, 2), padding='same')(enc_conv1)
+    enc_conv2 = Conv2D(8, (4, 4), activation='relu', padding='same')(enc_pool1)
+    enc_ouput = MaxPooling2D((4, 4), padding='same')(enc_conv2)
 
-    for i in range(1, len(filters)):
-        encoded = keras.layers.Conv2D(filters=filters[i],
-                                      kernel_size=kernel_size,
-                                      padding='same',
-                                      activation='relu')(encoded_pool)
-        encoded_pool = keras.layers.MaxPool2D(pool_size=pool_size,
-                                              padding='same')(encoded)
+    encoder = K.models.Model(input_img, enc_ouput)
 
-    latent = encoded_pool
-    encoder = keras.models.Model(input_encoder, latent)
-    encoder.summary()
+    input_dec = K.layers.Input(shape=latent_dims)
 
-    # decoded part of the model
-    input_decoder = keras.Input(shape=(latent_dims))
-    decoded = keras.layers.Conv2D(filters=filters[i],
-                                  kernel_size=kernel_size,
-                                  padding='same',
-                                  activation='relu')(input_decoder)
-    decoded_pool = keras.layers.UpSampling2D(size=[2, 2])(decoded)
+    dec_conv2 = Conv2D(8, (4, 4), activation='relu', padding='same')(enc_ouput)
+    dec_upsample2 = UpSampling2D((4, 4))(dec_conv2)
+    dec_conv3 = Conv2D(12, (3, 3), activation='relu')(dec_upsample2)
+    dec_upsample3 = UpSampling2D((2, 2))(dec_conv3)
+    dec_output = Conv2D(1, (3, 3), activation='sigmoid',
+                        padding='same')(dec_upsample3)
 
-    m = len(filters) - 2
-    for i in range(m, -1, -1):  # start = m, stop = -1, step = -1
-        padding = 'valid' if i == 0 else 'same'
-        decoded = keras.layers.Conv2D(filters=filters[i],
-                                      padding=padding,
-                                      kernel_size=kernel_size,
-                                      activation='relu')(decoded_pool)
-        decoded_pool = keras.layers.UpSampling2D(size=[2, 2])(decoded)
-    decoded = keras.layers.Conv2D(filters=1,
-                                  padding=padding,
-                                  kernel_size=kernel_size,
-                                  activation='sigmoid')(decoded_pool)
+    decoder = K.models.Model(input_img, dec_output)
 
-    # decoder: mapp the input to reconstruct the original image
-    decoder = keras.models.Model(input_decoder, decoded)
-    decoder.summary()
-
-    # 3. Autoencoder
-    inputs = keras.Input(shape=(input_dims))
-    outputs = decoder(encoder(inputs))
-
-    # mapping the complete autoencoded model, reconstruc the image
-    autoencoder = keras.models.Model(inputs=inputs, outputs=outputs)
-    autoencoder.compile(optimizer="Adam", loss="binary_crossentropy")
+    autoencoder = Model(input_img, dec_output)
+    autoencoder.compile(optimizer='Adam', loss='binary_crossentropy')
 
     return encoder, decoder, autoencoder
