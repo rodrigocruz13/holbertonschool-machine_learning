@@ -2,7 +2,6 @@
 """
 Autoencoders
 """
-import numpy as np
 import tensorflow.keras as keras
 
 
