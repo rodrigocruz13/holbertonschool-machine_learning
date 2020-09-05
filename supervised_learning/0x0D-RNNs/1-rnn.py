@@ -33,7 +33,7 @@ def rnn(rnn_cell, X, h_0):
 
     h_prev = h_0    # shape (m, h)
     # print(np.array([h_0]))
-    h_next = np.array([h_0])
+    H = np.array(([h_0]))
 
     t = X.shape[0]  # maximum number of time steps
     for i in range(t):
@@ -41,7 +41,7 @@ def rnn(rnn_cell, X, h_0):
         h_prev, y = rnn_cell.forward(h_prev, X[i])
 
         # storage data
-        H = np.append(h_next, [h_prev], axis=0)
+        H = np.append(H, [h_prev], axis=0)
         Ŷ = np.array([y]) if i == 0 else np.append(Ŷ, [y], axis=0)
 
     return H, Ŷ
