@@ -24,7 +24,7 @@ Tasks
 0. When to Invest mandatory
 Bitcoin (BTC) became a trending topic after its price peaked in 2018. Many have sought to predict its value in order to accrue wealth. Let’s attempt to use our knowledge of RNNs to attempt just that.
 
-Given the coinbase and bitstamp datasets, write a script, forecast_btc.py, that creates, trains, and validates a keras model for the forecasting of BTC:
+Given the [coinbase](https://intranet.hbtn.io/rltoken/_-9LQxYpc6qTM7K_AI58-g) and [bitstamp](https://intranet.hbtn.io/rltoken/0zZKYc5-xlxGFbxTfCVrBA) datasets, write a script, forecast_btc.py, that creates, trains, and validates a keras model for the forecasting of BTC:
 
 Your model should use the past 24 hours of BTC data to predict the value of BTC at the close of the following hour (approximately how long the average transaction takes):
 The datasets are formatted such that such that every row represents a 60 second time window containing:
@@ -41,13 +41,50 @@ Your model should use mean-squared error (MSE) as its cost function
 You should use a tf.data.Dataset to feed data to your model
 Because the dataset is raw, you will need to create a script, preprocess_data.py to preprocess this data. Here are some things to consider:
 
-Are all of the data points useful?
-Are all of the data features useful?
-Should you rescale the data?
-Is the current time window relevant?
-How should you save this preprocessed data?
-Repo:
+- Are all of the data points useful?
+- Are all of the data features useful?
+- Should you rescale the data?
+- Is the current time window relevant?
+- How should you save this preprocessed data?
 
-GitHub repository: holbertonschool-machine_learning
-Directory: supervised_learning/0x0E-time_series
-File: README.md, forecast_btc.py, preprocess_data.py
+## Files
+* README.md,
+* forecast_btc.py,
+* preprocess_data.py
+
+
+## General requirements
+* Allowed editors: vi, vim, emacs
+* All your files will be interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
+* Your files will be executed with numpy (version 1.15) and tensorflow (version 1.12)
+* All your files should end with a new line
+* The first line of all your files should be exactly #!/usr/bin/env python3
+* All of your files must be executable
+* A README.md file, at the root of the folder of the project, is mandatory
+* Your code should follow the pycodestyle style (version 2.4)
+* All your modules should have documentation (python3 -c 'print(__import__("my_module").__doc__)')
+* All your classes should have documentation (python3 -c 'print(__import__("my_module").MyClass.__doc__)')
+* All your functions (inside and outside a class) should have documentation (python3 -c 'print(__import__("my_module").my_function.__doc__)' and python3 -c 'print(__import__("my_module").MyClass.my_function.__doc__)')
+
+## Installation
+In your terminal, git clone the directory with the following command:
+```
+git clone https://github.com/rodrigocruz13/holbertonschool-interview_prep
+cd 0x05-menger
+```
+
+Compile the files using:
+
+```
+gcc -Wall -Wextra -Werror -pedantic -o 0-menger -g 0-menger.c 0-main.c -lm
+```
+
+## Usage
+
+Run the program using
+
+```
+./0-menger
+```
+
+d
