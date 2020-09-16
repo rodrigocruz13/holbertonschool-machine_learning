@@ -3,7 +3,7 @@
 0. Bag Of Words
 """
 
-import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 def bag_of_words(sentences, vocab=None):
@@ -21,6 +21,7 @@ def bag_of_words(sentences, vocab=None):
         features [np.ndarray]: [list of the features used for embeddings]
     """
 
+    """
     features = []
     alt_sentences = []
     if not (isinstance(sentences, list)):
@@ -55,5 +56,15 @@ def bag_of_words(sentences, vocab=None):
                     embedding[j] = 1
         embeddings.append(embedding)
     embeddings = np.array(embeddings)
+
+    return embeddings, features
+
+    """
+
+    # refactor
+
+    vectorizer = CountVectorizer(vocabulary=vocab)
+    embeddings = vectorizer.fit_transform(sentences).toarray()
+    features = vectorizer.get_feature_names()
 
     return embeddings, features
