@@ -52,7 +52,7 @@ def extract_fromzip(a_zipfile):
 
 def read_csv(a_csv_file):
     """
-    Function that read a csv file into a panda class
+    Function that read a csv file can convert the data into a panda Df
     Arguments: a_csv_file: a valid csv_file
     Returns: a pandas class dataframe
     """
@@ -64,7 +64,7 @@ def read_csv(a_csv_file):
 
 def select_df(df1, name1, df2, name2):
     """
-    Function that selec the DF with the most updated info between 2 pandas DFs
+    Function that selec the most updated info between 2 pandas DFs
 
     Args:
         df1 ([pandas DF]): [1st DF with BTC trade info]
@@ -91,7 +91,7 @@ def select_df(df1, name1, df2, name2):
 
 
 def classify(current, future):
-    """[Function that tells if the future value is bigger than current value]
+    """[Function that tells if the value is bigger than current value]
 
     Args:
         current ([str]): [string describing the current value of BTC]
@@ -106,7 +106,7 @@ def classify(current, future):
 
 
 def target(df, FUTURE_PREDICTION_HOURS):
-    """[Function that generates the column Target in the dataset]
+    """[Function that generates the column (class) Target in the dataset]
 
     Args:
         df ([pandas df]): [dataframe with the trading info of BTC]
@@ -125,47 +125,46 @@ def target(df, FUTURE_PREDICTION_HOURS):
 
 
 def split_validation_df(df, VALIDATION_STARTS_AT):
-    """[Splits the original df in two dataframes: validation and df]
+    """[Splits the original Df in two dataframes: validation df and main df]
 
     Args:
         df ([pandas df]): [dataframe with the trading info of BTC]
-        VALIDATION_STARTS_AT ([float]): [% where the validation Df starts]
+        VALIDATION_STARTS_AT ([float]): [% where the validation Df starts at]
 
     Returns:
         [validation_df]: [validation dataframe]
         [df]: [sliced df at 95 % of the original df]
     """
 
-    print("4. Separating validation data from working data")
+    print("4. Separating Main DF from Validation DF")
 
-    print("\t Current size of main DF = {}", df.shape)
-    print("\t Breaking DF at {} %".format(VALIDATION_STARTS_AT * 100))
+    pc = VALIDATION_STARTS_AT * 100
+    print("   Current DF shape: {}. Splitting it at {}%".format(df.shape, pc))
     breaking_time = int((len(df.index) - 1) * VALIDATION_STARTS_AT)
     main_df, vali_df = df.iloc[: breaking_time], df.iloc[breaking_time:]
 
-    """
-    ms, vs =main_df.shape, vali_df.shape
     t11, t12 = main_df.index.min(), main_df.index.max()
     t21, t22 = vali_df.index.min(), vali_df.index.max()
-
-    d_ini1, d_end1 = main_df.at[t11, 'Timestamp'], main_df.at[t12, 'Timestamp']
-    d_ini2, d_end2 = vali_df.at[t21, 'Timestamp'], vali_df.at[t22, 'Timestamp']
-    """
+    d_mi, d_mf = main_df.at[t11, 'Timestamp'], main_df.at[t12, 'Timestamp']
+    d_vi, d_vf = vali_df.at[t21, 'Timestamp'], vali_df.at[t22, 'Timestamp']
+    d_mi, d_mf = datetime.fromtimestamp(d_mi), datetime.fromtimestamp(d_mf)
+    d_vi, d_vf = datetime.fromtimestamp(d_vi), datetime.fromtimestamp(d_vf)
 
     ms, vs = main_df.shape, vali_df.shape
-    lm, lv = len(main_df), len(vali_df)
-    print("\t Size of main DF is {}, with {} registers".format(ms, lm))
-    print("\t Size of Validation DF = {}, with {} registers".format(vs, lv))
+    print("\t Main:\tNew shape\tInit Date \t\tEnd date")
+    print("\t\t{}\t{}\t{}".format(ms, d_mi, d_mf))
+    print()
+    print("\t Valid:\tNew shape\tInit Date \t\tEnd date")
+    print("\t\t{}\t{}\t{}".format(vs, d_vi, d_vf))
     return vali_df, main_df
 
 
 def preprocess(full_df, name):
     """
-    Function that preprocess some data from a pandas dataframe
-    Arguments: full_df: a valid pandas dataframe
+    Function that preprocess data from a pandas Df before training
+    Arguments: full_df: a valid pandas Df
     Returns: a smaller version of a_df with prepocessed data
     """
-    # https://bit.ly/3bM9VUl
 
     # 5. Preprocessing the dataset
     print("6. Preprocessing data of {}".format(name))
@@ -186,9 +185,12 @@ def preprocess(full_df, name):
     print("\tDataframe current shape = {}".format(full_df.shape))
     print("\t\t- Removing data older than {}".format(init_year))
     full_df["year"] = pd.DatetimeIndex(full_df["Timestamp"]).year
+#    print(full_df["year"])
     full_df = full_df[full_df["year"] >= init_year]
     sliced_df = full_df.drop(["year"], axis=1)
 
+#     print(full_df.head(1))
+#    print(sliced_df.head(1))
     print("\t\t- Subsamplig data to only use data each 60 min intervals")
     # sliced_df = sliced_df[::60]  # start, stop, step.
     # This step was done at # 2 but it is officially part of preprocessing.
@@ -216,7 +218,6 @@ def preprocess(full_df, name):
     print("\t\t- Renaming remaining columns")
     sliced_df.rename(columns=new_col_names, inplace=True)
     print("\tDataframe current shape = {}".format(sliced_df.shape))
-
     print("6.d. Normalizing data: Converting to percetages")
 
     # ------  1. Normalizing data
@@ -287,12 +288,12 @@ def saving_csv(a_dataframe, new_name):
         [type]: [None if fails]
     """
 
-    a_dataframe.reset_index(inplace=True, drop=True)
+    #a_dataframe.reset_index(inplace=True, drop=True)
     new_file = "./" + new_name
     try:
         a_dataframe.to_csv(new_file, index=False)
         MB = os.path.getsize(new_name) / 1000000
-        print("7. Saving to a file:\t'{}'  Size = {} MB".format(new_name, MB))
+        print("7. Saving file: '{}'\t\tSize = {} MB".format(new_name, MB))
     except BaseException as e:
         print(e)
         return None
@@ -332,7 +333,7 @@ if __name__ == "__main__":
     # saving_csv(validation_df, "Validation.csv")
     print()
 
-    # 5. Plotting
+    # 5. Plotting./
     plotting_df(df)
     print()
 
@@ -343,5 +344,5 @@ if __name__ == "__main__":
     print()
 
     # 7. Saving data
-    saving_csv(df, "BTC_trade_info.csv")
-    saving_csv(validation_df, "validation_BTC_trade_info.csv")
+    saving_csv(main_df, "main_DF.csv")
+    saving_csv(validation_df, "validation_DF.csv")
