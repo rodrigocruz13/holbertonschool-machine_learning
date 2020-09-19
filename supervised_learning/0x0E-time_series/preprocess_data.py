@@ -73,7 +73,7 @@ def select_df(df1, name1, df2, name2):
         name2 ([srt]): [Name of the 2nd dataframe]
     """
 
-    print("2. Selecting most recent data be use used by our Dataframe")
+    print("2. Selecting most recent data to be used by our Dataframe")
     t1, t2 = len(df1.index) - 1, len(df2.index) - 1
 
     df1_last_date = datetime.fromtimestamp(df1.at[t1, 'Timestamp'])
@@ -232,45 +232,6 @@ def preprocess(full_df):
     sliced_df.dropna(inplace=True)
 
     return sliced_df
-
-    # ------  2. Creating sequences
-    print("6.e. Creating sequences of data")
-    sequencial_data = []
-
-    # Populate with new data and pops out the old
-    previous_time = deque(maxlen=WINDOW_PREDICTION_HOURS)
-    for row in sliced_df.values:
-        previous_time.append([n for n in row[:-1]])  # all but Target column
-
-        if len(previous_time) == WINDOW_PREDICTION_HOURS:
-            # append features and labels
-            sequencial_data.append([np.array(previous_time), row[-1]])
-    random.shuffle(sequencial_data)
-
-    # ------  3. Balancing the data (The model will learn equally from ↑, ↓)
-    print("6.f. Balancing data: Have the same number of classes: Ups & Downs")
-    buys, sells = [], []
-    for seq, target in sequencial_data:
-        ls = sells if target == 0 else buys
-        ls.append([seq, target])
-
-    random.shuffle(buys)
-    random.shuffle(sells)
-
-    # what's the shorter length?
-    lower = min(len(buys), len(sells))
-
-    # make sure both lists are only up to the shortest length.
-    buys, sells = buys[:lower], sells[:lower]
-    sequential_data = buys + sells
-    random.shuffle(sequential_data)
-
-    X, y = [], []
-    for seq, target in sequential_data:  # going over our new sequential data
-        X.append(seq)  # X is the sequences
-        y.append(target)  # y is the targets/labels (buys vs sell/notbuy)
-
-    return np.array(X), y  # return X and y...and make X a numpy array!
 
 
 def plotting_df(a_dataframe):
