@@ -95,6 +95,6 @@ gcc -Wall -Wextra -Werror -pedantic -o 0-menger -g 0-menger.c 0-main.c -lm
 Run the program using
 
 ```
-./0-menger
+./preprocess.py
+./forecast_btc.py
 ```
-
