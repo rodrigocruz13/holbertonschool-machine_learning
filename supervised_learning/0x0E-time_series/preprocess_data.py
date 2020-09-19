@@ -159,7 +159,7 @@ def split_validation_df(df, VALIDATION_STARTS_AT):
     return vali_df, main_df
 
 
-def preprocess(full_df):
+def preprocess(full_df, name):
     """
     Function that preprocess some data from a pandas dataframe
     Arguments: full_df: a valid pandas dataframe
@@ -168,7 +168,7 @@ def preprocess(full_df):
     # https://bit.ly/3bM9VUl
 
     # 5. Preprocessing the dataset
-    print("6. Preprocessing data")
+    print("6. Preprocessing data of {}".format(name))
 
     print("6.a. Converting Timestamps from UNIX to UTC")
     feature = 'Timestamp'
@@ -193,8 +193,8 @@ def preprocess(full_df):
     # sliced_df = sliced_df[::60]  # start, stop, step.
     # This step was done at # 2 but it is officially part of preprocessing.
 
-    print("\t\t- Generating price variations (Δ price)")
-    sliced_df["Variation"] = sliced_df["Close"].diff()
+    # print("\t\t- Generating price variations (Δ price)")
+    # sliced_df["Variation"] = sliced_df["Close"].diff()
 
     print("\t\t- Removing 'Open' column")
     sliced_df.drop(["Open"], axis=1, inplace=True)
@@ -217,17 +217,20 @@ def preprocess(full_df):
     sliced_df.rename(columns=new_col_names, inplace=True)
     print("\tDataframe current shape = {}".format(sliced_df.shape))
 
-    print("6.d. Normalizing data: Converting to % and then into a range(0, 1)")
+    print("6.d. Normalizing data: Converting to percetages")
 
     # ------  1. Normalizing data
     for col in sliced_df.columns:
-        # normalize all but 'Target = Y', Timestam and variation columns
-        if (col != "Target" and col != 'Timestamp' and col != 'Variation'):
+        # Normalizing all but 'Target = Y', Timestam and variation columns
+        if (col != "Target" and col != 'Timestamp'):
             # normalizes the column according to its % of change (pct_change)
             sliced_df[col] = sliced_df[col].pct_change()
             sliced_df.dropna(inplace=True)
 
-            # scale the values from 0 to 1
+    print("6.e. Scaling data: Converting to a range from 0 to 1")
+    for col in sliced_df.columns:
+        # Scaling the values from 0 to 1
+        if (col != "Target" and col != 'Timestamp'):
             sliced_df[col] = preprocessing.scale(sliced_df[col].values)
     sliced_df.dropna(inplace=True)
 
@@ -245,7 +248,8 @@ def plotting_df(a_dataframe):
     import matplotlib.pyplot as plt
 
     print("5. Plotting data")
-    x_data = a_dataframe['Timestamp']
+    x_data = pd.to_datetime(a_dataframe['Timestamp'], unit='s')
+
     try:
         y_data = a_dataframe['Close_USD']
     except BaseException:
@@ -289,7 +293,6 @@ def saving_csv(a_dataframe, new_name):
         a_dataframe.to_csv(new_file, index=False)
         MB = os.path.getsize(new_name) / 1000000
         print("7. Saving to a file:\t'{}'  Size = {} MB".format(new_name, MB))
-        print()
     except BaseException as e:
         print(e)
         return None
@@ -331,10 +334,12 @@ if __name__ == "__main__":
 
     # 5. Plotting
     plotting_df(df)
-    # print()
+    print()
 
     # 6. Preprocessing the selected Dataframe (Slicing data)
-    df = preprocess(df)
+    main_df = preprocess(df, "Main DF")
+    print()
+    vali_df = preprocess(validation_df, "Validation DF")
     print()
 
     # 7. Saving data
