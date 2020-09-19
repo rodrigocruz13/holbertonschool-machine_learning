@@ -86,7 +86,7 @@ def select_df(df1, name1, df2, name2):
 
     print("\tDataframe selected: {}".format(name))
 
-    sliced_df = df[::60] # This step should be at preprocessing data but
+    sliced_df = df[::60]  # This step should be at preprocessing data but
     return sliced_df  # it is used here to reduce the size of the Database.
 
 
@@ -141,7 +141,7 @@ def split_validation_df(df, VALIDATION_STARTS_AT):
     print("\t Current size of main DF = {}", df.shape)
     print("\t Breaking DF at {} %".format(VALIDATION_STARTS_AT * 100))
     breaking_time = int((len(df.index) - 1) * VALIDATION_STARTS_AT)
-    main_df, vali_df = df.iloc[: breaking_time], df.iloc[breaking_time: ]
+    main_df, vali_df = df.iloc[: breaking_time], df.iloc[breaking_time:]
 
     """
     ms, vs =main_df.shape, vali_df.shape
@@ -211,7 +211,7 @@ def preprocess(full_df):
     print("\t\t- Removing 'Weighted_Price' column")
     sliced_df.drop(["Weighted_Price"], axis=1, inplace=True)
 
-    new_col_names = {'Close': 'Close_USD','Volume_(Currency)': 'Vol_USD'}
+    new_col_names = {'Close': 'Close_USD', 'Volume_(Currency)': 'Vol_USD'}
 
     print("\t\t- Renaming remaining columns")
     sliced_df.rename(columns=new_col_names, inplace=True)
@@ -221,8 +221,8 @@ def preprocess(full_df):
 
     # ------  1. Normalizing data
     for col in sliced_df.columns:
-        if (col != "Target" and col != 'Timestamp' and col != 'Variation'):  # normalize all except the 'Target = Y' column
-
+        # normalize all but 'Target = Y', Timestam and variation columns
+        if (col != "Target" and col != 'Timestamp' and col != 'Variation'):
             # normalizes the column according to its % of change (pct_change)
             sliced_df[col] = sliced_df[col].pct_change()
             sliced_df.dropna(inplace=True)
@@ -287,7 +287,7 @@ def plotting_df(a_dataframe):
     x_data = a_dataframe['Timestamp']
     try:
         y_data = a_dataframe['Close_USD']
-    except:
+    except BaseException:
         y_data = a_dataframe['Close']
 
     # 2. Form
@@ -326,8 +326,8 @@ def saving_csv(a_dataframe, new_name):
     new_file = "./" + new_name
     try:
         a_dataframe.to_csv(new_file, index=False)
-        size_MB = os.path.getsize(new_name) / 1000000
-        print("7. Saving to a file:\t'{}'  Size = {} MB".format(new_name, size_MB), end="\t\t\t")
+        MB = os.path.getsize(new_name) / 1000000
+        print("7. Saving to a file:\t'{}'  Size = {} MB".format(new_name, MB))
         print()
     except BaseException as e:
         print(e)
@@ -344,7 +344,7 @@ if __name__ == "__main__":
     VALIDATION_STARTS_AT = 0.95  # 95% for data and last 5% to validation
 
     clean_screen()
-    pd.set_option('mode.chained_assignment', None) # Avoid warnings
+    pd.set_option('mode.chained_assignment', None)  # Avoid warnings
 
     # 0. Extracting CSV from zip files
     extract_fromzip(BITSTAMP_USD_CSV + '.zip')
