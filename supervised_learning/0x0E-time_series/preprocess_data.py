@@ -17,23 +17,28 @@ import zipfile
 
 def clean_screen():
     """
-    Function that just clean the screen
-    Arguments:  None
-    Returns: Nothing
+    [Function that just clean the screen]
+
+    Args:
+        None
+
+    Returns:
+        Nothing
     """
+
     from os import system, name
     _ = system('cls') if name == 'nt' else system('clear')
-    print("Bitcoin (฿) forecasting")
-    print("Part 1. Preprocessing data")
-    print("---------------------")
-    print()
 
 
 def extract_fromzip(a_zipfile):
     """
-    Function that extracts the file from a compressed zip archive
-    Arguments: a_zipfile: a valid zip file
-    Returns: None if fails or the decompressed file
+    [Function that extracts a file from a zip archive]
+
+    Args:
+        a_zipfile ([type]): [a valid zip file]
+
+    Returns:
+        None if fails or the decompressed file
     """
 
     size_MB = os.path.getsize(a_zipfile) / 1000000
@@ -52,25 +57,35 @@ def extract_fromzip(a_zipfile):
 
 def read_csv(a_csv_file):
     """
-    Function that read a csv file can convert the data into a panda Df
-    Arguments: a_csv_file: a valid csv_file
-    Returns: a pandas class dataframe
+    [Function that read a csv file can convert the data into a panda Df]
+
+    Args:
+        a_csv_file ([file]):        [CSV file with BTC trading info]
+
+    Returns:
+        df         ([Pandas DF]):   [A Pandas dataframe]
     """
+
     size_MB = os.path.getsize(a_csv_file) / 1000000
     print("1. Opening {}".format(a_csv_file), end="\t\t")
     print("\b  Size = {} MB".format(size_MB))
-    return pd.read_csv("./" + a_csv_file)
+    df = pd.read_csv("./" + a_csv_file, error_bad_lines=False)
+
+    return df
 
 
 def select_df(df1, name1, df2, name2):
     """
-    Function that selec the most updated info between 2 pandas DFs
+    [Function that selects the most updated DF]
 
     Args:
-        df1 ([pandas DF]): [1st DF with BTC trade info]
-        df2 ([pandas DF]): [2nd DF with BTC trade info]
-        name1 ([str]): [Name of the 1st dataframe]
-        name2 ([srt]): [Name of the 2nd dataframe]
+        df1     ([Pandas DF]):  [1st DF with BTC trade info]
+        df2     ([Pandas DF]):  [2nd DF with BTC trade info]
+        name1   ([str]):        [Name of the 1st dataframe]
+        name2   ([srt]):        [Name of the 2nd dataframe]
+
+    Returns:
+        df      ([Pandas DF]):   [The most updated Pandas dataframe]
     """
 
     print("2. Selecting most recent data to be used by our Dataframe")
@@ -86,61 +101,63 @@ def select_df(df1, name1, df2, name2):
 
     print("\tDataframe selected: {}".format(name))
 
-    sliced_df = df[::60]  # This step should be at preprocessing data but
-    return sliced_df  # it is used here to reduce the size of the Database.
+    return df
 
 
 def classify(current, future):
-    """[Function that tells if the value is bigger than current value]
+    """
+    [Function that tells evaluates if 'future' > 'current']
 
     Args:
-        current ([str]): [string describing the current value of BTC]
-        future ([str]): [string describing the future value of BTC]
+        Current     ([float]):      [Current value of BTC]
+        future      ([float]):      [Future value of BTC]
 
     Returns:
-        [int]: [1 if future is > than current, 0 otherwise]
+        value       ([int]):        [1 if 'future' > 'current', 0 otherwise]
     """
     value = 1 if float(future) > float(current) else 0
 
     return value
 
 
-def target(df, FUTURE_PREDICTION_HOURS):
-    """[Function that generates the column (class) Target in the dataset]
+def target(df, FPH):
+    """
+    [Function that generates the column (class) Target in the dataset]
 
     Args:
-        df ([pandas df]): [dataframe with the trading info of BTC]
-        FUTURE_PREDICTION_HOURS ([int]): [hours to be predicted]
+        df  ([Pandas df]):  [dataframe with the trading info of BTC]
+        FPH ([int]):        [hours to be predicted]
 
     Returns:
-        df ([pandas df]): df with a new column added
+        df  ([pandas df]):  Df with a new column added
     """
 
-    print("3. Generating Target column")
-    df['Future_USD'] = df['Close'].shift(-FUTURE_PREDICTION_HOURS)
+    print("3. Generating Target column (Class Up = 1, Down = 0)")
+    df['Future_USD'] = df['Close'].shift(-FPH)
     df['Target'] = list(map(classify, df['Close'], df['Future_USD']))
     df = df.drop(["Future_USD"], axis=1)
 
     return df
 
 
-def split_validation_df(df, VALIDATION_STARTS_AT):
-    """[Splits the original Df in two dataframes: validation df and main df]
+def split_validation_df(df, VSA):
+    """
+    [Splits the original Df in two dataframes: validation df and main df]
 
     Args:
-        df ([pandas df]): [dataframe with the trading info of BTC]
-        VALIDATION_STARTS_AT ([float]): [% where the validation Df starts at]
+        df      ([Pandas df]):  [Dataframe with the trading info of BTC]
+        VSA     ([float]):      [% where the Validation (DF) Starts At]
 
     Returns:
-        [validation_df]: [validation dataframe]
-        [df]: [sliced df at 95 % of the original df]
+        vali_df ([Pandas df]):  [Validation DF]
+        main_df ([Pandas df]):  [main Df sliced at 95 % of the original DF]
     """
 
     print("4. Separating Main DF from Validation DF")
 
-    pc = VALIDATION_STARTS_AT * 100
+    pc = VSA * 100
     print("   Current DF shape: {}. Splitting it at {}%".format(df.shape, pc))
-    breaking_time = int((len(df.index) - 1) * VALIDATION_STARTS_AT)
+    breaking_time = int((len(df.index) - 1) * VSA)
     main_df, vali_df = df.iloc[: breaking_time], df.iloc[breaking_time:]
 
     t11, t12 = main_df.index.min(), main_df.index.max()
@@ -156,47 +173,46 @@ def split_validation_df(df, VALIDATION_STARTS_AT):
     print()
     print("\t Valid:\tNew shape\tInit Date \t\tEnd date")
     print("\t\t{}\t{}\t{}".format(vs, d_vi, d_vf))
+
     return vali_df, main_df
 
 
-def preprocess(full_df, name):
+def preprocess(full_df, NAME):
     """
-    Function that preprocess data from a pandas Df before training
-    Arguments: full_df: a valid pandas Df
-    Returns: a smaller version of a_df with prepocessed data
+    [Function that preprocess data from a Pandas Df]
+
+    Args:
+        full_df ([Pandas df]):  [Dataframe with the trading info of BTC]
+        NAME     ([str]):       [Name of the dataframe]
+
+    Returns:
+        main_df ([Pandas df]):  [A sliced preprocessed version of the DF]
     """
 
-    # 5. Preprocessing the dataset
-    print("6. Preprocessing data of {}".format(name))
+    print("6. Preprocessing data of {}".format(NAME))
 
+    # a. Converting Timestamps
     print("6.a. Converting Timestamps from UNIX to UTC")
-    feature = 'Timestamp'
-    full_df[feature] = pd.to_datetime(full_df[feature], unit='s')
+    full_df['Timestamp'] = pd.to_datetime(full_df['Timestamp'], unit='s')
 
+    # b. Filling the GAPs
     print("6.b. Filling the gaps. Interpolating NAN with last known value")
     full_df.fillna(method='pad', inplace=True)
-    # print(full_df.head())
     # main_df.fillna(method="ffill", inplace=True)
-    # print(full_df.head())
 
+    # c. Slicing data
     print("6.c. Slicing data:")
     init_year = 2017
 
     print("\tDataframe current shape = {}".format(full_df.shape))
     print("\t\t- Removing data older than {}".format(init_year))
+
     full_df["year"] = pd.DatetimeIndex(full_df["Timestamp"]).year
-#    print(full_df["year"])
     full_df = full_df[full_df["year"] >= init_year]
     sliced_df = full_df.drop(["year"], axis=1)
 
-#     print(full_df.head(1))
-#    print(sliced_df.head(1))
     print("\t\t- Subsamplig data to only use data each 60 min intervals")
-    # sliced_df = sliced_df[::60]  # start, stop, step.
-    # This step was done at # 2 but it is officially part of preprocessing.
-
-    # print("\t\t- Generating price variations (Δ price)")
-    # sliced_df["Variation"] = sliced_df["Close"].diff()
+    sliced_df = sliced_df[::60]  # start, stop, step.
 
     print("\t\t- Removing 'Open' column")
     sliced_df.drop(["Open"], axis=1, inplace=True)
@@ -217,17 +233,20 @@ def preprocess(full_df, name):
 
     print("\t\t- Renaming remaining columns")
     sliced_df.rename(columns=new_col_names, inplace=True)
+
     print("\tDataframe current shape = {}".format(sliced_df.shape))
+
+    # d. Normalizing data
     print("6.d. Normalizing data: Converting to percetages")
 
-    # ------  1. Normalizing data
     for col in sliced_df.columns:
-        # Normalizing all but 'Target = Y', Timestam and variation columns
+        # Normalizing all but 'Target = Y', and Timestamp columns
         if (col != "Target" and col != 'Timestamp'):
             # normalizes the column according to its % of change (pct_change)
             sliced_df[col] = sliced_df[col].pct_change()
             sliced_df.dropna(inplace=True)
 
+    # e. Scaling data
     print("6.e. Scaling data: Converting to a range from 0 to 1")
     for col in sliced_df.columns:
         # Scaling the values from 0 to 1
@@ -235,15 +254,27 @@ def preprocess(full_df, name):
             sliced_df[col] = preprocessing.scale(sliced_df[col].values)
     sliced_df.dropna(inplace=True)
 
+    # Restoring the values of Timestamps
+    """
+    dates = pd.to_datetime(['2019-01-15 13:30:00'])
+    (dates - pd.Timestamp("1970-01-01")) // pd.Timedelta('1s')
+    # Int64Index([1547559000], dtype='int64')
+    """
+    t = pd.Timestamp("1970-01-01")
+    sliced_df['Timestamp'] = (sliced_df['Timestamp'] - t) / pd.Timedelta('1s')
+
     return sliced_df
 
 
 def plotting_df(a_dataframe):
     """
-    Function that plots a feature from a dataframe file
-    Arguments: a_dataframe: a valid pandas dataframe
-               feature: list of features to be plotted
-    Returns: a smaller version of the csv file with prepocessed data
+    [Function that prints X and Y data from a Pandas DF]
+
+    Args:
+        a_dataframe ([pandas df]): [a valid pandas dataframe]
+
+    Returns:
+        Nothing
     """
 
     import matplotlib.pyplot as plt
@@ -277,72 +308,26 @@ def plotting_df(a_dataframe):
     plt.show()
 
 
-def saving_csv(a_dataframe, new_name):
-    """[Function that saves a dataframe into a file of name 'new_name']
+def saving_csv(df, new_name):
+    """
+    Function that saves a DF into a file of name 'new_name']
 
     Args:
-        a_dataframe ([pandas df]): [a valid pandas dataframe]
+        df ([pandas df]): [a valid pandas dataframe]
         new_name ([str]): [name of the file]
 
     Returns:
-        [type]: [None if fails]
+        None
     """
 
-    #a_dataframe.reset_index(inplace=True, drop=True)
+    # df.reset_index(inplace=True, drop=True)
     new_file = "./" + new_name
     try:
-        a_dataframe.to_csv(new_file, index=False)
+        df.to_csv(new_file, index=False)
         MB = os.path.getsize(new_name) / 1000000
-        print("7. Saving file: '{}'\t\tSize = {} MB".format(new_name, MB))
+        print("7. Saving file: '{:>17}'\tSize = {} MB".format(new_name, MB))
+
     except BaseException as e:
         print(e)
-        return None
 
-
-if __name__ == "__main__":
-
-    BITSTAMP_USD_CSV = "bitstampUSD_1-min_data_2012-01-01_to_2020-04-22.csv"
-    COINBASE_USD_CSV = "coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv"
-
-    WINDOW_PREDICTION_HOURS = 24
-    FUTURE_PREDICTION_HOURS = 1
-    VALIDATION_STARTS_AT = 0.95  # 95% for data and last 5% to validation
-
-    clean_screen()
-    pd.set_option('mode.chained_assignment', None)  # Avoid warnings
-
-    # 0. Extracting CSV from zip files
-    extract_fromzip(BITSTAMP_USD_CSV + '.zip')
-    extract_fromzip(COINBASE_USD_CSV + '.zip')
-    print()
-
-    # 1. Opening CSV files and converting them into pandas dataframes
-    df1, df2 = read_csv(BITSTAMP_USD_CSV), read_csv(COINBASE_USD_CSV)
-    print()
-
-    # 2. Selecting which one to use
-    full_df = select_df(df1, "BITSTAMP_USD", df2, "COINBASE_USD")
-    print()
-
-    # 3. Generate Target column (Y)
-    df = target(full_df, FUTURE_PREDICTION_HOURS)
-    print()
-
-    # 4. Separate validation_dataframe from the rest of the data
-    validation_df, df = split_validation_df(df, VALIDATION_STARTS_AT)
-    # saving_csv(validation_df, "Validation.csv")
-    print()
-
-    # 5. Plotting./
-    plotting_df(df)
-    print()
-
-    # 6. Preprocessing the selected Dataframe (Slicing data)
-    main_df = preprocess(df, "Main DF")
-    print()
-    vali_df = preprocess(validation_df, "Validation DF")
-    print()
-
-    # 7. Saving data
-    saving_csv(main_df, "main_DF.csv")
-    saving_csv(validation_df, "validation_DF.csv")
+    return None
