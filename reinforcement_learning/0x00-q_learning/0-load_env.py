@@ -18,6 +18,7 @@ def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
         map_name ([str], optional): [string with the pre-made map to load].
                                 Defaults to None.
         is_slippery (bool, optional): [description]. Defaults to False.
+    Returns: the environment
     """
 
     # load all enviroments
