@@ -37,6 +37,8 @@ def train(
     α = alpha
     ε = epsilon
     γ = gamma
+    min_ε = min_epsilon
+    ε_decay = epsilon_decay
 
     total_rewards = []
 
@@ -66,7 +68,6 @@ def train(
                 rewards = rewards + a_single_reward
 
         total_rewards.append(rewards)
-        ε = min_epsilon + (1 - min_epsilon) * \
-            np.exp(-epsilon_decay * a_single_episode)
+        ε = min_ε + (1 - min_ε) * np.exp(-ε_decay * a_single_episode)
 
     return Q, total_rewards
