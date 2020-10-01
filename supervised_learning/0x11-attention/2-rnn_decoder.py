@@ -3,7 +3,7 @@
 
 
 import tensorflow as tf
-Self_Attention = __import__('1-self_attention').SelfAttention
+SelfAttention = __import__('1-self_attention').SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
@@ -69,13 +69,13 @@ class RNNDecoder(tf.keras.layers.Layer):
         """
 
         old_input = tf.to_float(x)
-        attention = Self_Attention(2048)
+        attention = SelfAttention(2048)
         context, weights = attention(s_prev, hidden_states)
 
         new_input = tf.concat([old_input, context], axis=1)
         input_ = tf.expand_dims(new_input, 1)
 
         x, s = self.gru(inputs=input_)
-        x = tf.reshape(x, (-1, x.shape[2]))
+        x = tf.reshape(x, (-1, x.shape[2]))-s
         outputs = self.F(x)
         return (outputs, s)
