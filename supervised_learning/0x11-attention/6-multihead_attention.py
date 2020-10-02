@@ -5,7 +5,6 @@
 import tensorflow as tf
 sdp_attention = __import__('5-sdp_attention').sdp_attention
 
-
 class MultiHeadAttention(tf.keras.layers.Layer):
     """[Class that inherits from tf.keras.layers.Layer 2 perform multihead att]
 
