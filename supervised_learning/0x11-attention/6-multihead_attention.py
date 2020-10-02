@@ -63,7 +63,6 @@ class MultiHeadAttention(tf.keras.layers.Layer):
             weights a tensor with its last three dimensions as
             (..., h, seq_len_q, seq_len_v) containing the attention weights
         You should use
-        sdp_attention = __import__('5-sdp_attention').sdp_attention
 
         """
 
