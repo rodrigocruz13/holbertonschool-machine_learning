@@ -46,7 +46,6 @@ class EncoderBlock(tf.keras.layers.Layer):
         self.layernorm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
         self.layernorm2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
 
-
     def call(self, x, training, mask=None):
         """[summary]
 
@@ -75,4 +74,3 @@ class EncoderBlock(tf.keras.layers.Layer):
         out = self.layernorm2(m)
 
         return out
-
