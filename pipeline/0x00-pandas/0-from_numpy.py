@@ -26,10 +26,9 @@ def from_numpy(array):
     lenght = len(array[0])
 
     # Uppercase alphabet
-    letters = [chr(i) for i in range(ord('A'),ord('Z') + 1)]
+    letters = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
     letters = letters[0: lenght]
 
     df = pd.DataFrame(data=array, columns=letters)
 
     return df
-
