@@ -8,11 +8,12 @@ import numpy as np
 import pandas as pd
 
 
+index = ["A", "B", "C", "D"]
+
 dict = {
     "First": [0.0, 0.5, 1.0, 1.5],
     "Second": ['one', 'two', 'three', 'four']
 }
 
-index = ["A", "B", "C", "D"]
 
 df = pd.DataFrame(data=dict, index=index)
