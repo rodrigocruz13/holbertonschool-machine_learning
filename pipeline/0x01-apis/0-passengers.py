@@ -1,10 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+
 """script for getting info from web pages
 """
 
 import requests
-# import urllib3
-# urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def to_int(a_str):
