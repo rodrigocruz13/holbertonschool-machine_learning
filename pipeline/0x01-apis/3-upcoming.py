@@ -13,10 +13,6 @@ Format:
 The “upcoming launch” is the one which is the soonest from now, in UTC (we
 encourage you to use the date_unix for sorting it) - and if 2 launches have
 the same date, use the first one in the API result.
-
-Your code should not be executed when the file is imported (you should use
-if __name__ == '__main__':)
-
 """
 
 import requests
@@ -35,26 +31,25 @@ if __name__ == '__main__':
         launches_dict = response.json()
 
         # find the date, name, local date and rocket of the next launch date
-        for launch in launches_dict:
-            launch_date = launch["date_unix"]
+        launch_date = [launch["date_unix"] for launch in launches_dict]
+        min_date = min(launch_date)
+        i = launch_date.index(min_date)
 
-            if(launch_date <= next_date):
-                next_date = launch_date
-                launch_name = launch["name"]  # 1
-                launch_date_local = launch["date_local"]  # 2
-                launch_rocket_number = str(launch["rocket"])
-                launchpad_number = str(launch["launchpad"])
+        launch_name = launches_dict[i]["name"]  # 1
+        launch_date_local = launches_dict[i]["date_local"]  # 2
+        launch_rocket_number = str(launches_dict[i]["rocket"])
+        launchpad_number = str(launches_dict[i]["launchpad"])
 
-                rockets_url = base_url + "/rockets/" + launch_rocket_number
-                rocket_name = requests.get(rockets_url).json()["name"]  # 3
+        rockets_url = base_url + "/rockets/" + launch_rocket_number
+        rocket_name = requests.get(rockets_url).json()["name"]  # 3
 
-                launchpad_url = base_url + "/launchpads/" + launchpad_number
-                launchpad_dict = requests.get(launchpad_url).json()
-                launchpad_name = launchpad_dict["name"]  # 4
-                launchpad_locality = launchpad_dict["locality"]  # 5
+        launchpad_url = base_url + "/launchpads/" + launchpad_number
+        launchpad_dict = requests.get(launchpad_url).json()
+        launchpad_name = launchpad_dict["name"]  # 4
+        launchpad_locality = launchpad_dict["locality"]  # 5
 
-print("{} ({}) {} - {} ({})".format(launch_name,
-                                    launch_date_local,
-                                    rocket_name,
-                                    launchpad_name,
-                                    launchpad_locality))
+    print("{} ({}) {} - {} ({})".format(launch_name,
+                                        launch_date_local,
+                                        rocket_name,
+                                        launchpad_name,
+                                        launchpad_locality))
