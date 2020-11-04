@@ -17,6 +17,4 @@ def schools_by_topic(mongo_collection, topic):
     # create the data dictionary
 
     all_ = mongo_collection.find({"topics": {"$all": [topic]}})
-    #print(type(all_))
-    #print("--------------------")
     return [school for school in all_]
