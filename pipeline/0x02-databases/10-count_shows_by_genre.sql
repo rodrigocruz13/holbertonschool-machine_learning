@@ -7,7 +7,7 @@
 
 -- SELECT COLUMNS TO DISPLAY FROM TABLE WHERE THE INFO IS LOCATED
    SELECT tv_genres.name AS genre,
-   COUNT(tv_show_genres.genre_id) AS num_shows
+   COUNT(tv_show_genres.genre_id) AS number_of_shows
 
 -- WHERE THE FIELD IS EQUAL TO
 
@@ -21,4 +21,4 @@
 
 -- HOW THE DATA SHOULD BE ORGANIZED
         GROUP BY tv_show_genres.genre_id
-        ORDER BY num_shows DESC;
+        ORDER BY number_of_shows DESC;
