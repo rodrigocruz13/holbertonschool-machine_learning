@@ -19,7 +19,7 @@ if __name__ == "__main__":
             for db in client.database_names())
 
     # validate logs and nginx exists
-    if ('logs' not in d.keys() or 'nginx' != d['logs'][0]):
+    if ('logs' not in d.keys()):
         exit()
 
     collection = client.logs.nginx  # client.database.collection
