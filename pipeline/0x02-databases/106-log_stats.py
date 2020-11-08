@@ -2,8 +2,7 @@
 """ Module used to
 """
 from pymongo import MongoClient
-import operator
-import pymongo.son_manipulator
+
 
 
 if __name__ == "__main__":
@@ -17,9 +16,8 @@ if __name__ == "__main__":
     client = MongoClient(db_address)
 
     # create dict of all dbs and its collections
-    d = dict((db, [collection for collection in client[db].collection_names()])
-             for db in client.database_names())
-
+    # d = dict((db, [collection for collection in client[db].collection_names()])
+    #          for db in client.database_names())
     # validate logs and nginx exists
     # if ('logs' not in d.keys()):
     #    exit()
@@ -37,7 +35,7 @@ if __name__ == "__main__":
     GET_status = collection.count_documents(d)
     print("{} status check".format(GET_status))
 
-    # count by ips
+    # count number of occurrences by IPs
     load = [{"$sortByCount": '$ip'}, {"$limit": 10}, {"$sort": {"ip": -1}}]
     ip_occurrences = collection.aggregate(load)
 
